@@ -35,7 +35,9 @@
     "lint:fix": "eslint . --ext .js,.ts,.vue --fix",
     "lint:style": "stylelint src/**/*.{css,scss,vue} --cache --fix --allow-empty-input",
     "lint:style:fix": "stylelint src/**/*.{css,scss,vue} --cache --fix --allow-empty-input",
-    "gen:component": "node scripts/generate-component.cjs"
+    "gen:component": "node scripts/generate-component.cjs",
+    "release": "release-it",
+    "release:dry-run": "release-it --dry-run"
   },
   "dependencies": {
     "@iconify/vue": "^4.3.0",
@@ -54,6 +56,7 @@
     "@commitlint/config-conventional": "^19.8.0",
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.23.0",
+    "@release-it/conventional-changelog": "^10.0.1",
     "@storybook/addon-essentials": "8.6.11",
     "@storybook/addon-interactions": "^8.6.11",
     "@storybook/addon-onboarding": "8.6.11",
@@ -83,6 +86,7 @@
     "postcss-html": "^1.8.0",
     "postcss-preset-env": "^10.1.5",
     "postcss-scss": "^4.0.9",
+    "release-it": "^19.0.2",
     "rollup-plugin-visualizer": "^5.14.0",
     "sass-embedded": "^1.86.1",
     "storybook": "8.6.11",
