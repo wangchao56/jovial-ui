@@ -17,7 +17,7 @@ const {
   rotate = 0,
   flip = false,
   spin = false,
-  disabled = false
+  disabled = false,
 } = defineProps<JvIconProps>()
 
 // 判断是否显示外部图标
@@ -48,7 +48,7 @@ const iconStyle = computed<CSSProperties>(() => {
 })
 
 const innerSize = computed(() =>
-  isString(size) && sizeOptions.includes(size as JvIconSize) ? size : ''
+  isString(size) && sizeOptions.includes(size as JvIconSize) ? size : '',
 )
 
 // 处理内部图标
@@ -65,7 +65,7 @@ const iconClasses = computed(() => [
   innerSize.value && _bem.m(`size-${innerSize.value}`),
   colorType && _bem.m(`type-${colorType}`),
   flip && _bem.m('flip'),
-  spin && _bem.m('spin')
+  spin && _bem.m('spin'),
 ])
 </script>
 

@@ -1,6 +1,6 @@
 <script lang="ts">
 export default {
-  name: 'MdiCheckboxMarked'
+  name: 'MdiCheckboxMarked',
 }
 </script>
 

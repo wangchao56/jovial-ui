@@ -23,7 +23,7 @@ interface VueI18nAdapterParams {
 function useProvided<T>(
   props: Record<string, any>,
   prop: string,
-  provided: Ref<T>
+  provided: Ref<T>,
 ): Ref<T> {
   if (!provided || typeof prop !== 'string') {
     throw new Error('Invalid parameters provided to useProvided')
@@ -39,7 +39,7 @@ function useProvided<T>(
         internal.value = v
       }
     },
-    { immediate: true }
+    { immediate: true },
   ) // 添加immediate选项确保初始值同步
 
   return internal as Ref<T>
@@ -73,7 +73,7 @@ function createProvideFunction(data: {
       messages: messages.value as any,
       useScope: 'local', // 使用本地作用域
       legacy: false, // 不使用旧版模式
-      inheritLocale: false // 不继承父级的locale
+      inheritLocale: false, // 不继承父级的locale
     })
 
     // 监听当前语言变化
@@ -98,8 +98,8 @@ function createProvideFunction(data: {
         current,
         fallback,
         messages,
-        useI18n: data.useI18n
-      }) as unknown as (props: LocaleOptions) => LocaleInstance
+        useI18n: data.useI18n,
+      }) as unknown as (props: LocaleOptions) => LocaleInstance,
     }
   }
 }
@@ -121,7 +121,7 @@ function createProvideFunction(data: {
  */
 export function createVueI18nAdapter({
   i18n,
-  useI18n
+  useI18n,
 }: VueI18nAdapterParams): LocaleInstance {
   if (!i18n || !useI18n) {
     throw new Error('i18n instance and useI18n function are required')
@@ -153,7 +153,7 @@ export function createVueI18nAdapter({
       }
       return i18n.global.n(value, { ...options }) as string
     }) as LocaleInstance['n'],
-    provide: createProvideFunction({ current, fallback, messages, useI18n })
+    provide: createProvideFunction({ current, fallback, messages, useI18n }),
   }
 
   return instance
@@ -161,14 +161,14 @@ export function createVueI18nAdapter({
 
 // 添加类型保护函数
 export function isVueI18nInstance(
-  i18n: any
+  i18n: any,
 ): i18n is I18n<any, {}, {}, string, false> {
   return (
-    i18n &&
-    typeof i18n === 'object' &&
-    'global' in i18n &&
-    'locale' in i18n.global &&
-    'fallbackLocale' in i18n.global &&
-    'messages' in i18n.global
+    i18n
+    && typeof i18n === 'object'
+    && 'global' in i18n
+    && 'locale' in i18n.global
+    && 'fallbackLocale' in i18n.global
+    && 'messages' in i18n.global
   )
 }

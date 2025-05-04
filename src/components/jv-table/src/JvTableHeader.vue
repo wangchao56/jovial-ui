@@ -7,7 +7,7 @@ import { bem, JvTableContextKey } from './types'
 
 defineOptions({
   name: 'JvTableHeader',
-  inheritAttrs: false
+  inheritAttrs: false,
 })
 
 // 只需要 tableColumns 属性
@@ -17,8 +17,8 @@ defineProps<{
 }>()
 
 // 从父组件获取上下文
-const { sortColumn, sortOrder, updateSortOrder, setHeaderRef } =
-  inject<JvTableContext>(JvTableContextKey) as JvTableContext
+const { sortColumn, sortOrder, updateSortOrder, setHeaderRef }
+  = inject<JvTableContext>(JvTableContextKey) as JvTableContext
 
 // 获取表头单元格的类
 function setThClass(column: TableColumn) {
@@ -35,7 +35,7 @@ function setThClass(column: TableColumn) {
     { 'is-fixed-right': column.fixed === 'right' },
     { 'is-last-left-fixed': column.isLastLeft },
     { 'is-first-right-fixed': column.isFirstRight },
-    column.labelClassName || ''
+    column.labelClassName || '',
   ]
 }
 
@@ -46,7 +46,7 @@ function setThStyle(column: TableColumn) {
       ? convertToUnit(column.width)
       : column.minWidth
         ? convertToUnit(column.minWidth)
-        : 'auto'
+        : 'auto',
   }
 
   if (column.isFixed) {
@@ -71,7 +71,8 @@ function getSortIconName(column: TableColumn) {
   if (sortColumn.value === column) {
     if (sortOrder.value === 'ascending') {
       return 'mdi:sort-ascending'
-    } else if (sortOrder.value === 'descending') {
+    }
+    else if (sortOrder.value === 'descending') {
       return 'mdi:sort-descending'
     }
   }
@@ -82,7 +83,7 @@ function getSortIconName(column: TableColumn) {
 function getSortIconClass(column: TableColumn) {
   return [
     bem.e('sort-icon'),
-    { 'is-active': sortColumn.value === column && sortOrder.value !== null }
+    { 'is-active': sortColumn.value === column && sortOrder.value !== null },
   ]
 }
 
@@ -109,7 +110,7 @@ function handleSortClick(column: TableColumn) {
           v-for="(column, index) in tableColumns"
           :key="column.id || index"
           :width="column.width || column.minWidth || 'auto'"
-        />
+        >
       </colgroup>
       <thead>
         <tr :class="bem.e('header-row')">

@@ -34,5 +34,5 @@ export function replaceParams(text: string, params: unknown[]): string {
 export function isRTLLanguage(locale: string): boolean {
   // RTL语言列表
   const rtlLanguages = ['ar', 'he', 'fa', 'ur']
-  return rtlLanguages.some((lang) => locale.startsWith(lang))
+  return rtlLanguages.some(lang => locale.startsWith(lang))
 }

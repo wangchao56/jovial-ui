@@ -14,28 +14,28 @@ const config: StorybookConfig = {
         // 将a11y面板设置为默认打开
         enableShortcuts: true,
         // 将检查结果自动显示在控制台
-        check: 'onFirstRender'
-      }
-    }
+        check: 'onFirstRender',
+      },
+    },
   ],
   framework: {
     name: '@storybook/vue3-vite',
-    options: {}
+    options: {},
   },
   docs: {
-    autodocs: 'tag'
+    autodocs: 'tag',
   },
   viteFinal: async (config) => {
     // 路径别名配置
     config.resolve = {
       alias: {
         '@': '/src',
-        '@components': '/src/components'
-      }
+        '@components': '/src/components',
+      },
     }
     return config
   },
-  managerHead: (head) => `
+  managerHead: head => `
   ${head}
   <style>
     /* 为可访问性面板添加高亮样式 */
@@ -49,6 +49,6 @@ const config: StorybookConfig = {
       margin-top: 0;
     }
   </style>
-`
+`,
 }
 export default config

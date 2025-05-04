@@ -4,7 +4,7 @@ import type {
   JvOverlayEmits,
   JvOverlayExpose,
   JvOverlayProps,
-  JvOverlaySolts
+  JvOverlaySolts,
 } from './types'
 import { useZindex } from '@/hooks'
 import { useParentElement } from '@vueuse/core'
@@ -16,7 +16,7 @@ defineOptions({ name: JVOVERLAY_NAME, inheritAttrs: true })
 const {
   target = 'viewport',
   maskZIndex = 1000,
-  class: customClass
+  class: customClass,
 } = defineProps<JvOverlayProps>()
 
 const emit = defineEmits<JvOverlayEmits>()
@@ -25,7 +25,7 @@ const visible = defineModel<boolean>('modelValue')
 defineExpose<JvOverlayExpose>()
 
 const { currentZIndex, nextZindex } = useZindex(
-  target === 'parent' ? 100 : maskZIndex
+  target === 'parent' ? 100 : maskZIndex,
 )
 // 获取父元素
 const parentEl = useParentElement()
@@ -53,13 +53,13 @@ const overlayStyle = computed<CSSProperties>(() => {
       return {
         position: 'relative',
         width: '100%',
-        height: '100%'
+        height: '100%',
       }
     default:
       return {
         position: 'fixed',
         width: '100vw',
-        height: '100vh'
+        height: '100vh',
       }
   }
 })
@@ -67,14 +67,14 @@ const overlayStyle = computed<CSSProperties>(() => {
 const maskStyle = computed<CSSProperties>(() => {
   return {
     position: target === 'parent' ? 'absolute' : 'fixed',
-    zIndex: unref(currentZIndex)
+    zIndex: unref(currentZIndex),
   }
 })
 
 const contentStyle = computed<CSSProperties>(() => {
   return {
     zIndex: unref(currentZIndex) + 1,
-    position: target === 'parent' ? 'relative' : 'fixed'
+    position: target === 'parent' ? 'relative' : 'fixed',
   }
 })
 function handleClickOverlay() {

@@ -21,7 +21,7 @@ export function useTableClassAndStyle(props: JvTableProps) {
       row: TableRowData,
       rowIndex: number,
       selectedRows: MaybeRef<TableRowData[]>,
-      currentHighlightRow: MaybeRef<TableRowData | null>
+      currentHighlightRow: MaybeRef<TableRowData | null>,
     ) => {
       const _selectedRows = unref(selectedRows)
       const _currentHighlightRow = unref(currentHighlightRow)
@@ -32,7 +32,7 @@ export function useTableClassAndStyle(props: JvTableProps) {
         { 'is-current': highlightCurrentRow && _currentHighlightRow === row },
         typeof rowClassName === 'function'
           ? rowClassName(row, rowIndex)
-          : rowClassName || ''
+          : rowClassName || '',
       ]
     },
     setRowStyle: (row: TableRowData, rowIndex: number) => {
@@ -40,14 +40,14 @@ export function useTableClassAndStyle(props: JvTableProps) {
         width: row.width ? convertToUnit(row.width) : 'auto',
         ...(typeof rowStyle === 'function'
           ? rowStyle(row, rowIndex)
-          : rowStyle || {})
+          : rowStyle || {}),
       }
     },
     setCellClassName: (
       row: TableRowData,
       column: TableColumn,
       rowIndex: number,
-      columnIndex: number
+      columnIndex: number,
     ) => {
       return [
         bem.e('cell'),
@@ -61,18 +61,18 @@ export function useTableClassAndStyle(props: JvTableProps) {
         { 'is-first-right-fixed': column.isFirstRight },
         typeof cellClassName === 'function'
           ? cellClassName({ row, column, rowIndex, columnIndex })
-          : cellClassName || ''
+          : cellClassName || '',
       ]
     },
     setCellStyle: (
       row: TableRowData,
       column: TableColumn,
       rowIndex: number,
-      columnIndex: number
+      columnIndex: number,
     ) => {
       // 基础样式
       const baseStyle: Record<string, any> = {
-        width: column.width ? convertToUnit(column.width) : 'auto'
+        width: column.width ? convertToUnit(column.width) : 'auto',
       }
 
       // 添加固定列样式
@@ -80,28 +80,28 @@ export function useTableClassAndStyle(props: JvTableProps) {
         baseStyle.position = 'sticky'
 
         if (column.fixed === true || column.fixed === 'left') {
-          baseStyle.left =
-            column.fixedLeft !== undefined ? `${column.fixedLeft}px` : 0
+          baseStyle.left
+            = column.fixedLeft !== undefined ? `${column.fixedLeft}px` : 0
           baseStyle.zIndex = 3
           baseStyle.backgroundColor = 'var(--jv-theme-surface, #fff)'
 
           // 条纹行样式背景适配
           if (stripe && rowIndex % 2 !== 0) {
-            baseStyle.backgroundColor =
-              'var(--jv-theme-surface-variant, #f5f5f5)'
+            baseStyle.backgroundColor
+              = 'var(--jv-theme-surface-variant, #f5f5f5)'
           }
         }
 
         if (column.fixed === 'right') {
-          baseStyle.right =
-            column.fixedRight !== undefined ? `${column.fixedRight}px` : 0
+          baseStyle.right
+            = column.fixedRight !== undefined ? `${column.fixedRight}px` : 0
           baseStyle.zIndex = 3
           baseStyle.backgroundColor = 'var(--jv-theme-surface, #fff)'
 
           // 条纹行样式背景适配
           if (stripe && rowIndex % 2 !== 0) {
-            baseStyle.backgroundColor =
-              'var(--jv-theme-surface-variant, #f5f5f5)'
+            baseStyle.backgroundColor
+              = 'var(--jv-theme-surface-variant, #f5f5f5)'
           }
         }
       }
@@ -111,9 +111,9 @@ export function useTableClassAndStyle(props: JvTableProps) {
         ...baseStyle,
         ...(typeof cellStyle === 'function'
           ? cellStyle({ row, column, rowIndex, columnIndex })
-          : cellStyle || {})
+          : cellStyle || {}),
       }
-    }
+    },
   }
 }
 
@@ -121,7 +121,7 @@ export function useTableClassAndStyle(props: JvTableProps) {
 export function exportToCSV(
   _dataSource: MaybeRef<TableRowData[]>,
   _columns: MaybeRef<TableColumn[]>,
-  fileName = 'table-data.csv'
+  fileName = 'table-data.csv',
 ) {
   const dataSource = unref(_dataSource)
   const columns = unref(_columns)
@@ -130,9 +130,9 @@ export function exportToCSV(
   }
 
   const visibleColumns = columns.filter(
-    (col) => col.type !== 'selection' && col.type !== 'expand'
+    col => col.type !== 'selection' && col.type !== 'expand',
   )
-  const headers = visibleColumns.map((col) => col.label || col.prop || '')
+  const headers = visibleColumns.map(col => col.label || col.prop || '')
 
   let csvContent = `${headers.join(',')}\n`
 

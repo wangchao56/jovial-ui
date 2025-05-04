@@ -17,7 +17,7 @@ export function useComponentRules(): ComponentRules {
   // 尝试从注入中获取组件规则
   const injectedRules = inject<ComponentRules | undefined>(
     ComponentRulesSymbol,
-    undefined
+    undefined,
   )
 
   if (injectedRules) {
@@ -35,7 +35,7 @@ export function useComponentRules(): ComponentRules {
     messages,
     t,
     n,
-    provide: () => locale
+    provide: () => locale,
   }
 
   // 创建组件规则
@@ -77,7 +77,7 @@ export function useComponentStyle(componentName: string) {
    * @returns 尺寸值
    */
   const getSizeValue = (
-    size: keyof typeof rules.designRules.typography.fontSize
+    size: keyof typeof rules.designRules.typography.fontSize,
   ): string => {
     return rules.designRules.typography.fontSize[size]
   }
@@ -88,7 +88,7 @@ export function useComponentStyle(componentName: string) {
    * @returns 圆角值
    */
   const getBorderRadius = (
-    radius: keyof typeof rules.designRules.borderRadius
+    radius: keyof typeof rules.designRules.borderRadius,
   ): string => {
     return rules.designRules.borderRadius[radius]
   }
@@ -99,7 +99,7 @@ export function useComponentStyle(componentName: string) {
    * @returns 间距值
    */
   const getSpacing = (
-    space: keyof typeof rules.designRules.spacing
+    space: keyof typeof rules.designRules.spacing,
   ): string => {
     return rules.designRules.spacing[space]
   }
@@ -110,7 +110,7 @@ export function useComponentStyle(componentName: string) {
    * @returns 阴影值
    */
   const getElevation = (
-    elevation: keyof typeof rules.designRules.elevation
+    elevation: keyof typeof rules.designRules.elevation,
   ): string => {
     return rules.designRules.elevation[elevation]
   }
@@ -121,7 +121,7 @@ export function useComponentStyle(componentName: string) {
    * @returns CSS变量对象
    */
   const createCssVars = (
-    vars: Record<string, string | number>
+    vars: Record<string, string | number>,
   ): Record<string, string | number> => {
     const result: Record<string, string | number> = {}
 
@@ -142,7 +142,7 @@ export function useComponentStyle(componentName: string) {
     getElevation,
     createCssVars,
     isDark: theme.current.value.dark,
-    themeName: theme.name.value
+    themeName: theme.name.value,
   }
 }
 
@@ -152,8 +152,8 @@ export function useComponentStyle(componentName: string) {
  * @returns 组件样式助手
  */
 export function useColorTypeStyle(componentName: string) {
-  const { bem, getThemeColor, useThemeVariable } =
-    useComponentStyle(componentName)
+  const { bem, getThemeColor, useThemeVariable }
+    = useComponentStyle(componentName)
 
   /**
    * 获取颜色类型的颜色变量
@@ -166,7 +166,7 @@ export function useColorTypeStyle(componentName: string) {
       return {
         '--color-bg': useThemeVariable('background'),
         '--color-text': useThemeVariable('on-background'),
-        '--color-border': useThemeVariable('neutral')
+        '--color-border': useThemeVariable('neutral'),
       }
     }
 
@@ -177,7 +177,7 @@ export function useColorTypeStyle(componentName: string) {
       success: 'success',
       warning: 'warning',
       danger: 'danger',
-      info: 'info'
+      info: 'info',
     }
 
     const color = themeColorMap[colorType] || 'primary'
@@ -185,13 +185,13 @@ export function useColorTypeStyle(componentName: string) {
     return {
       '--color-bg': getThemeColor(color),
       '--color-text': getThemeColor(`on-${color}`),
-      '--color-border': getThemeColor(color)
+      '--color-border': getThemeColor(color),
     }
   }
 
   return {
     bem,
-    getColorTypeVars
+    getColorTypeVars,
   }
 }
 

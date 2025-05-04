@@ -6,15 +6,15 @@ export default {
   dismiss: '关闭',
   modal: {
     cancel: '取消',
-    confirm: '确定'
+    confirm: '确定',
   },
   confirmEdit: {
     ok: '确定',
-    cancel: '取消'
+    cancel: '取消',
   },
   dataIterator: {
     noResultsText: '没有符合条件的结果',
-    loadingText: '加载中……'
+    loadingText: '加载中……',
   },
   dataTable: {
     itemsPerPageText: '每页数目：',
@@ -24,9 +24,9 @@ export default {
       sortNone: '：未排序。',
       activateNone: '点击以移除排序。',
       activateDescending: '点击以降序排列。',
-      activateAscending: '点击以升序排列。'
+      activateAscending: '点击以升序排列。',
     },
-    sortBy: '排序方式'
+    sortBy: '排序方式',
   },
   dataFooter: {
     itemsPerPageText: '每页数目：',
@@ -35,30 +35,30 @@ export default {
     prevPage: '上一页',
     firstPage: '首页',
     lastPage: '尾页',
-    pageText: '{0}-{1} 共 {2}'
+    pageText: '{0}-{1} 共 {2}',
   },
   dateRangeInput: {
-    divider: '至'
+    divider: '至',
   },
   datePicker: {
     itemsSelected: '{0} 已选',
     range: {
       title: '选择日期',
-      header: '输入日期'
+      header: '输入日期',
     },
     title: '选择日期',
     header: '输入日期',
     input: {
-      placeholder: '输入日期'
-    }
+      placeholder: '输入日期',
+    },
   },
   noDataText: '没有数据',
   carousel: {
     prev: '上一张',
     next: '下一张',
     ariaLabel: {
-      delimiter: '轮播图 {0} 共 {1}'
-    }
+      delimiter: '轮播图 {0} 共 {1}',
+    },
   },
   calendar: {
     title: '日历',
@@ -89,7 +89,7 @@ export default {
     wed: '三',
     thu: '四',
     fri: '五',
-    sat: '六'
+    sat: '六',
   },
   input: {
     clear: '清除 {0}',
@@ -97,21 +97,21 @@ export default {
     appendAction: '{0} 后置操作',
     // 输入 OTP 字符
     otp: '请输入 OTP 字符 {0}',
-    placeholder: '请输入 {0}'
+    placeholder: '请输入 {0}',
   },
   fileInput: {
     counter: '{0} 个文件',
-    counterSize: '{0} 个文件（共 {1}）'
+    counterSize: '{0} 个文件（共 {1}）',
   },
   fileUpload: {
     title: '拖拽文件到这里',
     divider: '或',
-    browse: '浏览文件'
+    browse: '浏览文件',
   },
   timePicker: {
     am: '上午',
     pm: '下午',
-    title: '选择时间'
+    title: '选择时间',
   },
   pagination: {
     ariaLabel: {
@@ -121,7 +121,7 @@ export default {
       page: '转到页面 {0}',
       currentPage: '当前页 {0}',
       first: '首页',
-      last: '尾页'
+      last: '尾页',
     },
     total: '共 {0} 条',
     prev: '上一页',
@@ -131,20 +131,20 @@ export default {
     itemsPerPage: '条/页',
     pageSize: '每页显示',
     goto: '前往',
-    pageOf: '第 {0} 页，共 {1} 页'
+    pageOf: '第 {0} 页，共 {1} 页',
   },
   stepper: {
     next: '下一页',
-    prev: '上一页'
+    prev: '上一页',
   },
   rating: {
     ariaLabel: {
-      item: '评分 {0} 共 {1}'
-    }
+      item: '评分 {0} 共 {1}',
+    },
   },
   loading: '加载中...',
   infiniteScroll: {
     loadMore: '加载更多',
-    empty: '没有更多'
-  }
+    empty: '没有更多',
+  },
 }

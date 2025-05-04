@@ -20,6 +20,6 @@ export function useZindex(initialZIndex = defaultZIndex): {
   return {
     zIndex,
     currentZIndex,
-    nextZindex
+    nextZindex,
   }
 }

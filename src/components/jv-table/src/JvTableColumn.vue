@@ -6,7 +6,7 @@ import { JvTableContextKey } from './types'
 // 定义组件名称
 defineOptions({
   name: 'JvTableColumn',
-  inheritAttrs: false
+  inheritAttrs: false,
 })
 
 // 定义属性
@@ -40,8 +40,8 @@ const props = defineProps<{
 }>()
 
 defineSlots<{
-  default?: (props: { row: any; column: TableColumn; $index: number }) => any
-  header?: (props: { column: TableColumn; $index: number }) => any
+  default?: (props: { row: any, column: TableColumn, $index: number }) => any
+  header?: (props: { column: TableColumn, $index: number }) => any
 }>()
 
 // 获取插槽
@@ -49,7 +49,7 @@ const slots = useSlots()
 
 // 从父组件获取注册列方法
 const { registerColumn, unregisterColumn } = inject<JvTableContext>(
-  JvTableContextKey
+  JvTableContextKey,
 ) as JvTableContext
 
 // 处理fixed属性
@@ -67,10 +67,10 @@ const column: TableColumn = {
   // 如果存在自定义渲染插槽，标记列有自定义渲染
   hasCustomRender: !!slots.default,
   hasCustomHeader: !!slots.header,
-  renderHeader: (params: { column: TableColumn; $index: number }) =>
+  renderHeader: (params: { column: TableColumn, $index: number }) =>
     renderSlot(slots, 'header', params),
-  renderCell: (params: { row: any; column: TableColumn; $index: number }) =>
-    renderSlot(slots, 'default', params)
+  renderCell: (params: { row: any, column: TableColumn, $index: number }) =>
+    renderSlot(slots, 'default', params),
 }
 
 // 注册列

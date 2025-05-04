@@ -11,7 +11,7 @@ const {
   size = 'medium',
   closable = false,
   content = '',
-  variant = 'filled'
+  variant = 'filled',
 } = defineProps<JvTagProps>()
 
 const emit = defineEmits<{
@@ -45,7 +45,7 @@ const closeIcon = computed(() => {
       bem.m(`variant-${variant}`),
       bem.m(`size-${size}`),
       bem.m(`shape-${shape}`),
-      bem.is('closable', closable)
+      bem.is('closable', closable),
     ]"
     role="tag"
     tabindex="0"
@@ -70,25 +70,25 @@ const closeIcon = computed(() => {
 $jv-tag-size-map: (
   'small': (
     'padding': (
-      2px 8px
+      2px 8px,
     ),
     'font-size': 10px,
-    'max-height': 22px
+    'max-height': 22px,
   ),
   'medium': (
     'padding': (
-      4px 10px
+      4px 10px,
     ),
     'font-size': 12px,
-    'max-height': 26px
+    'max-height': 26px,
   ),
   'large': (
     'padding': (
-      6px 14px
+      6px 14px,
     ),
     'font-size': 14px,
-    'max-height': 34px
-  )
+    'max-height': 34px,
+  ),
 );
 $jv-tag-type-map: (primary, success, warning, error, info);
 
@@ -195,11 +195,7 @@ $jv-tag-type-map: (primary, success, warning, error, info);
   }
 
   @include m(variant-tonal) {
-    background-color: color-mix(
-      in srgb,
-      var(--jv-tag-background-color) 40%,
-      var(--jv-tag-color)
-    );
+    background-color: color-mix(in srgb, var(--jv-tag-background-color) 40%, var(--jv-tag-color));
     color: var(--jv-tag-background-color);
   }
 
@@ -213,13 +209,7 @@ $jv-tag-type-map: (primary, success, warning, error, info);
   }
 }
 
-@supports (
-  color: color-mix(
-      in srgb,
-      var(--jv-tag-background-color) 40%,
-      var(--jv-tag-color)
-    )
-) {
+@supports (color: color-mix(in srgb, var(--jv-tag-background-color) 40%, var(--jv-tag-color))) {
   .jv-tag--variant-tonal {
     background-color: rgba(var(--jv-tag-background-color-rgb), 0.4);
     color: rgba(var(--jv-tag-background-color-rgb), 0.4);

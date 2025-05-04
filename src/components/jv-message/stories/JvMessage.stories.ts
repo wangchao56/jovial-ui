@@ -12,51 +12,51 @@ const meta = {
       description: '消息类型',
       control: 'select',
       options: ['info', 'success', 'warning', 'danger'],
-      defaultValue: 'info'
+      defaultValue: 'info',
     },
     closable: {
       description: '是否可关闭',
       control: 'boolean',
-      defaultValue: false
+      defaultValue: false,
     },
     showIcon: {
       description: '是否显示图标',
       control: 'boolean',
-      defaultValue: true
+      defaultValue: true,
     },
     duration: {
       description: '显示时间，单位毫秒，设为 0 则不自动关闭',
       control: 'number',
-      defaultValue: 3000
+      defaultValue: 3000,
     },
     autoClose: {
       description: '是否自动关闭',
       control: 'boolean',
-      defaultValue: true
+      defaultValue: true,
     },
     center: {
       description: '是否居中显示',
       control: 'boolean',
-      defaultValue: false
+      defaultValue: false,
     },
     default: {
       description: '消息内容',
-      control: 'text'
-    }
+      control: 'text',
+    },
   },
   parameters: {
     docs: {
       description: {
-        component: '显示全局提示消息的组件，用于向用户反馈操作结果或显示通知。'
-      }
-    }
+        component: '显示全局提示消息的组件，用于向用户反馈操作结果或显示通知。',
+      },
+    },
   },
   decorators: [
-    (story) => ({
+    story => ({
       components: { story },
-      template: '<div style="padding: 60px 20px;"><story /></div>'
-    })
-  ]
+      template: '<div style="padding: 60px 20px;"><story /></div>',
+    }),
+  ],
 } satisfies Meta<typeof JvMessage>
 
 export default meta
@@ -65,8 +65,8 @@ type Story = StoryObj<typeof meta>
 // 基础使用
 export const Default: Story = {
   args: {
-    default: '这是一条消息提示'
-  }
+    default: '这是一条消息提示',
+  },
 }
 
 // 不同类型
@@ -74,8 +74,8 @@ function createTypeStory(type: MessageType) {
   return {
     args: {
       type,
-      default: `这是一条${type}类型的消息`
-    }
+      default: `这是一条${type}类型的消息`,
+    },
   }
 }
 
@@ -89,22 +89,22 @@ export const Closable: Story = {
   args: {
     closable: true,
     duration: 0,
-    default: '点击右侧关闭按钮可以关闭此消息'
-  }
+    default: '点击右侧关闭按钮可以关闭此消息',
+  },
 }
 
 // 无图标
 export const WithoutIcon: Story = {
   args: {
     showIcon: false,
-    default: '这是一条不带图标的消息'
-  }
+    default: '这是一条不带图标的消息',
+  },
 }
 
 // 居中显示
 export const Centered: Story = {
   args: {
     center: true,
-    default: '这是一条居中显示的消息'
-  }
+    default: '这是一条居中显示的消息',
+  },
 }

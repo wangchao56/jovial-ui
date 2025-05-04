@@ -11,14 +11,14 @@ const meta: Meta<typeof JvTagGroup> = {
     collapsible: { control: 'boolean' },
     maxCollapse: { control: 'number' },
     closable: { control: 'boolean' },
-    addable: { control: 'boolean' }
+    addable: { control: 'boolean' },
   },
   args: {
     collapsible: false,
     maxCollapse: 5,
     closable: false,
-    addable: false
-  }
+    addable: false,
+  },
 }
 
 export default meta
@@ -26,7 +26,7 @@ export default meta
 type Story = StoryObj<typeof JvTagGroup>
 
 export const Basic: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { JvTagGroup },
     setup() {
       const tags = ref<JvTagItemProps[]>([
@@ -34,23 +34,23 @@ export const Basic: Story = {
         { id: 2, props: { content: '标签2', type: 'success' } },
         { id: 3, props: { content: '标签3', type: 'warning' } },
         { id: 4, props: { content: '标签4', type: 'error' } },
-        { id: 5, props: { content: '标签5', type: 'info' } }
+        { id: 5, props: { content: '标签5', type: 'info' } },
       ])
 
       return { args, tags }
     },
     template: `
       <JvTagGroup v-bind="args" :tags="tags" />
-    `
-  })
+    `,
+  }),
 }
 
 export const Collapsible: Story = {
   args: {
     collapsible: true,
-    maxCollapse: 3
+    maxCollapse: 3,
   },
-  render: (args) => ({
+  render: args => ({
     components: { JvTagGroup },
     setup() {
       const tags = ref<JvTagItemProps[]>([
@@ -60,28 +60,28 @@ export const Collapsible: Story = {
         { id: 4, props: { content: '标签4', type: 'error' } },
         { id: 5, props: { content: '标签5', type: 'info' } },
         { id: 6, props: { content: '标签6', type: 'primary' } },
-        { id: 7, props: { content: '标签7', type: 'success' } }
+        { id: 7, props: { content: '标签7', type: 'success' } },
       ])
 
       return { args, tags }
     },
     template: `
       <JvTagGroup v-bind="args" :tags="tags" />
-    `
-  })
+    `,
+  }),
 }
 
 export const Closable: Story = {
   args: {
-    closable: true
+    closable: true,
   },
-  render: (args) => ({
+  render: args => ({
     components: { JvTagGroup },
     setup() {
       const tags = ref<JvTagItemProps[]>([
         { id: 1, props: { content: '标签1', type: 'primary' } },
         { id: 2, props: { content: '标签2', type: 'success' } },
-        { id: 3, props: { content: '标签3', type: 'warning' } }
+        { id: 3, props: { content: '标签3', type: 'warning' } },
       ])
 
       function handleClose(tag: JvTagItemProps, index: number) {
@@ -96,28 +96,28 @@ export const Closable: Story = {
         :tags="tags"
         @close="handleClose" 
       />
-    `
-  })
+    `,
+  }),
 }
 
 export const Addable: Story = {
   args: {
     closable: true,
-    addable: true
+    addable: true,
   },
-  render: (args) => ({
+  render: args => ({
     components: { JvTagGroup },
     setup() {
       const tags = ref<JvTagItemProps[]>([
         { id: 1, props: { content: '标签1', type: 'primary' } },
-        { id: 2, props: { content: '标签2', type: 'success' } }
+        { id: 2, props: { content: '标签2', type: 'success' } },
       ])
 
       function handleAdd() {
         const id = Date.now()
         tags.value.push({
           id,
-          props: { content: `标签${id % 100}`, type: 'primary' }
+          props: { content: `标签${id % 100}`, type: 'primary' },
         })
       }
 
@@ -129,6 +129,6 @@ export const Addable: Story = {
         :tags="tags"
         @add="handleAdd"
       />
-    `
-  })
+    `,
+  }),
 }

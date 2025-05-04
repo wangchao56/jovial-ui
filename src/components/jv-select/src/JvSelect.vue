@@ -17,26 +17,29 @@ const dropdownRef = ref<HTMLElement | null>(null)
 const selectedLabel = computed(() => {
   if (props.multiple && Array.isArray(props.modelValue)) {
     return props.options
-      .filter((opt) =>
-        (props.modelValue as (string | number)[]).includes(opt.value)
+      .filter(opt =>
+        (props.modelValue as (string | number)[]).includes(opt.value),
       )
-      .map((opt) => opt.label)
+      .map(opt => opt.label)
       .join(', ')
   }
-  const found = props.options.find((opt) => opt.value === props.modelValue)
+  const found = props.options.find(opt => opt.value === props.modelValue)
   return found ? found.label : ''
 })
 
 function handleSelect(option: JvSelectOption) {
-  if (props.disabled || props.readonly) return
+  if (props.disabled || props.readonly)
+    return
   if (props.multiple && Array.isArray(props.modelValue)) {
     const arr = [...props.modelValue] as (string | number)[]
     const idx = arr.indexOf(option.value)
-    if (idx > -1) arr.splice(idx, 1)
+    if (idx > -1)
+      arr.splice(idx, 1)
     else arr.push(option.value)
     emit('update:modelValue', arr as typeof props.modelValue)
     emit('change', arr as typeof props.modelValue)
-  } else {
+  }
+  else {
     emit('update:modelValue', option.value as typeof props.modelValue)
     emit('change', option.value as typeof props.modelValue)
     showDropdown.value = false
@@ -46,7 +49,7 @@ function handleSelect(option: JvSelectOption) {
 function handleClear() {
   emit(
     'update:modelValue',
-    (props.multiple ? [] : '') as typeof props.modelValue
+    (props.multiple ? [] : '') as typeof props.modelValue,
   )
   emit('clear')
 }
@@ -66,7 +69,8 @@ function handleBlur(e: FocusEvent) {
 }
 
 function toggleDropdown() {
-  if (props.disabled || props.readonly) return
+  if (props.disabled || props.readonly)
+    return
   showDropdown.value = !showDropdown.value
 }
 
@@ -83,10 +87,10 @@ function handleClickOutside(e: MouseEvent) {
   const dropdownEl = dropdownRef.value
 
   if (
-    selectEl &&
-    !selectEl.contains(target) &&
-    dropdownEl &&
-    !dropdownEl.contains(target)
+    selectEl
+    && !selectEl.contains(target)
+    && dropdownEl
+    && !dropdownEl.contains(target)
   ) {
     showDropdown.value = false
   }
@@ -95,7 +99,8 @@ function handleClickOutside(e: MouseEvent) {
 watchEffect(() => {
   if (showDropdown.value) {
     document.addEventListener('click', handleClickOutside)
-  } else {
+  }
+  else {
     document.removeEventListener('click', handleClickOutside)
   }
 
@@ -156,8 +161,8 @@ watchEffect(() => {
           bem.e('option'),
           {
             'is-selected': isSelected(option),
-            'is-disabled': option.disabled
-          }
+            'is-disabled': option.disabled,
+          },
         ]"
         @mousedown.prevent="!option.disabled && handleSelect(option)"
       >
@@ -169,7 +174,9 @@ watchEffect(() => {
         />
       </div>
 
-      <div v-if="!props.options.length" :class="bem.e('empty')">暂无数据</div>
+      <div v-if="!props.options.length" :class="bem.e('empty')">
+        暂无数据
+      </div>
     </div>
   </div>
 </template>

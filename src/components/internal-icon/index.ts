@@ -44,5 +44,5 @@ export const _internalIcons = {
   $menuDown: internalIcons.MdiMenuDown, // 菜单下箭头
   $sortAscending: internalIcons.MdiSortAscending, // 升序
   $sortDescending: internalIcons.MdiSortDescending, // 降序
-  $sortVariantOff: internalIcons.MdiSortVariantOff // 排序关闭
+  $sortVariantOff: internalIcons.MdiSortVariantOff, // 排序关闭
 }

@@ -3,7 +3,7 @@ import { useLocale } from '@/locale/adapters/jovial'
 import { computed } from 'vue'
 
 defineOptions({
-  name: 'JvLocaleSwitcher'
+  name: 'JvLocaleSwitcher',
 })
 
 const locale = useLocale()

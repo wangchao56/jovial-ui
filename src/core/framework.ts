@@ -61,6 +61,6 @@ export function createJovialUI(jovial: JovialOptions = {}): JovialInstance {
     install,
     defaults,
     theme,
-    locale // 导出国际化实例
+    locale, // 导出国际化实例
   }
 }

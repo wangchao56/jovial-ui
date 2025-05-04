@@ -11,46 +11,46 @@ const meta = {
   argTypes: {
     value: {
       description: '显示的值',
-      control: 'text'
+      control: 'text',
     },
     max: {
       description: '最大值，超过最大值会显示 "{max}+"',
       control: 'number',
-      defaultValue: 99
+      defaultValue: 99,
     },
     dot: {
       description: '是否为圆点',
       control: 'boolean',
-      defaultValue: false
+      defaultValue: false,
     },
     hidden: {
       description: '是否隐藏角标',
       control: 'boolean',
-      defaultValue: false
+      defaultValue: false,
     },
     type: {
       description: '角标类型',
       control: 'select',
       options: ['primary', 'success', 'warning', 'danger', 'info'],
-      defaultValue: 'danger'
+      defaultValue: 'danger',
     },
     offset: {
       description: '自定义角标位置偏移，格式为 [x, y]',
-      control: 'object'
+      control: 'object',
     },
     default: {
       description: '默认插槽内容',
-      control: 'text'
-    }
+      control: 'text',
+    },
   },
   parameters: {
     docs: {
       description: {
         component:
-          '用于显示角标或数量标记的组件，可以在元素右上角显示提示信息。'
-      }
-    }
-  }
+          '用于显示角标或数量标记的组件，可以在元素右上角显示提示信息。',
+      },
+    },
+  },
 } satisfies Meta<typeof JvBadge>
 
 export default meta
@@ -60,9 +60,9 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   args: {
     value: 5,
-    default: '徽标'
+    default: '徽标',
   },
-  render: (args) => ({
+  render: args => ({
     components: { JvBadge, JvButton },
     setup() {
       return { args }
@@ -78,8 +78,8 @@ export const Default: Story = {
           </div>
         </JvBadge>
       </div>
-    `
-  })
+    `,
+  }),
 }
 
 // 不同类型
@@ -87,9 +87,9 @@ function createTypeStory(type: BadgeType) {
   return {
     args: {
       value: 5,
-      type
+      type,
     },
-    render: Default.render
+    render: Default.render,
   }
 }
 
@@ -103,24 +103,24 @@ export const Info: Story = createTypeStory('info')
 export const MaxValue: Story = {
   args: {
     value: 1000,
-    max: 99
+    max: 99,
   },
-  render: Default.render
+  render: Default.render,
 }
 
 // 小圆点
 export const Dot: Story = {
   args: {
-    dot: true
+    dot: true,
   },
-  render: Default.render
+  render: Default.render,
 }
 
 // 自定义偏移
 export const CustomOffset: Story = {
   args: {
     value: 5,
-    offset: [5, 5]
+    offset: [5, 5],
   },
-  render: Default.render
+  render: Default.render,
 }

@@ -1,6 +1,6 @@
 <script lang="ts">
 export default {
-  name: 'MdiAlertDecagram'
+  name: 'MdiAlertDecagram',
 }
 </script>
 

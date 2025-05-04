@@ -64,7 +64,7 @@ export interface TableColumn {
   fixedIndex?: number
   isLastLeft?: boolean
   isFirstRight?: boolean
-  renderHeader?: (params: { column: TableColumn; $index: number }) => VNode
+  renderHeader?: (params: { column: TableColumn, $index: number }) => VNode
   renderCell?: (params: {
     row: TableRowData
     column: TableColumn
@@ -171,13 +171,13 @@ export interface JvTableProps {
    */
   headerCellClassName?:
     | string
-    | ((params: { column: TableColumn; columnIndex: number }) => string)
+    | ((params: { column: TableColumn, columnIndex: number }) => string)
   /**
    * 表格头部单元格的样式
    */
   headerCellStyle?:
     | CSSProperties
-    | ((params: { column: TableColumn; columnIndex: number }) => CSSProperties)
+    | ((params: { column: TableColumn, columnIndex: number }) => CSSProperties)
   /**
    * 表格单元格的类名
    */
@@ -236,7 +236,7 @@ export interface JvTableProps {
   /**
    * 是否默认排序
    */
-  defaultSort?: { prop: string; order: SortOrder }
+  defaultSort?: { prop: string, order: SortOrder }
   /**
    * 是否开启虚拟滚动（优化大数据量渲染）
    */
@@ -271,7 +271,7 @@ export enum TableEventNames {
   CurrentChange = 'currentChange',
   HeaderDragend = 'headerDragend',
   ExpandChange = 'expandChange',
-  Scroll = 'scroll'
+  Scroll = 'scroll',
 }
 
 // 定义表格事件
@@ -312,7 +312,7 @@ export interface JvTableEmits {
   (e: TableEventNames.HeaderClick, column: TableColumn, event: MouseEvent): void
   (
     e: TableEventNames.SortChange,
-    params: { column: TableColumn; prop: string; order: SortOrder }
+    params: { column: TableColumn, prop: string, order: SortOrder }
   ): void
   (e: TableEventNames.FilterChange, filters: Record<string, string[]>): void
   (
@@ -356,7 +356,7 @@ export interface JvTableSlots {
   append: () => VNode[]
   loading: () => VNode[]
   header: (props: { columns: TableColumn[] }) => VNode[]
-  footer: (props: { columns: TableColumn[]; data: TableRowData[] }) => VNode[]
+  footer: (props: { columns: TableColumn[], data: TableRowData[] }) => VNode[]
   [key: `column-${string}`]: (props: {
     row: TableRowData
     column: TableColumn
@@ -377,5 +377,5 @@ export interface JvTableContext {
   setHeaderRef: (el: HTMLElement) => void
 }
 
-export const JvTableContextKey: InjectionKey<JvTableContext> =
-  Symbol('jv-table')
+export const JvTableContextKey: InjectionKey<JvTableContext>
+  = Symbol('jv-table')

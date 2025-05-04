@@ -13,7 +13,7 @@ const {
   size = '300px',
   closeIcon = '$close',
   closeable = true,
-  maskClosable = true
+  maskClosable = true,
 } = defineProps<JvDrawerProps>()
 
 const emit = defineEmits<JvDrawerEmits>()
@@ -52,12 +52,13 @@ watch(
     if (val) {
       overlayVisible.value = true
       hideScrollbar()
-    } else {
+    }
+    else {
       drawerVisible.value = false
       showScrollbar()
     }
   },
-  { immediate: true }
+  { immediate: true },
 )
 
 function overlayOpenAfter() {
@@ -85,9 +86,9 @@ const drawerId = `jv-drawer-${useId()}`
 
 const triggerProps = computed(() => {
   return {
-    onClick: toggleDrawer,
-    class: 'jv-drawer__trigger',
-    'data-bindmodal-id': drawerId
+    'onClick': toggleDrawer,
+    'class': 'jv-drawer__trigger',
+    'data-bindmodal-id': drawerId,
   }
 })
 
@@ -99,7 +100,8 @@ const maskZIndex = computed(() => {
 const isMobile = computed(() => window.innerWidth <= 600)
 
 const realPlacement = computed(() => {
-  if (isMobile.value) return 'bottom'
+  if (isMobile.value)
+    return 'bottom'
   return placement
 })
 
@@ -114,7 +116,8 @@ const placementStyle = computed(() => {
     style.right = 0
     style.bottom = 0
     style.borderRadius = '16px 16px 0 0'
-  } else {
+  }
+  else {
     switch (realPlacement.value) {
       case 'left':
         style.width = innerSize
@@ -141,7 +144,7 @@ function handleClickOverlay() {
 
 defineExpose<JvDrawerExpose>({
   open: openDrawer,
-  close: closeDrawer
+  close: closeDrawer,
 })
 </script>
 
@@ -169,7 +172,7 @@ defineExpose<JvDrawerExpose>({
           :class="[
             bem.e('wrapper'),
             bem.is('open', visible),
-            bem.m(realPlacement)
+            bem.m(realPlacement),
           ]"
           :style="normalizeStyle([contentStyle, placementStyle])"
         >

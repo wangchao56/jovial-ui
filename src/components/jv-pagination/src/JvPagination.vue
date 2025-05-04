@@ -11,7 +11,7 @@ const {
   total,
   pageSize: pageSizeProp = 10,
   pageSizes = [10, 20, 50, 100],
-  simple = false
+  simple = false,
 } = defineProps<JvPaginationProps>()
 
 const emit = defineEmits<JvPaginationEmits>()
@@ -24,16 +24,16 @@ const { current, t } = useLocale()
 
 // 转换pageSizes为JvSelect需要的选项格式
 const pageSizeOptions = computed<JvSelectOption[]>(() => {
-  return pageSizes.map((size) => ({
+  return pageSizes.map(size => ({
     label: `${size}${t('$jv.pagination.itemsPerPage')}`,
-    value: size
+    value: size,
   }))
 })
 
 const isRtl = ref(false)
 function updateRtl() {
-  isRtl.value =
-    document.dir === 'rtl' || document.body.classList.contains('is-rtl')
+  isRtl.value
+    = document.dir === 'rtl' || document.body.classList.contains('is-rtl')
 }
 onMounted(() => {
   updateRtl()
@@ -47,12 +47,14 @@ watch(() => current.value, updateRtl)
 watch(
   () => modelValue,
   (val) => {
-    if (val !== currentPage.value) currentPage.value = val
-  }
+    if (val !== currentPage.value)
+      currentPage.value = val
+  },
 )
 
 function changePage(page: number) {
-  if (page < 1 || page > totalPages.value) return
+  if (page < 1 || page > totalPages.value)
+    return
   currentPage.value = page
   emit('update:modelValue', page)
   emit('change', page, pageSize.value)
@@ -70,10 +72,12 @@ const pageList = computed(() => {
   const cur = currentPage.value
   if (totalVal <= 7) {
     for (let i = 1; i <= totalVal; i++) pages.push(i)
-  } else {
+  }
+  else {
     if (cur <= 4) {
       pages.push(1, 2, 3, 4, 5, '...', totalVal)
-    } else if (cur >= totalVal - 3) {
+    }
+    else if (cur >= totalVal - 3) {
       pages.push(
         1,
         '...',
@@ -81,9 +85,10 @@ const pageList = computed(() => {
         totalVal - 3,
         totalVal - 2,
         totalVal - 1,
-        totalVal
+        totalVal,
       )
-    } else {
+    }
+    else {
       pages.push(1, '...', cur - 1, cur, cur + 1, '...', totalVal)
     }
   }
@@ -109,7 +114,7 @@ const pageList = computed(() => {
           :class="[
             bem.e('btn'),
             bem.is('active', p === currentPage),
-            bem.is('ellipsis', p === '...')
+            bem.is('ellipsis', p === '...'),
           ]"
           :disabled="p === '...'"
           @click="typeof p === 'number' && changePage(p)"
@@ -142,7 +147,7 @@ const pageList = computed(() => {
           :class="[
             bem.e('btn'),
             bem.is('active', p === currentPage),
-            bem.is('ellipsis', p === '...')
+            bem.is('ellipsis', p === '...'),
           ]"
           :disabled="p === '...'"
           @click="typeof p === 'number' && changePage(p)"
@@ -179,7 +184,7 @@ const pageList = computed(() => {
         :max="totalPages"
         style="width: 40px"
         @change="changePage(currentPage)"
-      />
+      >
       {{ t('$jv.pagination.page') }}
     </span>
   </nav>

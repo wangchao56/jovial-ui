@@ -1,7 +1,7 @@
 import {
   coverageConfigDefaults,
   defineConfig,
-  mergeConfig
+  mergeConfig,
 } from 'vitest/config'
 
 import viteConfig from './vite.config'
@@ -19,9 +19,9 @@ export default defineConfig(
           // 👇 This pattern must align with the `stories` property of your `.storybook/main.ts` config
           '**/*.stories.*',
           // 👇 This pattern must align with the output directory of `storybook build`
-          '**/storybook-static/**'
-        ]
-      }
-    }
-  })
+          '**/storybook-static/**',
+        ],
+      },
+    },
+  }),
 )

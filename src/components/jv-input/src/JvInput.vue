@@ -20,7 +20,7 @@ const {
   prefixIcon = '',
   suffixIcon = '',
   maxLength = undefined,
-  showCount = false
+  showCount = false,
 } = defineProps<JvInputProps>()
 
 const emit = defineEmits<JvInputEmits>()
@@ -31,13 +31,15 @@ const inputRef = ref<HTMLInputElement | null>(null)
 
 // 计算实际输入类型
 const inputType = computed(() => {
-  if (type !== 'password') return type
+  if (type !== 'password')
+    return type
   return passwordVisible.value ? 'text' : 'password'
 })
 
 // 计算字符数显示文本
 const countText = computed(() => {
-  if (!showCount) return ''
+  if (!showCount)
+    return ''
   const length = String(modelValue).length
   return maxLength ? `${length}/${maxLength}` : String(length)
 })
@@ -79,7 +81,7 @@ const passwordIcon = computed(() => {
 defineExpose({
   focus: () => inputRef.value?.focus(),
   blur: () => inputRef.value?.blur(),
-  clear: handleClear
+  clear: handleClear,
 })
 </script>
 
@@ -93,7 +95,7 @@ defineExpose({
       bem.is('disabled', disabled),
       bem.is('readonly', readonly),
       bem.is('clearable', clearable),
-      bem.is('show-password', showPassword)
+      bem.is('show-password', showPassword),
     ]"
   >
     <!-- 前置插槽 -->
@@ -121,7 +123,7 @@ defineExpose({
         @input="handleInput"
         @focus="handleFocus"
         @blur="handleBlur"
-      />
+      >
 
       <!-- 后缀图标或插槽 -->
       <div
@@ -172,23 +174,23 @@ $jv-input-size-options: (
   small: (
     height: 28px,
     font-size: 12px,
-    padding-x: 8px
+    padding-x: 8px,
   ),
   medium: (
     height: 36px,
     font-size: 14px,
-    padding-x: 12px
+    padding-x: 12px,
   ),
   large: (
     height: 44px,
     font-size: 16px,
-    padding-x: 16px
+    padding-x: 16px,
   ),
   xlarge: (
     height: 52px,
     font-size: 18px,
-    padding-x: 16px
-  )
+    padding-x: 16px,
+  ),
 );
 
 .jv-input {

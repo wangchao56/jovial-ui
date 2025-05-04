@@ -15,7 +15,8 @@ const emit = defineEmits<{
 const isChecked = computed(() => modelValue === label)
 
 function handleClick(e: MouseEvent) {
-  if (disabled) return
+  if (disabled)
+    return
   emit('click', e)
   emit('update:modelValue', label)
 }
@@ -27,8 +28,8 @@ function handleClick(e: MouseEvent) {
     :class="[
       {
         'is-checked': isChecked,
-        'is-disabled': disabled
-      }
+        'is-disabled': disabled,
+      },
     ]"
     @click="handleClick"
   >
@@ -39,7 +40,7 @@ function handleClick(e: MouseEvent) {
         :disabled="disabled"
         :checked="isChecked"
         hidden
-      />
+      >
       <span class="jv-radio__inner" />
     </span>
     <span class="jv-radio__label">

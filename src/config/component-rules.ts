@@ -178,14 +178,14 @@ export function createComponentRules(locale: LocaleInstance): ComponentRules {
         return ''
       }
       return theme.current.value.colors[colorName]
-    }
+    },
   }
 
   // 创建国际化规则
   const localeRules: LocaleRules = {
     translate: locale.t,
     formatNumber: locale.n,
-    getCurrentLocale: () => locale.current
+    getCurrentLocale: () => locale.current,
   }
 
   // 创建设计规则
@@ -196,14 +196,14 @@ export function createComponentRules(locale: LocaleInstance): ComponentRules {
       roundedSm: 'var(--jv-rounded-sm)',
       roundedLg: 'var(--jv-rounded-lg)',
       roundedXl: 'var(--jv-rounded-xl)',
-      roundedFull: 'var(--jv-rounded-full)'
+      roundedFull: 'var(--jv-rounded-full)',
     },
     sizes: {
       tiny: 'tiny',
       small: 'small',
       medium: 'medium',
       large: 'large',
-      xlarge: 'xlarge'
+      xlarge: 'xlarge',
     },
     colorTypes: [
       'default',
@@ -212,7 +212,7 @@ export function createComponentRules(locale: LocaleInstance): ComponentRules {
       'success',
       'warning',
       'danger',
-      'info'
+      'info',
     ],
     variants: [
       'text',
@@ -221,18 +221,18 @@ export function createComponentRules(locale: LocaleInstance): ComponentRules {
       'plain',
       'dashed',
       'elevated',
-      'flat'
+      'flat',
     ],
     animations: {
       transition: 'all 0.3s ease',
       duration: '0.3s',
-      easing: 'cubic-bezier(0.4, 0, 0.2, 1)'
+      easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
     },
     elevation: {
       default: 'var(--jv-elevation-default)',
       low: 'var(--jv-elevation-4)',
       medium: 'var(--jv-elevation-6)',
-      high: 'var(--jv-elevation-8)'
+      high: 'var(--jv-elevation-8)',
     },
     typography: {
       fontFamily: 'var(--jv-font-family)',
@@ -241,34 +241,34 @@ export function createComponentRules(locale: LocaleInstance): ComponentRules {
         small: 'var(--jv-font-size-sm)',
         base: 'var(--jv-font-size-base)',
         large: 'var(--jv-font-size-lg)',
-        xlarge: 'var(--jv-font-size-xl)'
+        xlarge: 'var(--jv-font-size-xl)',
       },
       fontWeight: {
         light: 'var(--jv-font-weight-light)',
         normal: 'var(--jv-font-weight-normal)',
         medium: 'var(--jv-font-weight-medium)',
         semibold: 'var(--jv-font-weight-semibold)',
-        bold: 'var(--jv-font-weight-bold)'
+        bold: 'var(--jv-font-weight-bold)',
       },
       lineHeight: {
         tight: '1.25',
         normal: '1.5',
-        relaxed: '1.75'
-      }
+        relaxed: '1.75',
+      },
     },
     spacing: {
       xs: '4px',
       sm: '8px',
       md: '16px',
       lg: '24px',
-      xl: '32px'
-    }
+      xl: '32px',
+    },
   }
 
   return {
     themeRules,
     localeRules,
-    designRules
+    designRules,
   }
 }
 
@@ -296,8 +296,8 @@ export const componentGenerationGuidelines = {
       component: 'JvComponentName.vue',
       types: 'types.ts',
       index: 'index.ts',
-      stories: 'JvComponentName.stories.ts'
-    }
+      stories: 'JvComponentName.stories.ts',
+    },
   },
   /**
    * 组件目录结构
@@ -313,7 +313,7 @@ export const componentGenerationGuidelines = {
      *     JvComponentName.stories.ts
      *   index.ts
      */
-    description: '组件目录结构必须遵循项目规范'
+    description: '组件目录结构必须遵循项目规范',
   },
   /**
    * 组件实现规范
@@ -342,7 +342,7 @@ export const componentGenerationGuidelines = {
      * - 支持插槽系统
      * - 支持指令
      */
-    template: 'Semantic HTML with ARIA'
+    template: 'Semantic HTML with ARIA',
   },
   /**
    * Material Design 设计原则
@@ -368,6 +368,6 @@ export const componentGenerationGuidelines = {
      * - 键盘可访问
      * - 屏幕阅读器友好
      */
-    accessibility: 'WCAG compliance'
-  }
+    accessibility: 'WCAG compliance',
+  },
 }

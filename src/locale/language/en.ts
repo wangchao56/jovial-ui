@@ -6,15 +6,15 @@ export default {
   dismiss: 'Dismiss',
   modal: {
     cancel: 'Cancel',
-    confirm: 'Confirm'
+    confirm: 'Confirm',
   },
   confirmEdit: {
     ok: 'OK',
-    cancel: 'Cancel'
+    cancel: 'Cancel',
   },
   dataIterator: {
     noResultsText: 'No results found',
-    loadingText: 'Loading...'
+    loadingText: 'Loading...',
   },
   dataTable: {
     itemsPerPageText: 'Items per page:',
@@ -24,9 +24,9 @@ export default {
       sortNone: 'No sort',
       activateNone: 'Click to remove sorting',
       activateDescending: 'Click to sort descending',
-      activateAscending: 'Click to sort ascending'
+      activateAscending: 'Click to sort ascending',
     },
-    sortBy: 'Sort by'
+    sortBy: 'Sort by',
   },
   dataFooter: {
     itemsPerPageText: 'Items per page:',
@@ -35,30 +35,30 @@ export default {
     prevPage: 'Previous page',
     firstPage: 'First page',
     lastPage: 'Last page',
-    pageText: '{0}-{1} of {2}'
+    pageText: '{0}-{1} of {2}',
   },
   dateRangeInput: {
-    divider: 'to'
+    divider: 'to',
   },
   datePicker: {
     itemsSelected: '{0} selected',
     range: {
       title: 'Select date',
-      header: 'Enter date'
+      header: 'Enter date',
     },
     title: 'Select date',
     header: 'Enter date',
     input: {
-      placeholder: 'Enter date'
-    }
+      placeholder: 'Enter date',
+    },
   },
   noDataText: 'No data available',
   carousel: {
     prev: 'Previous',
     next: 'Next',
     ariaLabel: {
-      delimiter: 'Carousel {0} of {1}'
-    }
+      delimiter: 'Carousel {0} of {1}',
+    },
   },
   calendar: {
     title: 'Calendar',
@@ -89,28 +89,28 @@ export default {
     wed: 'Wed',
     thu: 'Thu',
     fri: 'Fri',
-    sat: 'Sat'
+    sat: 'Sat',
   },
   input: {
     clear: 'Clear {0}',
     prependAction: 'Prepend {0}',
     appendAction: 'Append {0}',
     otp: 'Enter OTP character {0}',
-    placeholder: 'Enter {0}'
+    placeholder: 'Enter {0}',
   },
   fileInput: {
     counter: '{0} files',
-    counterSize: '{0} files (total {1})'
+    counterSize: '{0} files (total {1})',
   },
   fileUpload: {
     title: 'Drag and drop files here',
     divider: 'or',
-    browse: 'Browse files'
+    browse: 'Browse files',
   },
   timePicker: {
     am: 'AM',
     pm: 'PM',
-    title: 'Select time'
+    title: 'Select time',
   },
   pagination: {
     ariaLabel: {
@@ -120,7 +120,7 @@ export default {
       page: 'Go to page {0}',
       currentPage: 'Current page {0}',
       first: 'First page',
-      last: 'Last page'
+      last: 'Last page',
     },
     total: 'Total {0} items',
     prev: 'Previous',
@@ -130,20 +130,20 @@ export default {
     itemsPerPage: 'items/page',
     pageSize: 'Items per page',
     goto: 'Go to',
-    pageOf: 'Page {0} of {1}'
+    pageOf: 'Page {0} of {1}',
   },
   stepper: {
     next: 'Next page',
-    prev: 'Previous page'
+    prev: 'Previous page',
   },
   rating: {
     ariaLabel: {
-      item: 'Rating {0} of {1}'
-    }
+      item: 'Rating {0} of {1}',
+    },
   },
   loading: 'Loading...',
   infiniteScroll: {
     loadMore: 'Load more',
-    empty: 'No more'
-  }
+    empty: 'No more',
+  },
 }

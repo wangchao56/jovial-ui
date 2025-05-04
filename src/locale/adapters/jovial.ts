@@ -4,7 +4,7 @@ import {
   consoleError,
   consoleWarn,
   getCurrentInstance,
-  getObjectValueByPath
+  getObjectValueByPath,
 } from '@/utils'
 import { inject, ref, shallowRef, useModel, watch } from 'vue'
 import en from '../language/en'
@@ -12,8 +12,8 @@ import zhHans from '../language/zh-Hans'
 import zhHant from '../language/zh-Hant'
 /** Jovial国际化前缀 */
 const LANG_PREFIX = '$jv.'
-export const LocaleSymbol: InjectionKey<LocaleInstance> =
-  Symbol.for('jovial-ui-locale')
+export const LocaleSymbol: InjectionKey<LocaleInstance>
+  = Symbol.for('jovial-ui-locale')
 
 /**
  * 替换字符串中的参数
@@ -45,7 +45,7 @@ function replace(str: string, params: unknown[]): string {
 function createTranslateFunction(
   current: Ref<string>,
   fallback: Ref<string>,
-  messages: Ref<LocaleMessages>
+  messages: Ref<LocaleMessages>,
 ) {
   return (key: string, ...params: unknown[]): string => {
     // 如果key不以$jv.开头,直接替换参数返回
@@ -64,7 +64,7 @@ function createTranslateFunction(
     // 如果当前语言没有该翻译,使用回退语言
     if (!str) {
       consoleWarn(
-        `Translation key "${key}" not found in "${current.value}", trying fallback locale`
+        `Translation key "${key}" not found in "${current.value}", trying fallback locale`,
       )
       str = getObjectValueByPath(fallbackLocale, shortKey, null)
     }
@@ -100,7 +100,7 @@ function createNumberFunction(current: Ref<string>, fallback: Ref<string>) {
   return (value: number, options?: Intl.NumberFormatOptions): string => {
     const numberFormat = new Intl.NumberFormat(
       [current.value, fallback.value],
-      options
+      options,
     )
     return numberFormat.format(value)
   }
@@ -111,11 +111,12 @@ function _formatNumber(
   value: number,
   locale: string,
   fallback: string,
-  options?: Intl.NumberFormatOptions
+  options?: Intl.NumberFormatOptions,
 ): string {
   try {
     return new Intl.NumberFormat([locale, fallback], options).format(value)
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Number formatting error:', error)
     return String(value)
   }
@@ -140,7 +141,7 @@ function _formatNumber(
 function useProvided<T>(
   props: Record<string, unknown>,
   prop: string,
-  provided: Ref<T>
+  provided: Ref<T>,
 ): Ref<T> {
   const internal = useModel(props, prop)
   internal.value = props[prop] ?? provided.value
@@ -180,7 +181,7 @@ function createProvideFunction(state: {
       messages,
       t: createTranslateFunction(current, fallback, messages),
       n: createNumberFunction(current, fallback),
-      provide: provideFn as LocaleInstance['provide']
+      provide: provideFn as LocaleInstance['provide'],
     }
   }
 }
@@ -206,7 +207,7 @@ export function createJovialAdapter(options?: LocaleOptions): LocaleInstance {
     en,
     'zh-Hans': zhHans,
     'zh-Hant': zhHant,
-    ...options?.messages
+    ...options?.messages,
   })
 
   return {
@@ -216,7 +217,7 @@ export function createJovialAdapter(options?: LocaleOptions): LocaleInstance {
     messages,
     t: createTranslateFunction(current, fallback, messages),
     n: createNumberFunction(current, fallback),
-    provide: createProvideFunction({ current, fallback, messages })
+    provide: createProvideFunction({ current, fallback, messages }),
   }
 }
 
@@ -225,7 +226,8 @@ export function useLocale(): LocaleInstance {
 
   const locale = inject(LocaleSymbol, null) as LocaleInstance
 
-  if (!locale) throw new Error('Could not find Jovial locale injection')
+  if (!locale)
+    throw new Error('Could not find Jovial locale injection')
 
   return locale
 }

@@ -26,7 +26,7 @@ const {
   clickable = false,
   colorType = 'default',
   variant = 'elevated',
-  role = 'grid'
+  role = 'grid',
 } = defineProps<JvGridProps>()
 
 const emit = defineEmits<JvGridEmits>()
@@ -56,10 +56,10 @@ const gridStyles = computed(() => {
   // 处理间距
   if (gap !== undefined) {
     const [rowGapValue, colGapValue] = Array.isArray(gap) ? gap : [gap, gap]
-    styles.rowGap =
-      typeof rowGapValue === 'number' ? convertToUnit(rowGapValue) : rowGapValue
-    styles.columnGap =
-      typeof colGapValue === 'number' ? convertToUnit(colGapValue) : colGapValue
+    styles.rowGap
+      = typeof rowGapValue === 'number' ? convertToUnit(rowGapValue) : rowGapValue
+    styles.columnGap
+      = typeof colGapValue === 'number' ? convertToUnit(colGapValue) : colGapValue
   }
 
   // 独立设置行间距和列间距
@@ -68,8 +68,8 @@ const gridStyles = computed(() => {
   }
 
   if (colGap !== undefined) {
-    styles.columnGap =
-      typeof colGap === 'number' ? convertToUnit(colGap) : colGap
+    styles.columnGap
+      = typeof colGap === 'number' ? convertToUnit(colGap) : colGap
   }
 
   // 设置宽高
@@ -86,7 +86,8 @@ const gridStyles = computed(() => {
 
 // 点击处理函数
 function handleClick(event: MouseEvent) {
-  if (disabled || !clickable) return
+  if (disabled || !clickable)
+    return
   emit('click', event)
 }
 </script>
@@ -102,7 +103,7 @@ function handleClick(event: MouseEvent) {
       bem.is('bordered', bordered),
       bem.is('clickable', clickable),
       bem.is('disabled', disabled),
-      bem.is('fill', fill)
+      bem.is('fill', fill),
     ]"
     :style="gridStyles"
     :role="role"
@@ -149,7 +150,7 @@ $grid-padding-map: (
   'sm': 8px,
   'md': 16px,
   'lg': 24px,
-  'xl': 32px
+  'xl': 32px,
 );
 
 // 颜色类型列表

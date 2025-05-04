@@ -6,15 +6,15 @@ export default {
   dismiss: '關閉',
   modal: {
     cancel: '取消',
-    confirm: '確定'
+    confirm: '確定',
   },
   confirmEdit: {
     ok: '確定',
-    cancel: '取消'
+    cancel: '取消',
   },
   dataIterator: {
     noResultsText: '沒有符合條件的結果',
-    loadingText: '加載中……'
+    loadingText: '加載中……',
   },
   dataTable: {
     itemsPerPageText: '每頁數目：',
@@ -24,9 +24,9 @@ export default {
       sortNone: '：未排序。',
       activateNone: '點擊以移除排序。',
       activateDescending: '點擊以降序排列。',
-      activateAscending: '點擊以升序排列。'
+      activateAscending: '點擊以升序排列。',
     },
-    sortBy: '排序方式'
+    sortBy: '排序方式',
   },
   dataFooter: {
     itemsPerPageText: '每頁數目：',
@@ -35,30 +35,30 @@ export default {
     prevPage: '上一頁',
     firstPage: '首頁',
     lastPage: '尾頁',
-    pageText: '{0}-{1} 共 {2}'
+    pageText: '{0}-{1} 共 {2}',
   },
   dateRangeInput: {
-    divider: '至'
+    divider: '至',
   },
   datePicker: {
     itemsSelected: '{0} 已選',
     range: {
       title: '選擇日期',
-      header: '輸入日期'
+      header: '輸入日期',
     },
     title: '選擇日期',
     header: '輸入日期',
     input: {
-      placeholder: '輸入日期'
-    }
+      placeholder: '輸入日期',
+    },
   },
   noDataText: '沒有數據',
   carousel: {
     prev: '上一張',
     next: '下一張',
     ariaLabel: {
-      delimiter: '輪播圖 {0} 共 {1}'
-    }
+      delimiter: '輪播圖 {0} 共 {1}',
+    },
   },
   calendar: {
     moreEvents: '還有 {0} 項',
@@ -88,27 +88,27 @@ export default {
     wed: '三',
     thu: '四',
     fri: '五',
-    sat: '六'
+    sat: '六',
   },
   input: {
     clear: '清除 {0}',
     prependAction: '{0} 前置操作',
     appendAction: '{0} 後置操作',
-    otp: '請輸入 OTP 字符 {0}'
+    otp: '請輸入 OTP 字符 {0}',
   },
   fileInput: {
     counter: '{0} 個文件',
-    counterSize: '{0} 個文件（共 {1}）'
+    counterSize: '{0} 個文件（共 {1}）',
   },
   fileUpload: {
     title: '拖拽文件到這裡',
     divider: '或',
-    browse: '瀏覽文件'
+    browse: '瀏覽文件',
   },
   timePicker: {
     am: '上午',
     pm: '下午',
-    title: '選擇時間'
+    title: '選擇時間',
   },
   pagination: {
     ariaLabel: {
@@ -118,7 +118,7 @@ export default {
       page: '轉到頁面 {0}',
       currentPage: '當前頁 {0}',
       first: '首頁',
-      last: '尾頁'
+      last: '尾頁',
     },
     total: '共 {0} 條',
     prev: '上一頁',
@@ -128,20 +128,20 @@ export default {
     itemsPerPage: '條/頁',
     pageSize: '每頁顯示',
     goto: '前往',
-    pageOf: '第 {0} 頁，共 {1} 頁'
+    pageOf: '第 {0} 頁，共 {1} 頁',
   },
   stepper: {
     next: '下一頁',
-    prev: '上一頁'
+    prev: '上一頁',
   },
   rating: {
     ariaLabel: {
-      item: '評分 {0} 共 {1}'
-    }
+      item: '評分 {0} 共 {1}',
+    },
   },
   loading: '加載中...',
   infiniteScroll: {
     loadMore: '加載更多',
-    empty: '沒有更多'
-  }
+    empty: '沒有更多',
+  },
 }

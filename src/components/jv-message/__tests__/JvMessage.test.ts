@@ -16,8 +16,8 @@ describe('jvMessage', () => {
   it('renders correctly with default props', () => {
     const wrapper = mount(JvMessage, {
       slots: {
-        default: '消息内容'
-      }
+        default: '消息内容',
+      },
     })
 
     expect(wrapper.text()).toContain('消息内容')
@@ -33,8 +33,8 @@ describe('jvMessage', () => {
       const wrapper = mount(JvMessage, {
         props: { type },
         slots: {
-          default: '消息内容'
-        }
+          default: '消息内容',
+        },
       })
 
       expect(wrapper.classes()).toContain(`jv-message--type-${type}`)
@@ -45,8 +45,8 @@ describe('jvMessage', () => {
     const wrapper = mount(JvMessage, {
       props: { showIcon: false },
       slots: {
-        default: '消息内容'
-      }
+        default: '消息内容',
+      },
     })
 
     expect(wrapper.find('.jv-message__icon').exists()).toBe(false)
@@ -57,7 +57,7 @@ describe('jvMessage', () => {
 
   it('respects closable prop', async () => {
     const wrapper = mount(JvMessage, {
-      props: { closable: false }
+      props: { closable: false },
     })
 
     expect(wrapper.find('.jv-message__close').exists()).toBe(false)
@@ -68,7 +68,7 @@ describe('jvMessage', () => {
 
   it('respects center prop', async () => {
     const wrapper = mount(JvMessage, {
-      props: { center: true }
+      props: { center: true },
     })
 
     expect(wrapper.classes()).toContain('jv-message--is-center')
@@ -79,7 +79,7 @@ describe('jvMessage', () => {
 
   it('emits close event when close button is clicked', async () => {
     const wrapper = mount(JvMessage, {
-      props: { closable: true }
+      props: { closable: true },
     })
 
     await wrapper.find('.jv-message__close').trigger('click')
@@ -88,7 +88,7 @@ describe('jvMessage', () => {
 
   it('auto-closes after duration', async () => {
     const wrapper = mount(JvMessage, {
-      props: { duration: 1000 }
+      props: { duration: 1000 },
     })
 
     expect(wrapper.isVisible()).toBe(true)
@@ -102,7 +102,7 @@ describe('jvMessage', () => {
 
   it('does not auto-close when duration is 0', async () => {
     const wrapper = mount(JvMessage, {
-      props: { duration: 0 }
+      props: { duration: 0 },
     })
 
     expect(wrapper.isVisible()).toBe(true)

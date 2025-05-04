@@ -16,16 +16,16 @@ export default {
   argTypes: {
     name: {
       control: { type: 'text' },
-      description: '图标名称，以$开头的为内置图标，其他为Iconify图标'
+      description: '图标名称，以$开头的为内置图标，其他为Iconify图标',
     },
     size: {
       control: { type: 'select' },
       options: ['small', 'medium', 'large', 'xlarge'],
-      description: '图标大小'
+      description: '图标大小',
     },
     color: {
       control: { type: 'color' },
-      description: '图标颜色'
+      description: '图标颜色',
     },
     colorType: {
       control: { type: 'select' },
@@ -36,35 +36,35 @@ export default {
         'success',
         'warning',
         'error',
-        'info'
+        'info',
       ],
-      description: '图标颜色类型'
+      description: '图标颜色类型',
     },
     spin: {
       control: { type: 'boolean' },
-      description: '是否旋转'
+      description: '是否旋转',
     },
     flip: {
       control: { type: 'boolean' },
-      description: '是否翻转'
+      description: '是否翻转',
     },
     rotate: {
       control: { type: 'number' },
-      description: '旋转角度'
+      description: '旋转角度',
     },
     disabled: {
       control: { type: 'boolean' },
-      description: '是否禁用'
-    }
+      description: '是否禁用',
+    },
   },
   parameters: {
     docs: {
       description: {
         component:
-          'JvIcon 组件支持两种图标类型：内置图标（以$开头）和 Iconify 图标。'
-      }
-    }
-  }
+          'JvIcon 组件支持两种图标类型：内置图标（以$开头）和 Iconify 图标。',
+      },
+    },
+  },
 } as Meta<typeof JvIcon>
 
 type Story = StoryObj<typeof JvIcon>
@@ -74,8 +74,8 @@ export const Basic: Story = {
   args: {
     name: '$star',
     size: 'medium',
-    colorType: 'primary'
-  }
+    colorType: 'primary',
+  },
 }
 
 // 内置图标展示
@@ -95,8 +95,8 @@ export const InternalIcons: Story = {
           </div>
         </div>
       </div>
-    `
-  })
+    `,
+  }),
 }
 
 // 不同大小
@@ -126,8 +126,8 @@ export const Sizes: Story = {
           <span style="font-size: 12px; margin-top: 8px;">48px</span>
         </div>
       </div>
-    `
-  })
+    `,
+  }),
 }
 
 // 不同颜色类型
@@ -141,7 +141,7 @@ export const ColorTypes: Story = {
         'success',
         'warning',
         'error',
-        'info'
+        'info',
       ]
       return { colorTypes }
     },
@@ -152,8 +152,8 @@ export const ColorTypes: Story = {
           <span style="font-size: 12px; margin-top: 8px;">{{ type }}</span>
         </div>
       </div>
-    `
-  })
+    `,
+  }),
 }
 
 // 自定义颜色
@@ -175,8 +175,8 @@ export const CustomColor: Story = {
           <span style="font-size: 12px; margin-top: 8px;">#4CAF50</span>
         </div>
       </div>
-    `
-  })
+    `,
+  }),
 }
 
 // 动画效果
@@ -198,8 +198,8 @@ export const Animations: Story = {
           <span style="font-size: 12px; margin-top: 8px;">旋转45°</span>
         </div>
       </div>
-    `
-  })
+    `,
+  }),
 }
 
 // Iconify 图标
@@ -246,8 +246,8 @@ export const IconifyIcons: Story = {
           在上面的 Iconify 图标选择器中，您可以搜索并找到需要的图标。点击图标后，复制图标名称（如 "mdi:home"），然后在 JvIcon 组件中使用。
         </p>
       </div>
-    `
-  })
+    `,
+  }),
 }
 
 // 禁用状态
@@ -255,6 +255,6 @@ export const Disabled: Story = {
   args: {
     name: '$star',
     size: 'large',
-    disabled: true
-  }
+    disabled: true,
+  },
 }

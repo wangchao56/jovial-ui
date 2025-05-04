@@ -6,5 +6,5 @@ export default {
     Object.entries(jovialui).forEach(([key, value]) => {
       app.component(key, value)
     })
-  }
+  },
 }

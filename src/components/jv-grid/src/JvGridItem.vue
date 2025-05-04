@@ -59,7 +59,8 @@ const gridItemStyles = computed(() => {
 
 // 点击处理函数
 function handleClick(event: MouseEvent) {
-  if (props.disabled || !props.clickable) return
+  if (props.disabled || !props.clickable)
+    return
   emit('click', event)
 }
 </script>
@@ -70,7 +71,7 @@ function handleClick(event: MouseEvent) {
       bem.e('item'),
       bem.is('fill', props.fill),
       bem.is('clickable', props.clickable),
-      bem.is('disabled', props.disabled)
+      bem.is('disabled', props.disabled),
     ]"
     :style="gridItemStyles"
     v-bind="$attrs"

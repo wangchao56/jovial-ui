@@ -11,7 +11,7 @@ const {
   dot = false,
   hidden = false,
   type = 'error',
-  offset
+  offset,
 } = defineProps<JvBadgeProps>()
 
 // 声明组件事件
@@ -21,7 +21,8 @@ const emit = defineEmits<{
 
 // 计算显示的内容
 const content = computed(() => {
-  if (dot) return ''
+  if (dot)
+    return ''
 
   if (typeof value === 'number' && typeof max === 'number') {
     return value > max ? `${max}+` : `${value}`
@@ -32,11 +33,12 @@ const content = computed(() => {
 
 // 计算样式
 const badgeStyle = computed(() => {
-  if (!offset) return {}
+  if (!offset)
+    return {}
 
   const [x, y] = offset
   return {
-    transform: `translate(${x}px, ${y}px)`
+    transform: `translate(${x}px, ${y}px)`,
   }
 })
 </script>
@@ -50,7 +52,7 @@ const badgeStyle = computed(() => {
         bem.e('content'),
         bem.m(`type-${type}`),
         bem.is('dot', dot),
-        bem.is('fixed', !!$slots.default)
+        bem.is('fixed', !!$slots.default),
       ]"
       :style="badgeStyle"
       @click="emit('click', $event)"

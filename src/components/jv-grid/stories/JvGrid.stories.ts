@@ -9,35 +9,35 @@ const meta: Meta<typeof JvGrid> = {
     cols: {
       control: { type: 'number' },
       description: '列数',
-      defaultValue: 12
+      defaultValue: 12,
     },
     rows: {
       control: { type: 'number' },
-      description: '行数'
+      description: '行数',
     },
     gap: {
       control: { type: 'number' },
       description: '间距',
-      defaultValue: 16
+      defaultValue: 16,
     },
     header: {
       control: { type: 'text' },
-      description: '标题'
+      description: '标题',
     },
     subheader: {
       control: { type: 'text' },
-      description: '副标题'
+      description: '副标题',
     },
     bordered: {
       control: { type: 'boolean' },
       description: '是否有边框',
-      defaultValue: false
+      defaultValue: false,
     },
     padding: {
       control: { type: 'select' },
       options: ['none', 'xs', 'sm', 'md', 'lg', 'xl'],
       description: '内边距',
-      defaultValue: 'md'
+      defaultValue: 'md',
     },
     colorType: {
       control: { type: 'select' },
@@ -48,18 +48,18 @@ const meta: Meta<typeof JvGrid> = {
         'success',
         'warning',
         'danger',
-        'info'
+        'info',
       ],
       description: '颜色类型',
-      defaultValue: 'default'
+      defaultValue: 'default',
     },
     variant: {
       control: { type: 'select' },
       options: ['elevated', 'outlined', 'tonal'],
       description: '变体',
-      defaultValue: 'elevated'
-    }
-  }
+      defaultValue: 'elevated',
+    },
+  },
 }
 
 export default meta
@@ -67,7 +67,7 @@ type Story = StoryObj<typeof JvGrid>
 
 // 基础网格示例
 export const Basic: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { JvGrid, JvGridItem },
     setup() {
       return { args }
@@ -78,7 +78,7 @@ export const Basic: Story = {
           网格项 {{ i }}
         </JvGridItem>
       </JvGrid>
-    `
+    `,
   }),
   args: {
     cols: 2,
@@ -86,13 +86,13 @@ export const Basic: Story = {
     header: '基础网格',
     subheader: '2x2 网格布局',
     bordered: true,
-    padding: 'md'
-  }
+    padding: 'md',
+  },
 }
 
 // 带有标题的网格示例
 export const WithHeader: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { JvGrid, JvGridItem },
     setup() {
       return { args }
@@ -109,20 +109,20 @@ export const WithHeader: Story = {
           网格项 {{ i }}
         </JvGridItem>
       </JvGrid>
-    `
+    `,
   }),
   args: {
     cols: 3,
     gap: 16,
     bordered: false,
     padding: 'md',
-    variant: 'elevated'
-  }
+    variant: 'elevated',
+  },
 }
 
 // 复杂网格布局示例
 export const ComplexLayout: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { JvGrid, JvGridItem },
     setup() {
       return { args }
@@ -145,7 +145,7 @@ export const ComplexLayout: Story = {
           正常大小
         </JvGridItem>
       </JvGrid>
-    `
+    `,
   }),
   args: {
     cols: 3,
@@ -154,13 +154,13 @@ export const ComplexLayout: Story = {
     subheader: '使用colSpan和rowSpan属性创建不同大小的网格项',
     bordered: true,
     padding: 'lg',
-    variant: 'outlined'
-  }
+    variant: 'outlined',
+  },
 }
 
 // 自动填充示例
 export const AutoFill: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { JvGrid, JvGridItem },
     setup() {
       return { args }
@@ -171,7 +171,7 @@ export const AutoFill: Story = {
           自动填充项 {{ i }}
         </JvGridItem>
       </JvGrid>
-    `
+    `,
   }),
   args: {
     cols: 200,
@@ -181,6 +181,6 @@ export const AutoFill: Story = {
     subheader: '根据容器宽度自动适应网格项数量',
     bordered: true,
     padding: 'md',
-    variant: 'tonal'
-  }
+    variant: 'tonal',
+  },
 }

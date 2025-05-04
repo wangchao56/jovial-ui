@@ -2,7 +2,7 @@
 import { provideTheme, useTheme } from '@/theme/config/index'
 
 defineOptions({
-  name: 'JvThemeProvider'
+  name: 'JvThemeProvider',
 })
 
 const props = defineProps<{

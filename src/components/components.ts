@@ -4,7 +4,7 @@ import JvCard, {
   JvCardActions,
   JvCardContent,
   JvCardFooter,
-  JvCardHeader
+  JvCardHeader,
 } from './jv-card'
 import JvCheckbox from './jv-checkbox/index'
 import JvDrawer from './jv-drawer/index'
@@ -53,5 +53,5 @@ export {
   JvTableColumn,
   JvTag,
   JvTagGroup,
-  JvTooltip
+  JvTooltip,
 }

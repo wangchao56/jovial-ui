@@ -4,13 +4,14 @@ import type { VNode, VNodeArrayChildren } from 'vue'
  * 检查节点是否为插槽节点
  */
 export function isSlotNode(node: VNode | undefined): boolean {
-  if (!node) return false
+  if (!node)
+    return false
 
   // 插槽节点通常有children属性，且type不是具体的组件或HTML标签
   return (
-    !!node.children &&
-    typeof node.type !== 'string' &&
-    typeof node.type !== 'object'
+    !!node.children
+    && typeof node.type !== 'string'
+    && typeof node.type !== 'object'
   )
 }
 

@@ -16,7 +16,7 @@ const {
   disabled = false,
   readonly = false,
   size = 'medium',
-  clearable = false
+  clearable = false,
 } = defineProps<JvInputNumberProps>()
 const emit = defineEmits<JvInputNumberEmits>()
 
@@ -31,10 +31,12 @@ const showClearIcon = computed(() => {
 
 // 加法
 function handleAdd() {
-  if (disabled || readonly) return
+  if (disabled || readonly)
+    return
   let val = Number(innerValue.value) || 0
   val += step
-  if (max !== undefined) val = Math.min(val, max)
+  if (max !== undefined)
+    val = Math.min(val, max)
   val = toPrecision(val)
   innerValue.value = val
   emit('update:modelValue', val)
@@ -43,10 +45,12 @@ function handleAdd() {
 }
 // 减法
 function handleSub() {
-  if (disabled || readonly) return
+  if (disabled || readonly)
+    return
   let val = Number(innerValue.value) || 0
   val -= step
-  if (min !== undefined) val = Math.max(val, min)
+  if (min !== undefined)
+    val = Math.max(val, min)
   val = toPrecision(val)
   innerValue.value = val
   emit('update:modelValue', val)
@@ -65,8 +69,10 @@ function handleInput(event: Event) {
   }
   let num = Number(val)
   if (!Number.isNaN(num)) {
-    if (max !== undefined) num = Math.min(num, max)
-    if (min !== undefined) num = Math.max(num, min)
+    if (max !== undefined)
+      num = Math.min(num, max)
+    if (min !== undefined)
+      num = Math.max(num, min)
     num = toPrecision(num)
     innerValue.value = num
     emit('update:modelValue', num)
@@ -103,7 +109,7 @@ watch(
   () => modelValue,
   (val) => {
     innerValue.value = val
-  }
+  },
 )
 
 // 暴露方法
@@ -126,7 +132,7 @@ defineExpose({ getInputValue, setInputValue, clearInputValue })
       bem.m(`size-${size}`),
       bem.is('disabled', disabled),
       bem.is('readonly', readonly),
-      bem.is('focused', focused)
+      bem.is('focused', focused),
     ]"
   >
     <div :class="bem.e('prepend')">
@@ -147,7 +153,7 @@ defineExpose({ getInputValue, setInputValue, clearInputValue })
         @input="handleInput"
         @focus="handleFocus"
         @blur="handleBlur"
-      />
+      >
       <!-- 清除按钮 -->
       <JvButton
         v-if="clearable && showClearIcon"

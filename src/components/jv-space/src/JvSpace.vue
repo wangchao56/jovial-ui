@@ -18,7 +18,7 @@ const {
   role = 'group',
   ariaLabel,
   ariaLabelledby,
-  ariaDescribedby
+  ariaDescribedby,
 } = defineProps<JvSpaceProps>()
 
 defineEmits<{
@@ -29,15 +29,15 @@ defineEmits<{
 const spaceStyle = computed(() => {
   const style: Record<string, any> = {
     columnGap: 0,
-    rowGap: 0
+    rowGap: 0,
   }
   const [horizontalGap, verticalGap] = Array.isArray(gap) ? gap : [gap, gap]
-  style.columnGap =
-    typeof horizontalGap === 'number'
+  style.columnGap
+    = typeof horizontalGap === 'number'
       ? convertToUnit(horizontalGap)
       : horizontalGap
-  style.rowGap =
-    typeof verticalGap === 'number' ? convertToUnit(verticalGap) : verticalGap
+  style.rowGap
+    = typeof verticalGap === 'number' ? convertToUnit(verticalGap) : verticalGap
   return style
 })
 
@@ -56,7 +56,7 @@ const computedRole = computed(() => {
       align && bem.m(`align-${align}`),
       justify && bem.m(`justify-${justify}`),
       fill && bem.m('fill'),
-      wrap && bem.m('wrap')
+      wrap && bem.m('wrap'),
     ]"
     :role="computedRole"
     :aria-label="ariaLabel"

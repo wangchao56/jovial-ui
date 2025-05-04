@@ -6,7 +6,7 @@ import JvSelect from '../index'
 const baseOptions: JvSelectOption[] = [
   { label: '选项1', value: '1' },
   { label: '选项2', value: '2' },
-  { label: '选项3', value: '3' }
+  { label: '选项3', value: '3' },
 ]
 
 describe('jvSelect', () => {
@@ -15,8 +15,8 @@ describe('jvSelect', () => {
     const wrapper = mount(JvSelect, {
       props: {
         modelValue: '',
-        options: baseOptions
-      }
+        options: baseOptions,
+      },
     })
     expect(wrapper.find('.jv-select').exists()).toBe(true)
     expect(wrapper.findComponent({ name: 'JvInput' }).exists()).toBe(true)
@@ -27,8 +27,8 @@ describe('jvSelect', () => {
     const wrapper = mount(JvSelect, {
       props: {
         modelValue: '',
-        options: baseOptions
-      }
+        options: baseOptions,
+      },
     })
 
     // 点击打开下拉菜单
@@ -50,8 +50,8 @@ describe('jvSelect', () => {
     const wrapper = mount(JvSelect, {
       props: {
         modelValue: '2',
-        options: baseOptions
-      }
+        options: baseOptions,
+      },
     })
 
     // 检查输入框中的值是否正确显示选中项的label
@@ -72,8 +72,8 @@ describe('jvSelect', () => {
       props: {
         modelValue: ['1'],
         options: baseOptions,
-        multiple: true
-      }
+        multiple: true,
+      },
     })
 
     // 打开下拉菜单
@@ -100,8 +100,8 @@ describe('jvSelect', () => {
       props: {
         modelValue: '',
         options: baseOptions,
-        disabled: true
-      }
+        disabled: true,
+      },
     })
 
     // 尝试点击打开下拉菜单
@@ -116,14 +116,14 @@ describe('jvSelect', () => {
     const disabledOptions: JvSelectOption[] = [
       { label: '选项1', value: '1' },
       { label: '选项2', value: '2', disabled: true },
-      { label: '选项3', value: '3' }
+      { label: '选项3', value: '3' },
     ]
 
     const wrapper = mount(JvSelect, {
       props: {
         modelValue: '',
-        options: disabledOptions
-      }
+        options: disabledOptions,
+      },
     })
 
     // 打开下拉菜单
@@ -143,8 +143,8 @@ describe('jvSelect', () => {
       props: {
         modelValue: '1',
         options: baseOptions,
-        clearable: true
-      }
+        clearable: true,
+      },
     })
 
     // 模拟清空事件
@@ -161,9 +161,9 @@ describe('jvSelect', () => {
     const wrapper = mount(JvSelect, {
       props: {
         modelValue: '',
-        options: baseOptions
+        options: baseOptions,
       },
-      attachTo: document.body
+      attachTo: document.body,
     })
 
     // 打开下拉菜单
@@ -175,7 +175,7 @@ describe('jvSelect', () => {
     document.dispatchEvent(clickEvent)
 
     // 等待关闭动画
-    await new Promise((resolve) => setTimeout(resolve, 200))
+    await new Promise(resolve => setTimeout(resolve, 200))
 
     // 下拉菜单应该关闭
     expect(wrapper.find('.jv-select__dropdown').exists()).toBe(false)

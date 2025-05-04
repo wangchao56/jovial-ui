@@ -27,7 +27,7 @@ function _bem(
   prefixName: string,
   blockSuffix: string,
   element: string,
-  modifier: string
+  modifier: string,
 ): string {
   if (blockSuffix) {
     prefixName += `-${blockSuffix}`
@@ -88,7 +88,7 @@ function createBEM(prefixName: string): BEMRecord {
     em,
     bm,
     bem,
-    is
+    is,
   }
 }
 export type BemRecord = ReturnType<typeof createBEM>

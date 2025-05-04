@@ -21,7 +21,7 @@ const {
   colorType = 'default',
   stacked = false,
   loading = false,
-  block = false
+  block = false,
 } = defineProps<JvButtonProps>()
 const emit = defineEmits<JvButtonEmits>()
 const slots = defineSlots<JvButtonSlots>()
@@ -49,7 +49,7 @@ const showAppend = computed(() => {
       bem.is('loading', loading),
       bem.is('stacked', stacked),
       { [bem.m('icon-only')]: icon || $slots.icon },
-      { [bem.m('block')]: block }
+      { [bem.m('block')]: block },
     ]"
     :type="nativeType"
     :autofocus="autofocus"
@@ -174,32 +174,32 @@ $button-sizes: (
     size: 10px,
     height: 20px,
     padding: 0 8px,
-    icon: 14px
+    icon: 14px,
   ),
   small: (
     size: 12px,
     height: 28px,
     padding: 0 12px,
-    icon: 16px
+    icon: 16px,
   ),
   medium: (
     size: 14px,
     height: 36px,
     padding: 0 16px,
-    icon: 18px
+    icon: 18px,
   ),
   large: (
     size: 16px,
     height: 44px,
     padding: 0 20px,
-    icon: 20px
+    icon: 20px,
   ),
   xlarge: (
     size: 18px,
     height: 52px,
     padding: 0 24px,
-    icon: 22px
-  )
+    icon: 22px,
+  ),
 );
 $color-types: (primary, secondary, success, error, warning, info, default);
 $variants: (elevated, outlined, dashed, text, tonal, plain, flat);

@@ -11,5 +11,5 @@ export const allPlacements = [
   'left-start',
   'left-end',
   'right-start',
-  'right-end'
+  'right-end',
 ]

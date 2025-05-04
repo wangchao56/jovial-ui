@@ -10,5 +10,5 @@ export default {
     Object.entries(components).forEach(([key, value]) => {
       app.component(key, value)
     })
-  }
+  },
 }

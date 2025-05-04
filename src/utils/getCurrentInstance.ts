@@ -19,7 +19,7 @@ export function getCurrentInstance(name: string, message?: string) {
   // 如果当前组件实例不存在，则抛出错误
   if (!vm) {
     throw new Error(
-      `[Vuetify] ${name} ${message || 'must be called from inside a setup function'}`
+      `[Vuetify] ${name} ${message || 'must be called from inside a setup function'}`,
     )
   }
 
@@ -53,7 +53,8 @@ export function getUid() {
   // 如果当前组件实例已经有了ID，则直接返回该ID
   if (_map.has(vm)) {
     return _map.get(vm)!
-  } else {
+  }
+  else {
     // 否则，生成一个新的ID，并将其存储在_map中
     const uid = _uid++
     _map.set(vm, uid)

@@ -6,17 +6,17 @@ interface ThemeDefinition {
   // 基础颜色配置
   colors: {
     // 主要颜色
-    primary: string
-    secondary: string
-    accent: string
+    'primary': string
+    'secondary': string
+    'accent': string
     // 功能颜色
-    success: string
-    info: string
-    warning: string
-    error: string
+    'success': string
+    'info': string
+    'warning': string
+    'error': string
     // 背景/表面颜色
-    background: string
-    surface: string
+    'background': string
+    'surface': string
     // 文字颜色(前景色)
     'on-primary': string
     'on-secondary': string

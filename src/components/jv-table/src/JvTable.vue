@@ -4,7 +4,7 @@ import type {
   JvTableProps,
   SortOrder,
   TableColumn,
-  TableRowData
+  TableRowData,
 } from './types'
 import JvIcon from '@/components/jv-icon/src/JvIcon.vue'
 import { convertToUnit } from '@/utils'
@@ -15,7 +15,7 @@ import {
   onUnmounted,
   provide,
   ref,
-  watch
+  watch,
 } from 'vue'
 import { exportToCSV as _exportToCSV, useTableClassAndStyle } from './helper'
 import JvTableHeader from './JvTableHeader.vue'
@@ -43,7 +43,7 @@ const {
   cellStyle,
   dataSource = [],
   defaultSort = { prop: '', order: null },
-  maxHeight
+  maxHeight,
 } = defineProps<JvTableProps>()
 
 // 事件处理
@@ -76,19 +76,19 @@ const tableClasses = computed(() => [
   tableSizeClass.value,
   {
     [bem.m('border')]: border,
-    [bem.m('striped')]: stripe
-  }
+    [bem.m('striped')]: stripe,
+  },
 ])
 
-const { setRowClassName, setRowStyle, setCellClassName, setCellStyle } =
-  useTableClassAndStyle({
+const { setRowClassName, setRowStyle, setCellClassName, setCellStyle }
+  = useTableClassAndStyle({
     rowClassName,
     rowStyle,
     cellClassName,
     cellStyle,
     defaultAlign,
     stripe,
-    highlightCurrentRow
+    highlightCurrentRow,
   })
 
 // 初始化列配置
@@ -104,7 +104,8 @@ function initColumns() {
 
         if (newCol.fixed === true || newCol.fixed === 'left') {
           newCol.fixedLeft = 0 // 初始值，后续更新
-        } else if (newCol.fixed === 'right') {
+        }
+        else if (newCol.fixed === 'right') {
           newCol.fixedRight = 0 // 初始值，后续更新
         }
       }
@@ -115,7 +116,8 @@ function initColumns() {
     tableColumns.value = clonedColumns
     // 计算固定列位置
     updateFixedColumnsPosition()
-  } else {
+  }
+  else {
     tableColumns.value = []
   }
 }
@@ -124,7 +126,7 @@ function initColumns() {
 function handleRowClick(
   row: TableRowData,
   column: TableColumn,
-  event: MouseEvent
+  event: MouseEvent,
 ) {
   emit(TableEventNames.RowClick, row, column, event)
 
@@ -137,18 +139,21 @@ function handleRowClick(
 
 // 切换行选择
 function toggleRowSelection(row: TableRowData, selected?: boolean) {
-  const index = selectedRows.value.findIndex((r) => r === row)
+  const index = selectedRows.value.findIndex(r => r === row)
   const isSelected = index !== -1
 
   if (typeof selected === 'undefined') {
     if (isSelected) {
       selectedRows.value.splice(index, 1)
-    } else {
+    }
+    else {
       selectedRows.value.push(row)
     }
-  } else if (selected && !isSelected) {
+  }
+  else if (selected && !isSelected) {
     selectedRows.value.push(row)
-  } else if (!selected && isSelected) {
+  }
+  else if (!selected && isSelected) {
     selectedRows.value.splice(index, 1)
   }
 
@@ -165,7 +170,8 @@ function clearSelection() {
 function toggleAllSelection() {
   if (selectedRows.value.length === dataSource.length) {
     clearSelection()
-  } else {
+  }
+  else {
     selectedRows.value = [...dataSource]
     emit(TableEventNames.SelectAll, selectedRows.value)
     emit(TableEventNames.SelectionChange, selectedRows.value)
@@ -174,12 +180,13 @@ function toggleAllSelection() {
 
 // 排序方法
 function updateSortOrder(column: TableColumn) {
-  if (!column.sortable) return
+  if (!column.sortable)
+    return
 
   const orders: SortOrder[] = column.sortOrders || [
     'ascending',
     'descending',
-    null
+    null,
   ]
   let nextIndex = 0
 
@@ -197,7 +204,7 @@ function updateSortOrder(column: TableColumn) {
   emit(TableEventNames.SortChange, {
     column,
     prop: column.prop || '',
-    order: nextOrder
+    order: nextOrder,
   })
 }
 
@@ -210,7 +217,7 @@ function registerColumn(column: TableColumn) {
 
 // 注销列
 function unregisterColumn(column: TableColumn) {
-  tableColumns.value = tableColumns.value.filter((col) => col.id !== column.id)
+  tableColumns.value = tableColumns.value.filter(col => col.id !== column.id)
   // 注销后需要重新计算固定列位置
   updateFixedColumnsPosition()
 }
@@ -228,10 +235,10 @@ function updateFixedColumnsPosition() {
 
   // 获取所有左固定列和右固定列
   const leftFixedColumns = tableColumns.value.filter(
-    (column) => column.fixed === true || column.fixed === 'left'
+    column => column.fixed === true || column.fixed === 'left',
   )
   const rightFixedColumns = tableColumns.value.filter(
-    (column) => column.fixed === 'right'
+    column => column.fixed === 'right',
   )
 
   // 从左到右依次设置左固定列的位置
@@ -242,7 +249,7 @@ function updateFixedColumnsPosition() {
     column.fixedIndex = index
     // 累加左侧偏移量
     leftOffset += Number.parseFloat(
-      String(column.width || column.minWidth || 80)
+      String(column.width || column.minWidth || 80),
     )
   })
 
@@ -254,7 +261,7 @@ function updateFixedColumnsPosition() {
     column.fixedIndex = index
     // 累加右侧偏移量
     rightOffset += Number.parseFloat(
-      String(column.width || column.minWidth || 80)
+      String(column.width || column.minWidth || 80),
     )
   })
 
@@ -267,8 +274,8 @@ function updateFixedColumnsPosition() {
   }
 
   if (rightFixedColumns.length > 0) {
-    const firstRightFixedColumn =
-      rightFixedColumns[rightFixedColumns.length - 1]
+    const firstRightFixedColumn
+      = rightFixedColumns[rightFixedColumns.length - 1]
     if (firstRightFixedColumn) {
       firstRightFixedColumn.isFirstRight = true
     }
@@ -286,7 +293,7 @@ provide(JvTableContextKey, {
   sortColumn,
   sortOrder,
   updateSortOrder,
-  setHeaderRef
+  setHeaderRef,
 })
 
 // 处理容器滚动事件
@@ -327,20 +334,20 @@ defineExpose({
     })
   },
   sort: (prop: string, order: SortOrder) => {
-    const column = tableColumns.value.find((col) => col.prop === prop)
+    const column = tableColumns.value.find(col => col.prop === prop)
     if (column && column.sortable) {
       sortColumn.value = column
       sortOrder.value = order
       emit(TableEventNames.SortChange, {
         column,
         prop,
-        order
+        order,
       })
     }
   },
   exportToCSV: (fileName = 'table-data.csv') => {
     _exportToCSV(dataSource, tableColumns, fileName)
-  }
+  },
 })
 
 // 初始化设置
@@ -351,7 +358,7 @@ onMounted(() => {
   // 初始化默认排序
   if (defaultSort && defaultSort.prop) {
     const sortCol = tableColumns.value.find(
-      (col) => col.prop === defaultSort?.prop
+      col => col.prop === defaultSort?.prop,
     )
     if (sortCol) {
       sortColumn.value = sortCol
@@ -362,7 +369,7 @@ onMounted(() => {
   // 确保容器滚动事件绑定
   if (scrollerRef.value) {
     scrollerRef.value.addEventListener('scroll', handleScrollerScroll, {
-      passive: true
+      passive: true,
     })
   }
 })
@@ -381,7 +388,7 @@ watch(
     clearSelection()
     currentHighlightRow.value = null
   },
-  { deep: true }
+  { deep: true },
 )
 
 // 同步外部传入的列配置
@@ -391,7 +398,7 @@ watch(
     // 当列配置变化时重新初始化
     initColumns()
   },
-  { deep: true }
+  { deep: true },
 )
 </script>
 
@@ -431,7 +438,7 @@ watch(
               v-for="(column, index) in tableColumns"
               :key="column.id || index"
               :width="column.width || column.minWidth || 'auto'"
-            />
+            >
           </colgroup>
           <tbody>
             <template v-if="dataSource && dataSource.length > 0">
@@ -449,7 +456,7 @@ watch(
                     row,
                     rowIndex,
                     selectedRows,
-                    currentHighlightRow
+                    currentHighlightRow,
                   )
                 "
                 :style="setRowStyle(row, rowIndex)"
@@ -467,7 +474,7 @@ watch(
                         row,
                         column,
                         event.currentTarget as HTMLElement,
-                        event
+                        event,
                       )
                   "
                   @dblclick.stop="
@@ -477,7 +484,7 @@ watch(
                         row,
                         column,
                         event.currentTarget as HTMLElement,
-                        event
+                        event,
                       )
                   "
                 >
@@ -505,11 +512,11 @@ watch(
                       {{
                         column.formatter
                           ? column.formatter(
-                              row,
-                              column,
-                              row[column.prop || ''],
-                              rowIndex
-                            )
+                            row,
+                            column,
+                            row[column.prop || ''],
+                            rowIndex,
+                          )
                           : row[column.prop || '']
                       }}
                     </template>

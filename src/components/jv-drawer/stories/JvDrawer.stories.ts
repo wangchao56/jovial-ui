@@ -13,32 +13,32 @@ export default {
     placement: {
       control: { type: 'select' },
       options: ['left', 'right', 'top', 'bottom'],
-      description: '抽屉位置'
+      description: '抽屉位置',
     },
     size: {
       control: 'text',
-      description: '抽屉大小'
+      description: '抽屉大小',
     },
     title: {
       control: 'text',
-      description: '标题'
+      description: '标题',
     },
     closeIcon: {
       control: 'text',
-      description: '关闭图标'
+      description: '关闭图标',
     },
     closeable: {
       control: 'boolean',
-      description: '是否可关闭'
+      description: '是否可关闭',
     },
     maskClosable: {
       control: 'boolean',
-      description: '是否点击遮罩关闭'
-    }
-  }
+      description: '是否点击遮罩关闭',
+    },
+  },
 } as Meta
 
-const Template: StoryFn = (args) => ({
+const Template: StoryFn = args => ({
   components: { JvDrawer, JvButton },
   setup() {
     const visible = ref(false)
@@ -57,42 +57,42 @@ const Template: StoryFn = (args) => ({
         </div>
       </JvDrawer>
     </div>
-  `
+  `,
 })
 
 export const 基础用法 = Template.bind({})
 基础用法.args = {
   title: '基础抽屉',
   placement: 'right',
-  size: '300px'
+  size: '300px',
 }
 
 export const 左侧抽屉 = Template.bind({})
 左侧抽屉.args = {
   title: '左侧抽屉',
   placement: 'left',
-  size: '300px'
+  size: '300px',
 }
 
 export const 顶部抽屉 = Template.bind({})
 顶部抽屉.args = {
   title: '顶部抽屉',
   placement: 'top',
-  size: '300px'
+  size: '300px',
 }
 
 export const 底部抽屉 = Template.bind({})
 底部抽屉.args = {
   title: '底部抽屉',
   placement: 'bottom',
-  size: '300px'
+  size: '300px',
 }
 
 export const 自定义大小 = Template.bind({})
 自定义大小.args = {
   title: '自定义大小',
   placement: 'right',
-  size: '500px'
+  size: '500px',
 }
 
 export const 自定义头部和底部: StoryObj = {
@@ -129,8 +129,8 @@ export const 自定义头部和底部: StoryObj = {
           </template>
         </JvDrawer>
       </div>
-    `
-  })
+    `,
+  }),
 }
 
 export const 响应式抽屉: StoryObj = {
@@ -154,8 +154,8 @@ export const 响应式抽屉: StoryObj = {
           </div>
         </JvDrawer>
       </div>
-    `
-  })
+    `,
+  }),
 }
 
 export const 测试打开关闭: StoryObj = {
@@ -191,16 +191,16 @@ export const 测试打开关闭: StoryObj = {
           </div>
         </JvDrawer>
       </div>
-    `
+    `,
   }),
   play: async ({ canvasElement }) => {
     // 由于drawer使用了overlay和mask，这里的测试比较简单
     const canvas = canvasElement as HTMLElement
     const openButton = canvas.querySelector(
-      '[data-testid="open-button"]'
+      '[data-testid="open-button"]',
     ) as HTMLElement
     const closeButton = canvas.querySelector(
-      '[data-testid="close-button"]'
+      '[data-testid="close-button"]',
     ) as HTMLElement
 
     // 点击打开按钮
@@ -208,7 +208,7 @@ export const 测试打开关闭: StoryObj = {
       openButton.click()
 
       // 给抽屉动画一些时间
-      await new Promise((resolve) => setTimeout(resolve, 500))
+      await new Promise(resolve => setTimeout(resolve, 500))
 
       // 检查抽屉是否打开
       const drawerWrapper = document.querySelector('.jv-drawer__wrapper')
@@ -219,7 +219,7 @@ export const 测试打开关闭: StoryObj = {
         closeButton.click()
 
         // 给抽屉关闭动画一些时间
-        await new Promise((resolve) => setTimeout(resolve, 500))
+        await new Promise(resolve => setTimeout(resolve, 500))
         // 检查抽屉是否打开
         const drawerWrapper = document.querySelector('.jv-drawer__wrapper')
         expect(drawerWrapper).toBeTruthy()
@@ -228,8 +228,8 @@ export const 测试打开关闭: StoryObj = {
         closeButton.click()
 
         // 给抽屉关闭动画一些时间
-        await new Promise((resolve) => setTimeout(resolve, 500))
+        await new Promise(resolve => setTimeout(resolve, 500))
       }
     }
-  }
+  },
 }

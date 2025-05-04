@@ -119,7 +119,8 @@ export function provideTheme(props: { theme?: string }): ThemeInstance {
 
   const theme = inject(ThemeSymbol) as ThemeInstance
 
-  if (!theme) throw new Error('Could not find Vuetify theme injection')
+  if (!theme)
+    throw new Error('Could not find Vuetify theme injection')
 
   const name = computed<string>(() => {
     return props.theme ?? theme.name.value
@@ -127,14 +128,14 @@ export function provideTheme(props: { theme?: string }): ThemeInstance {
   const current = computed(() => theme.themes.value[name.value])
 
   const themeClasses = computed(() =>
-    theme.isDisabled ? undefined : `${THEME_CLASS}--${name.value}`
+    theme.isDisabled ? undefined : `${THEME_CLASS}--${name.value}`,
   )
 
   const newTheme: ThemeInstance = {
     ...theme,
     name,
     current,
-    themeClasses
+    themeClasses,
   }
 
   provide(ThemeSymbol, newTheme) // 使用provide提供主题实例 覆盖全局的theme
@@ -159,16 +160,16 @@ export function createThemeManager(options?: ThemeOptions): ThemeInstance {
 
   // 完整的Colors字段默认值
   const defaultColors: Colors = {
-    background: '#ffffff',
-    surface: '#ffffff',
-    primary: '#1976d2',
-    accent: '#e91e63',
-    secondary: '#424242',
-    neutral: '#f5f5f5',
-    success: '#4caf50',
-    warning: '#ff9800',
-    danger: '#f44336',
-    info: '#2196f3',
+    'background': '#ffffff',
+    'surface': '#ffffff',
+    'primary': '#1976d2',
+    'accent': '#e91e63',
+    'secondary': '#424242',
+    'neutral': '#f5f5f5',
+    'success': '#4caf50',
+    'warning': '#ff9800',
+    'danger': '#f44336',
+    'info': '#2196f3',
     'on-background': '#000000',
     'on-surface': '#000000',
     'on-primary': '#ffffff',
@@ -178,7 +179,7 @@ export function createThemeManager(options?: ThemeOptions): ThemeInstance {
     'on-success': '#ffffff',
     'on-warning': '#ffffff',
     'on-danger': '#ffffff',
-    'on-info': '#ffffff'
+    'on-info': '#ffffff',
   }
 
   // 合并主题
@@ -187,7 +188,7 @@ export function createThemeManager(options?: ThemeOptions): ThemeInstance {
     const theme = themes[key] || {}
     const mergedColors: Colors = {
       ...defaultColors,
-      ...(theme.colors || {})
+      ...(theme.colors || {}),
     } as Colors
     const mergedVariables: Record<string, string | number> = {}
     if (theme.variables) {
@@ -199,14 +200,14 @@ export function createThemeManager(options?: ThemeOptions): ThemeInstance {
     mergedThemes[key] = {
       dark: !!theme.dark,
       colors: mergedColors,
-      variables: mergedVariables
+      variables: mergedVariables,
     }
   }
   if (!mergedThemes[defaultTheme]) {
     mergedThemes[defaultTheme] = {
       dark: false,
       colors: { ...defaultColors },
-      variables: {}
+      variables: {},
     }
   }
 
@@ -224,10 +225,11 @@ export function createThemeManager(options?: ThemeOptions): ThemeInstance {
     styles: computed(() => ``),
     global: {
       name,
-      current
+      current,
     },
     switch: (themeName: string) => {
-      if (mergedThemes[themeName]) name.value = themeName
-    }
+      if (mergedThemes[themeName])
+        name.value = themeName
+    },
   }
 }

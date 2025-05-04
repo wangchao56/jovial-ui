@@ -6,12 +6,12 @@ const jovial = createJovialUI({
   components,
   locale: {
     locale: 'zh-Hans',
-    fallback: 'en'
-  }
+    fallback: 'en',
+  },
 })
 
 export default {
   install: (app: App) => {
     app.use(jovial)
-  }
+  },
 }

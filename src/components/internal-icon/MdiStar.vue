@@ -1,6 +1,6 @@
 <script lang="ts">
 export default {
-  name: 'MdiStar'
+  name: 'MdiStar',
 }
 </script>
 

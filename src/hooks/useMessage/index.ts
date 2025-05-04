@@ -55,20 +55,20 @@ function createMessage(options: MessageOptions) {
     showIcon: options.showIcon,
     duration: options.duration,
     center: options.center,
-    variant: options.variant
+    variant: options.variant,
   } as any
   // 创建VNode
   const vnode = createVNode(
     JvMessage,
     {
       ...jvMessageProps,
-      onClose
+      onClose,
     },
     options.message
       ? {
-          default: () => options.message
+          default: () => options.message,
         }
-      : undefined
+      : undefined,
   )
 
   // 创建容器
@@ -89,7 +89,7 @@ function createMessage(options: MessageOptions) {
         const closeFun = vnode.component.exposed?.close
         closeFun?.()
       }
-    }
+    },
   }
 }
 
@@ -100,10 +100,12 @@ function closeMessage(id: string) {
     return props && (props as any).id === id
   })
 
-  if (idx === -1) return
+  if (idx === -1)
+    return
 
   const instance = instances[idx]
-  if (!instance) return
+  if (!instance)
+    return
 
   // 移除实例
   instances.splice(idx, 1)
@@ -134,7 +136,7 @@ interface MessageFunction {
 export const useMessage = ((options: MessageOptions | string) => {
   if (typeof options === 'string') {
     options = {
-      message: options
+      message: options,
     }
   }
   return createMessage(options)
@@ -145,8 +147,8 @@ const messageTypes: MessageType[] = ['success', 'warning', 'info', 'error']
 
 messageTypes.forEach((type) => {
   useMessage[type] = (options: MessageOptions | string) => {
-    const opt: MessageOptions =
-      typeof options === 'string'
+    const opt: MessageOptions
+      = typeof options === 'string'
         ? { message: options, type }
         : { ...options, type }
     return createMessage(opt)

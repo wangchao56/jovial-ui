@@ -32,48 +32,48 @@ const meta: Meta<typeof JvSelect> = {
       control: 'text',
       description: '选中的值',
       table: {
-        type: { summary: 'string | number | string[] | number[]' }
-      }
+        type: { summary: 'string | number | string[] | number[]' },
+      },
     },
     options: {
       control: 'object',
       description: '选项列表',
       table: {
         type: { summary: 'JvSelectOption[]' },
-        defaultValue: { summary: '[]' }
-      }
+        defaultValue: { summary: '[]' },
+      },
     },
     placeholder: {
       control: 'text',
       description: '占位文本',
       table: {
         type: { summary: 'string' },
-        defaultValue: { summary: '请选择' }
-      }
+        defaultValue: { summary: '请选择' },
+      },
     },
     disabled: {
       control: 'boolean',
       description: '是否禁用',
       table: {
         type: { summary: 'boolean' },
-        defaultValue: { summary: 'false' }
-      }
+        defaultValue: { summary: 'false' },
+      },
     },
     readonly: {
       control: 'boolean',
       description: '是否只读',
       table: {
         type: { summary: 'boolean' },
-        defaultValue: { summary: 'false' }
-      }
+        defaultValue: { summary: 'false' },
+      },
     },
     clearable: {
       control: 'boolean',
       description: '是否可清空',
       table: {
         type: { summary: 'boolean' },
-        defaultValue: { summary: 'false' }
-      }
+        defaultValue: { summary: 'false' },
+      },
     },
     size: {
       control: { type: 'select' },
@@ -81,18 +81,18 @@ const meta: Meta<typeof JvSelect> = {
       description: '尺寸',
       table: {
         type: { summary: 'string' },
-        defaultValue: { summary: 'medium' }
-      }
+        defaultValue: { summary: 'medium' },
+      },
     },
     multiple: {
       control: 'boolean',
       description: '是否多选',
       table: {
         type: { summary: 'boolean' },
-        defaultValue: { summary: 'false' }
-      }
-    }
-  }
+        defaultValue: { summary: 'false' },
+      },
+    },
+  },
 }
 
 export default meta
@@ -103,7 +103,7 @@ const baseOptions: JvSelectOption[] = [
   { label: '选项2', value: '2' },
   { label: '选项3', value: '3' },
   { label: '选项4', value: '4' },
-  { label: '选项5', value: '5' }
+  { label: '选项5', value: '5' },
 ]
 
 /**
@@ -112,7 +112,7 @@ const baseOptions: JvSelectOption[] = [
  * 基本的选择器用法，通过v-model绑定选中值。
  */
 export const 基础用法: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { JvSelect },
     setup() {
       const value = ref(args.modelValue || '')
@@ -127,12 +127,12 @@ export const 基础用法: Story = {
         />
         <div style="margin-top: 10px">当前值: {{ value }}</div>
       </div>
-    `
+    `,
   }),
   args: {
     placeholder: '请选择',
-    clearable: true
-  }
+    clearable: true,
+  },
 }
 
 /**
@@ -155,8 +155,8 @@ export const 不同尺寸: Story = {
         <JvSelect v-model="value2" :options="options" size="medium" placeholder="中尺寸" />
         <JvSelect v-model="value3" :options="options" size="large" placeholder="大尺寸" />
       </div>
-    `
-  })
+    `,
+  }),
 }
 
 /**
@@ -165,7 +165,7 @@ export const 不同尺寸: Story = {
  * 通过 multiple 属性启用多选模式。
  */
 export const 多选模式: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { JvSelect },
     setup() {
       const value = ref<string[]>([])
@@ -181,12 +181,12 @@ export const 多选模式: Story = {
         />
         <div style="margin-top: 10px">当前值: {{ value }}</div>
       </div>
-    `
+    `,
   }),
   args: {
     placeholder: '请选择多个选项',
-    clearable: true
-  }
+    clearable: true,
+  },
 }
 
 /**
@@ -205,7 +205,7 @@ export const 禁用状态: Story = {
         { label: '选项2 (禁用)', value: '2', disabled: true },
         { label: '选项3', value: '3' },
         { label: '选项4 (禁用)', value: '4', disabled: true },
-        { label: '选项5', value: '5' }
+        { label: '选项5', value: '5' },
       ]
       return { value1, value2, options: baseOptions, disabledOptions }
     },
@@ -214,8 +214,8 @@ export const 禁用状态: Story = {
         <JvSelect v-model="value1" :options="options" disabled placeholder="禁用的选择器" />
         <JvSelect v-model="value2" :options="disabledOptions" placeholder="包含禁用选项的选择器" />
       </div>
-    `
-  })
+    `,
+  }),
 }
 
 /**
@@ -240,6 +240,6 @@ export const 可清空: Story = {
         />
         <div style="margin-top: 10px">当前值: {{ value }}</div>
       </div>
-    `
-  })
+    `,
+  }),
 }

@@ -11,7 +11,7 @@ describe('jvBadge', () => {
 
   it('renders content correctly', () => {
     const wrapper = mount(JvBadge, {
-      props: { value: 5 }
+      props: { value: 5 },
     })
 
     const content = wrapper.find('.jv-badge__content')
@@ -23,8 +23,8 @@ describe('jvBadge', () => {
     const wrapper = mount(JvBadge, {
       props: { value: 5 },
       slots: {
-        default: '<div class="test-content">测试内容</div>'
-      }
+        default: '<div class="test-content">测试内容</div>',
+      },
     })
 
     expect(wrapper.find('.test-content').exists()).toBe(true)
@@ -35,8 +35,8 @@ describe('jvBadge', () => {
     const wrapper = mount(JvBadge, {
       props: {
         value: 100,
-        max: 99
-      }
+        max: 99,
+      },
     })
 
     expect(wrapper.find('.jv-badge__content').text()).toBe('99+')
@@ -44,7 +44,7 @@ describe('jvBadge', () => {
 
   it('renders dot when dot is true', () => {
     const wrapper = mount(JvBadge, {
-      props: { dot: true }
+      props: { dot: true },
     })
 
     expect(wrapper.find('.jv-badge__content--is-dot').exists()).toBe(true)
@@ -55,8 +55,8 @@ describe('jvBadge', () => {
     const wrapper = mount(JvBadge, {
       props: {
         value: 5,
-        hidden: true
-      }
+        hidden: true,
+      },
     })
 
     expect(wrapper.find('.jv-badge__content').exists()).toBe(false)
@@ -68,19 +68,19 @@ describe('jvBadge', () => {
       'success',
       'warning',
       'danger',
-      'info'
+      'info',
     ]
 
     types.forEach((type) => {
       const wrapper = mount(JvBadge, {
         props: {
           value: 5,
-          type
-        }
+          type,
+        },
       })
 
       expect(wrapper.find(`.jv-badge__content--type-${type}`).exists()).toBe(
-        true
+        true,
       )
     })
   })
@@ -89,8 +89,8 @@ describe('jvBadge', () => {
     const wrapper = mount(JvBadge, {
       props: {
         value: 5,
-        offset: [10, 20]
-      }
+        offset: [10, 20],
+      },
     })
 
     // 检查样式是否应用了自定义偏移
@@ -100,7 +100,7 @@ describe('jvBadge', () => {
 
   it('emits click event when badge is clicked', async () => {
     const wrapper = mount(JvBadge, {
-      props: { value: 5 }
+      props: { value: 5 },
     })
 
     await wrapper.find('.jv-badge__content').trigger('click')

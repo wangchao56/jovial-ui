@@ -4,7 +4,7 @@ import { LocaleSymbol } from '@/locale/adapters/jovial'
 import { provide, watch } from 'vue'
 
 defineOptions({
-  name: 'JvLocaleProvider'
+  name: 'JvLocaleProvider',
 })
 
 const props = defineProps<{
@@ -17,7 +17,7 @@ const locale = createLocaleManager(props)
 provide(LocaleSymbol, locale)
 
 function isRTLLanguage(locale: string): boolean {
-  return ['ar', 'he', 'fa', 'ur'].some((rtl) => locale.startsWith(rtl))
+  return ['ar', 'he', 'fa', 'ur'].some(rtl => locale.startsWith(rtl))
 }
 
 watch(
@@ -27,7 +27,7 @@ watch(
     document.dir = isRtl ? 'rtl' : 'ltr'
     document.body.classList.toggle('is-rtl', isRtl)
   },
-  { immediate: true }
+  { immediate: true },
 )
 </script>
 

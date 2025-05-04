@@ -17,34 +17,34 @@ export default defineConfig({
       fix: true,
       cache: false,
       include: ['src/**/*.{vue,scss,css}'],
-      exclude: ['node_modules', 'dist']
-    }) as PluginOption
+      exclude: ['node_modules', 'dist'],
+    }) as PluginOption,
   ],
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `@use "@/theme/styles/_bem.scss" as *;`
-      }
+        additionalData: `@use "@/theme/styles/_bem.scss" as *;`,
+      },
     },
-    postcss: './postcss.config.js'
+    postcss: './postcss.config.js',
   },
   resolve: {
     alias: {
       '@': '/src',
-      '@components': '/src/components'
-    }
+      '@components': '/src/components',
+    },
   },
   server: {
     port: 3000,
     open: true,
-    host: true
+    host: true,
   },
   build: {
     sourcemap: true,
     rollupOptions: {
       output: {
-        sourcemap: true
-      }
-    }
-  }
+        sourcemap: true,
+      },
+    },
+  },
 })

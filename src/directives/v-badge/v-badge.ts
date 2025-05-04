@@ -39,8 +39,8 @@ const vBadge: ObjectDirective<BadgeElement, BadgeOptions> = {
     // 创建一个包裹器，用于包含徽章内容
     const badgeWrapper = document.createElement('div')
     badgeWrapper.className = 'v-badge-wrapper'
-    badgeWrapper.style.cssText =
-      'position: absolute; top: 0; right: 0; transform: translate(50%, -50%); pointer-events: none;'
+    badgeWrapper.style.cssText
+      = 'position: absolute; top: 0; right: 0; transform: translate(50%, -50%); pointer-events: none;'
 
     // 应用徽章
     applyBadge(el, binding.value || {}, badgeWrapper)
@@ -69,21 +69,21 @@ const vBadge: ObjectDirective<BadgeElement, BadgeOptions> = {
       delete el._vBadgeWrapper
       delete el._vBadgeVNode
     }
-  }
+  },
 }
 
 // 辅助函数：应用徽章
 function applyBadge(
   el: BadgeElement,
   options: BadgeOptions,
-  wrapper: HTMLElement
+  wrapper: HTMLElement,
 ) {
   // 创建VNode
   const vnode = createVNode(JvBadge, {
     ...options,
     style: {
-      pointerEvents: 'none'
-    }
+      pointerEvents: 'none',
+    },
   })
 
   // 渲染VNode

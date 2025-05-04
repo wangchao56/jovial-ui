@@ -10,7 +10,7 @@ export enum JvTriggerMethod {
   HOVER = 'hover',
   FOCUS = 'focus',
   CONTEXTMENU = 'contextmenu',
-  BLUR = 'blur'
+  BLUR = 'blur',
 }
 
 export type PlacementType =

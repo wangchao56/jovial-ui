@@ -34,11 +34,12 @@ watch(
   (val) => {
     if (val) {
       overlayVisible.value = true
-    } else {
+    }
+    else {
       modalVisible.value = false
     }
   },
-  { immediate: true }
+  { immediate: true },
 )
 
 function overlayOpenAfter() {
@@ -75,9 +76,9 @@ const modalId = `jv-modal-${useId()}`
 
 const triggerProps = computed(() => {
   return {
-    onClick: toggleModal,
-    class: 'jv-modal__trigger',
-    'data-bindmodal-id': modalId
+    'onClick': toggleModal,
+    'class': 'jv-modal__trigger',
+    'data-bindmodal-id': modalId,
   }
 })
 const maskZIndex = computed(() => {
@@ -92,7 +93,7 @@ function handleClickOverlay() {
 
 defineExpose<JvModalExpose>({
   open: openModal,
-  close: closeModal
+  close: closeModal,
 })
 </script>
 

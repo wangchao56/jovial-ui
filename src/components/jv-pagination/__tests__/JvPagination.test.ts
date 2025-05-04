@@ -14,11 +14,11 @@ vi.mock('@/locale/adapters/jovial', () => ({
         '$jv.pagination.total': `共 ${value} 条`,
         '$jv.pagination.itemsPerPage': '条/页',
         '$jv.pagination.jumpTo': '前往',
-        '$jv.pagination.page': `第${value}页`
+        '$jv.pagination.page': `第${value}页`,
       }
       return messages[key] || key
-    }
-  })
+    },
+  }),
 }))
 
 describe('jvPagination', () => {
@@ -28,8 +28,8 @@ describe('jvPagination', () => {
       props: {
         modelValue: 1,
         total: 100,
-        pageSize: 10
-      }
+        pageSize: 10,
+      },
     })
 
     expect(wrapper.find('.jv-pagination').exists()).toBe(true)
@@ -43,8 +43,8 @@ describe('jvPagination', () => {
       props: {
         modelValue: 1,
         total: 100,
-        pageSize: 10
-      }
+        pageSize: 10,
+      },
     })
 
     // 找到"下一页"按钮（第一个按钮是"上一页"，最后一个是"下一页"）
@@ -71,8 +71,8 @@ describe('jvPagination', () => {
         modelValue: 1,
         total: 100,
         pageSize: 10,
-        pageSizes: [10, 20, 50, 100]
-      }
+        pageSizes: [10, 20, 50, 100],
+      },
     })
 
     // 检查是否渲染了JvSelect组件
@@ -98,8 +98,8 @@ describe('jvPagination', () => {
         modelValue: 1,
         total: 100,
         pageSize: 10,
-        simple: true
-      }
+        simple: true,
+      },
     })
 
     // 简洁模式下，页码按钮应该只有上一页和下一页
@@ -116,8 +116,8 @@ describe('jvPagination', () => {
       props: {
         modelValue: 1,
         total: 100,
-        pageSize: 10
-      }
+        pageSize: 10,
+      },
     })
 
     // 模拟点击特定页码按钮 (第三个按钮是页码"3")
@@ -146,8 +146,8 @@ describe('jvPagination', () => {
       props: {
         modelValue: 1, // 首页
         total: 100,
-        pageSize: 10
-      }
+        pageSize: 10,
+      },
     })
 
     // 在首页时，上一页按钮应该被禁用

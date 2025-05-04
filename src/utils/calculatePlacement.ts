@@ -33,7 +33,7 @@ export function calculatePlacement(
   popoverRect: Ref<DOMRect>,
   preferredPlacement: PlacementType = 'bottom',
   offset: [number, number] | number = [0, 0],
-  strategy: PlacementStrategy = 'auto'
+  strategy: PlacementStrategy = 'auto',
 ): CSSProperties & { 'data-actual-placement'?: string } {
   // 获取触发元素的位置和尺寸
   const triggerRectValue = unref(triggerRect)
@@ -67,7 +67,7 @@ export function calculatePlacement(
     top: top - viewportTop - SAFETY_MARGIN,
     bottom: viewportBottom - bottom - SAFETY_MARGIN,
     left: left - viewportLeft - SAFETY_MARGIN,
-    right: viewportRight - right - SAFETY_MARGIN
+    right: viewportRight - right - SAFETY_MARGIN,
   }
 
   // 确定各个方向是否有足够空间放置弹出层
@@ -75,7 +75,7 @@ export function calculatePlacement(
     top: spaces.top >= popoverHeight,
     bottom: spaces.bottom >= popoverHeight,
     left: spaces.left >= popoverWidth,
-    right: spaces.right >= popoverWidth
+    right: spaces.right >= popoverWidth,
   }
 
   // 计算各个方向的适合度得分（空间越多越适合）
@@ -83,7 +83,7 @@ export function calculatePlacement(
     top: spaces.top / popoverHeight,
     bottom: spaces.bottom / popoverHeight,
     left: spaces.left / popoverWidth,
-    right: spaces.right / popoverWidth
+    right: spaces.right / popoverWidth,
   }
 
   // 初始化最终放置位置
@@ -92,15 +92,16 @@ export function calculatePlacement(
   if (strategy === 'fixed') {
     // 固定策略：不变更首选位置
     finalPlacement = preferredPlacement
-  } else if (strategy === 'flip' || strategy === 'auto') {
+  }
+  else if (strategy === 'flip' || strategy === 'auto') {
     // 翻转策略或自动策略：根据空间不足翻转位置
 
     // 定义对应的翻转位置映射
     const flipMap: Record<string, PlacementType> = {
-      top: 'bottom',
-      bottom: 'top',
-      left: 'right',
-      right: 'left',
+      'top': 'bottom',
+      'bottom': 'top',
+      'left': 'right',
+      'right': 'left',
       'top-start': 'bottom-start',
       'top-end': 'bottom-end',
       'bottom-start': 'top-start',
@@ -108,13 +109,13 @@ export function calculatePlacement(
       'left-start': 'right-start',
       'left-end': 'right-end',
       'right-start': 'left-start',
-      'right-end': 'left-end'
+      'right-end': 'left-end',
     }
 
     // 获取主方向和修饰符
     const [mainPlacement, modifier] = preferredPlacement.split('-') as [
       PlacementType,
-      string | undefined
+      string | undefined,
     ]
 
     // 检查主方向空间是否不足
@@ -123,8 +124,8 @@ export function calculatePlacement(
 
       // 如果翻转后的方向有足够空间，或者策略是flip，则应用翻转
       if (
-        hasSpace[flippedMain as keyof typeof hasSpace] ||
-        strategy === 'flip'
+        hasSpace[flippedMain as keyof typeof hasSpace]
+        || strategy === 'flip'
       ) {
         finalPlacement = modifier
           ? (`${flippedMain}-${modifier}` as PlacementType)
@@ -178,7 +179,7 @@ export function calculatePlacement(
     // 分解为主方向和修饰符
     const [mainPlacement, modifier] = finalPlacement.split('-') as [
       PlacementType,
-      string | undefined
+      string | undefined,
     ]
 
     if (modifier) {
@@ -188,15 +189,15 @@ export function calculatePlacement(
       if (mainPlacement === 'top' || mainPlacement === 'bottom') {
         // 检查start修饰符是否导致左侧溢出
         if (
-          modifier === 'start' &&
-          left + offsetX < viewportLeft + SAFETY_MARGIN
+          modifier === 'start'
+          && left + offsetX < viewportLeft + SAFETY_MARGIN
         ) {
           newModifier = 'end'
         }
         // 检查end修饰符是否导致右侧溢出
         else if (
-          modifier === 'end' &&
-          right + offsetX > viewportRight - SAFETY_MARGIN
+          modifier === 'end'
+          && right + offsetX > viewportRight - SAFETY_MARGIN
         ) {
           newModifier = 'start'
         }
@@ -205,15 +206,15 @@ export function calculatePlacement(
       else if (mainPlacement === 'left' || mainPlacement === 'right') {
         // 检查start修饰符是否导致顶部溢出
         if (
-          modifier === 'start' &&
-          top + offsetY < viewportTop + SAFETY_MARGIN
+          modifier === 'start'
+          && top + offsetY < viewportTop + SAFETY_MARGIN
         ) {
           newModifier = 'end'
         }
         // 检查end修饰符是否导致底部溢出
         else if (
-          modifier === 'end' &&
-          bottom + offsetY > viewportBottom - SAFETY_MARGIN
+          modifier === 'end'
+          && bottom + offsetY > viewportBottom - SAFETY_MARGIN
         ) {
           newModifier = 'start'
         }
@@ -324,14 +325,16 @@ export function calculatePlacement(
       // 水平边界保护
       if (endX < viewportLeft + SAFETY_MARGIN) {
         endX = viewportLeft + SAFETY_MARGIN
-      } else if (endX + popoverWidth > viewportRight - SAFETY_MARGIN) {
+      }
+      else if (endX + popoverWidth > viewportRight - SAFETY_MARGIN) {
         endX = viewportRight - popoverWidth - SAFETY_MARGIN
       }
 
       // 垂直边界保护
       if (endY < viewportTop + SAFETY_MARGIN) {
         endY = viewportTop + SAFETY_MARGIN
-      } else if (endY + popoverHeight > viewportBottom - SAFETY_MARGIN) {
+      }
+      else if (endY + popoverHeight > viewportBottom - SAFETY_MARGIN) {
         endY = viewportBottom - popoverHeight - SAFETY_MARGIN
       }
     }
@@ -347,8 +350,8 @@ export function calculatePlacement(
 
   // 构建最终的样式对象
   return {
-    transformOrigin: calculatePositioningData(finalPlacement).origin,
-    transform: buildTransformValue(finalPlacement),
+    'transformOrigin': calculatePositioningData(finalPlacement).origin,
+    'transform': buildTransformValue(finalPlacement),
     '--x': `${x}px`, // 触发元素的x坐标
     '--y': `${y}px`, // 触发元素的y坐标
     '--width': `${width}px`, // 触发元素的宽度
@@ -361,7 +364,7 @@ export function calculatePlacement(
     '--viewport-height': `${viewportHeight}px`, // 视口的高度
     '--popover-width': `${popoverWidth}px`, // 弹出层的宽度
     '--popover-height': `${popoverHeight}px`, // 弹出层的高度
-    position: 'fixed', // 固定定位
-    'data-actual-placement': finalPlacement
+    'position': 'fixed', // 固定定位
+    'data-actual-placement': finalPlacement,
   }
 }

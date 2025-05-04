@@ -12,7 +12,7 @@ import {
   JVCARDACTIONS_NAME,
   JVCARDCONTENT_NAME,
   JVCARDFOOTER_NAME,
-  JVCARDHEADER_NAME
+  JVCARDHEADER_NAME,
 } from './types'
 
 defineOptions({ name: JVCARD_NAME, inheritAttrs: false })
@@ -29,7 +29,7 @@ const {
   disabled = false,
   padding = 'md',
   actionsAlign = 'end',
-  content
+  content,
 } = defineProps<JvCardProps>()
 
 const emit = defineEmits<JvCardEmits>()
@@ -52,7 +52,7 @@ const cardChildComponents = [
   JVCARDHEADER_NAME,
   JVCARDCONTENT_NAME,
   JVCARDACTIONS_NAME,
-  JVCARDFOOTER_NAME
+  JVCARDFOOTER_NAME,
 ]
 
 // 检查子组件的存在
@@ -81,11 +81,11 @@ function checkChildren() {
   hasOtherContent.value = defaultSlotContent.some((vnode) => {
     // 如果是文本节点或者非卡片子组件
     return (
-      !vnode.type || // 文本节点
-      (typeof vnode.type === 'string' && vnode.type !== 'template') || // HTML元素
-      (vnode.type &&
-        typeof vnode.type !== 'string' &&
-        !cardChildComponents.includes((vnode.type as any).name || '')) // 其他组件
+      !vnode.type // 文本节点
+      || (typeof vnode.type === 'string' && vnode.type !== 'template') // HTML元素
+      || (vnode.type
+        && typeof vnode.type !== 'string'
+        && !cardChildComponents.includes((vnode.type as any).name || '')) // 其他组件
     )
   })
 
@@ -94,7 +94,7 @@ function checkChildren() {
     consoleWarn(
       `[JvCard] 警告: 检测到默认插槽中包含非卡片子组件的内容。
       为了最佳实践，建议在默认插槽中仅使用 JvCardHeader、JvCardContent、JvCardActions 或 JvCardFooter 子组件。
-      如需添加内容，请使用 JvCardContent 子组件或 content 插槽。`
+      如需添加内容，请使用 JvCardContent 子组件或 content 插槽。`,
     )
   }
 }
@@ -103,15 +103,16 @@ function checkChildren() {
 const otherContentVnode = computed(() => {
   return slots.default?.()?.filter((vnode) => {
     return (
-      !vnode.type ||
-      !cardChildComponents.includes((vnode.type as any)?.name || '')
+      !vnode.type
+      || !cardChildComponents.includes((vnode.type as any)?.name || '')
     )
   })
 })
 
 // 点击处理函数
 function handleClick(event: MouseEvent) {
-  if (disabled || !clickable) return
+  if (disabled || !clickable)
+    return
   emit('click', event)
 }
 </script>
@@ -126,7 +127,7 @@ function handleClick(event: MouseEvent) {
       bem.m(`rounded-${rounded}`),
       bem.is('bordered', bordered),
       bem.is('clickable', clickable),
-      bem.is('disabled', disabled)
+      bem.is('disabled', disabled),
     ]"
     v-bind="$attrs"
     @click="handleClick"
@@ -160,8 +161,8 @@ function handleClick(event: MouseEvent) {
     <!-- 当没有子组件JvCardContent时，使用内容插槽或属性 -->
     <JvCardContent
       v-if="
-        !hasChildContent &&
-        ($slots.content || content || otherContentVnode?.length)
+        !hasChildContent
+          && ($slots.content || content || otherContentVnode?.length)
       "
       :content="content"
     >
@@ -211,7 +212,7 @@ $card-padding-map: (
   'sm': 8px,
   'md': 16px,
   'lg': 24px,
-  'xl': 32px
+  'xl': 32px,
 );
 
 // 颜色类型列表

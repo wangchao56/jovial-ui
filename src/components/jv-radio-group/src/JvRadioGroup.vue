@@ -8,7 +8,7 @@ defineOptions({ name: JVRADIOGROUP_NAME, inheritAttrs: false })
 const {
   modelValue = '',
   disabled = false,
-  name = ''
+  name = '',
 } = defineProps<JvRadioGroupProps>()
 
 const emit = defineEmits<{
@@ -25,7 +25,7 @@ provide(radioGroupKey, {
   name: name ?? '',
   modelValue: modelValue ?? '',
   disabled,
-  updateValue
+  updateValue,
 })
 </script>
 

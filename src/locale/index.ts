@@ -13,7 +13,7 @@ function defaultN(value: number) {
 }
 
 export function createLocaleManager(
-  options: LocaleOptions = {}
+  options: LocaleOptions = {},
 ): LocaleInstance {
   const current = shallowRef(options.locale ?? 'zh-Hans')
   const fallback = shallowRef(options.fallback ?? 'zh-Hans')
@@ -26,9 +26,9 @@ export function createLocaleManager(
     t: (options as any)?.t ?? defaultT,
     n: (options as any)?.n ?? defaultN,
     provide:
-      (options as any)?.provide ??
-      (() => {
+      (options as any)?.provide
+      ?? (() => {
         throw new Error('provide not implemented')
-      })
+      }),
   }
 }

@@ -99,8 +99,8 @@ export class ComponentGenerator {
    * @returns 组件类型定义代码
    */
   generateTypes(): string {
-    const { componentName, props, emits, slots, exposes, description } =
-      this.config
+    const { componentName, props, emits, slots, exposes, description }
+      = this.config
     const componentNameConstant = componentName.toUpperCase()
 
     let code = `import type { Slot } from 'vue'\n`
@@ -152,7 +152,8 @@ export class ComponentGenerator {
           paramsString = paramEntries
             .map(([name, type]) => `${name}: ${type}`)
             .join(', ')
-        } else {
+        }
+        else {
           paramsString = 'event: Event'
         }
 
@@ -173,8 +174,8 @@ export class ComponentGenerator {
         code += `  ${slotName}: Slot${
           slot.props && Object.keys(slot.props).length > 0
             ? `<{ ${Object.entries(slot.props)
-                .map(([name, type]) => `${name}: ${type}`)
-                .join(', ')} }>`
+              .map(([name, type]) => `${name}: ${type}`)
+              .join(', ')} }>`
             : ''
         }\n`
       }
@@ -250,7 +251,8 @@ export class ComponentGenerator {
 
       if (defaultProps.length > 0) {
         code += `const {\n  ${defaultProps}\n} = defineProps<${componentName}Props>()\n\n`
-      } else {
+      }
+      else {
         code += `const props = defineProps<${componentName}Props>()\n\n`
       }
     }
@@ -279,7 +281,8 @@ export class ComponentGenerator {
     if (slots) {
       if (slots.default) {
         code += `    <slot></slot>\n`
-      } else {
+      }
+      else {
         code += `    <!-- 组件内容 -->\n`
       }
 
@@ -290,12 +293,14 @@ export class ComponentGenerator {
           if (slot.props && Object.keys(slot.props).length > 0) {
             const slotProps = Object.keys(slot.props).join(', ')
             code += `    <slot name="${slotName}" :${slotProps}="${slotProps}"></slot>\n`
-          } else {
+          }
+          else {
             code += `    <slot name="${slotName}"></slot>\n`
           }
         }
       }
-    } else {
+    }
+    else {
       code += `    <!-- 组件内容 -->\n`
     }
 
@@ -405,16 +410,19 @@ export class ComponentGenerator {
         // 根据类型提供控件
         if (prop.type === 'boolean') {
           code += `      control: 'boolean',\n`
-        } else if (prop.type.includes('string') && prop.type.includes('|')) {
+        }
+        else if (prop.type.includes('string') && prop.type.includes('|')) {
           code += `      control: 'select',\n`
           const options = prop.type
             .replace(/['"]/g, '')
             .split('|')
-            .map((t) => t.trim())
+            .map(t => t.trim())
           code += `      options: [${options.join(', ')}],\n`
-        } else if (prop.type === 'string') {
+        }
+        else if (prop.type === 'string') {
           code += `      control: 'text',\n`
-        } else if (prop.type === 'number') {
+        }
+        else if (prop.type === 'number') {
           code += `      control: 'number',\n`
         }
 
@@ -497,7 +505,7 @@ export class ComponentGenerator {
   private toPascalCase(str: string): string {
     return str
       .split(/[-_\s]+/)
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join('')
   }
 }

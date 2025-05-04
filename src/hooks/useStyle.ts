@@ -14,7 +14,8 @@ type NormalizedStyle =
  */
 export function useStyle() {
   const attrs = useAttrs()
-  if (!attrs) return { resultStyle: {} }
+  if (!attrs)
+    return { resultStyle: {} }
   const { style } = attrs as { style: CSSProperties }
   const resultStyle = normalizeStyle(style) as NormalizedStyle
   return { customStyles: resultStyle }

@@ -6,7 +6,7 @@ function detectSystemColorScheme(): 'light' | 'dark' {
 
 // 监听系统颜色方案变化
 function watchSystemColorScheme(
-  callback: (isDark: boolean) => void
+  callback: (isDark: boolean) => void,
 ): () => void {
   const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
 

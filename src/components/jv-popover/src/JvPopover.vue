@@ -4,7 +4,7 @@ import type {
   JvPopoverEmits,
   JvPopoverExpose,
   JvPopoverProps,
-  JvPopoverSlots
+  JvPopoverSlots,
 } from './types'
 import { useZindex } from '@/hooks'
 import { calculatePlacement } from '@/utils'
@@ -20,7 +20,7 @@ import {
   useAttrs,
   useId,
   watch,
-  watchPostEffect
+  watchPostEffect,
 } from 'vue'
 import { bem, JVPOPOVER_NAME } from './types'
 
@@ -34,7 +34,7 @@ const {
   offset = 0,
   referenceRect = null,
   placementStrategy = 'auto',
-  arrowSize = 12
+  arrowSize = 12,
 } = defineProps<JvPopoverProps>()
 
 const emits = defineEmits<JvPopoverEmits>()
@@ -60,7 +60,7 @@ const defaultRect: DOMRect = {
   bottom: 0,
   toJSON() {
     return {}
-  }
+  },
 }
 const triggerRect = shallowRef<DOMRect>(referenceRect || defaultRect)
 const popoverRect = shallowRef<DOMRect>(defaultRect)
@@ -69,7 +69,8 @@ const initOffset = computed(() => {
   if (arrow) {
     if (placement.startsWith('top') || placement.startsWith('bottom')) {
       return [0, arrowSize]
-    } else if (placement.startsWith('left') || placement.startsWith('right')) {
+    }
+    else if (placement.startsWith('left') || placement.startsWith('right')) {
       return [arrowSize, 0]
     }
     return [0, 0]
@@ -81,7 +82,7 @@ const finalOffset = computed(() => {
   const [offsetX, offsetY] = Array.isArray(offset) ? offset : [0, offset]
   return [initOffset.value[0] + offsetX, initOffset.value[1] + offsetY] as [
     number,
-    number
+    number,
   ]
 })
 
@@ -108,7 +109,7 @@ function updatePositionStyles() {
     popoverRect,
     placement,
     finalOffset.value,
-    placementStrategy // 使用组件传入的策略
+    placementStrategy, // 使用组件传入的策略
   ) as CSSProperties & { 'data-actual-placement'?: string }
 
   // 更新实际放置位置
@@ -138,7 +139,8 @@ const throttledUpdatePositionStyles = (() => {
   let ticking = false
 
   return () => {
-    if (ticking) return
+    if (ticking)
+      return
 
     ticking = true
     rafId = window.requestAnimationFrame(() => {
@@ -152,9 +154,9 @@ const throttledUpdatePositionStyles = (() => {
 // 取消待处理的更新
 function cancelPendingUpdate() {
   if (
-    typeof window !== 'undefined' &&
-    window.cancelAnimationFrame &&
-    rafId !== null
+    typeof window !== 'undefined'
+    && window.cancelAnimationFrame
+    && rafId !== null
   ) {
     window.cancelAnimationFrame(rafId)
     rafId = null
@@ -226,7 +228,8 @@ function hide() {
 function toggle() {
   if (visible.value) {
     hide()
-  } else {
+  }
+  else {
     show()
   }
 }
@@ -243,7 +246,7 @@ watchThrottled(
     }
     updatePositionStyles()
   },
-  { throttle: 16 } // 使用16ms (约60fps) 的节流来保持流畅
+  { throttle: 16 }, // 使用16ms (约60fps) 的节流来保持流畅
 )
 
 // 获取外部传入的class和样式
@@ -254,7 +257,7 @@ const wrapperClass = attrs.class ? normalizeClass([attrs.class]) : ''
 const popoverClass = normalizeClass([
   bem.e('content'),
   'elevation-6',
-  bem.is('has-arrow', arrow)
+  bem.is('has-arrow', arrow),
 ])
 
 // 处理过渡动画事件
@@ -272,7 +275,7 @@ function onLeave(_el: Element) {
 defineExpose<JvPopoverExpose>({
   show,
   hide,
-  toggle
+  toggle,
 })
 </script>
 
@@ -352,10 +355,7 @@ defineExpose<JvPopoverExpose>({
     border: none;
     background-color: var(--jv-popover-bg); // 使用与popover相同的背景色
     transform: rotate(var(--jv-popover-arrow-rotate))
-      translate(
-        var(--jv-popover-arrow-translate-x),
-        var(--jv-popover-arrow-translate-y)
-      );
+      translate(var(--jv-popover-arrow-translate-x), var(--jv-popover-arrow-translate-y));
     transition: all 0.2s ease-out; // 过渡动画
     pointer-events: none; // 确保箭头不阻止鼠标事件
     clip-path: polygon(100% 0, 0% 100%, 0 0); // 创建三角形切角效果
@@ -370,9 +370,7 @@ defineExpose<JvPopoverExpose>({
     // 顶部位置的箭头样式
     &[data-placement='top'] {
       bottom: calc(var(--jv-popover-arrow-size) / -2);
-      left: calc(
-        var(--width) / 2 + var(--x) - var(--jv-popover-arrow-ratio) / 2
-      ); // 对齐到触发元素的中间
+      left: calc(var(--width) / 2 + var(--x) - var(--jv-popover-arrow-ratio) / 2); // 对齐到触发元素的中间
 
       --jv-popover-arrow-rotate: -135deg;
       --jv-popover-arrow-translate-x: 0;
@@ -381,10 +379,7 @@ defineExpose<JvPopoverExpose>({
 
     &[data-placement='top-start'] {
       bottom: calc(var(--jv-popover-arrow-size) / -2);
-      left: max(
-        var(--jv-popover-arrow-offset),
-        var(--x) + var(--jv-popover-arrow-ratio)
-      ); // 对齐到触发元素的开始位置
+      left: max(var(--jv-popover-arrow-offset), var(--x) + var(--jv-popover-arrow-ratio)); // 对齐到触发元素的开始位置
 
       --jv-popover-arrow-rotate: -135deg;
       --jv-popover-arrow-translate-x: 8px; // 添加水平偏移
@@ -406,9 +401,7 @@ defineExpose<JvPopoverExpose>({
     // 底部位置的箭头样式
     &[data-placement='bottom'] {
       top: calc(var(--jv-popover-arrow-size) / -2);
-      left: calc(
-        var(--width) / 2 + var(--x) - var(--jv-popover-arrow-ratio) / 2
-      ); // 对齐到触发元素的中间
+      left: calc(var(--width) / 2 + var(--x) - var(--jv-popover-arrow-ratio) / 2); // 对齐到触发元素的中间
 
       --jv-popover-arrow-rotate: 45deg;
       --jv-popover-arrow-translate-x: 0;
@@ -417,10 +410,7 @@ defineExpose<JvPopoverExpose>({
 
     &[data-placement='bottom-start'] {
       top: calc(var(--jv-popover-arrow-size) / -2);
-      left: max(
-        var(--jv-popover-arrow-offset),
-        var(--x) + var(--jv-popover-arrow-ratio)
-      ); // 对齐到触发元素的开始位置
+      left: max(var(--jv-popover-arrow-offset), var(--x) + var(--jv-popover-arrow-ratio)); // 对齐到触发元素的开始位置
 
       --jv-popover-arrow-rotate: 45deg;
       --jv-popover-arrow-translate-x: 8px; // 添加水平偏移
@@ -441,9 +431,7 @@ defineExpose<JvPopoverExpose>({
 
     // 左侧位置的箭头样式
     &[data-placement='left'] {
-      top: calc(
-        var(--height) / 2 + var(--y) - var(--jv-popover-arrow-ratio) / 2
-      ); // 对齐到触发元素的中间
+      top: calc(var(--height) / 2 + var(--y) - var(--jv-popover-arrow-ratio) / 2); // 对齐到触发元素的中间
       right: calc(var(--jv-popover-arrow-size) / -2);
 
       --jv-popover-arrow-rotate: 45deg;
@@ -452,10 +440,7 @@ defineExpose<JvPopoverExpose>({
     }
 
     &[data-placement='left-start'] {
-      top: max(
-        var(--jv-popover-arrow-offset),
-        var(--y) + var(--jv-popover-arrow-ratio)
-      ); // 对齐到触发元素的开始位置
+      top: max(var(--jv-popover-arrow-offset), var(--y) + var(--jv-popover-arrow-ratio)); // 对齐到触发元素的开始位置
       right: calc(var(--jv-popover-arrow-size) / -2);
 
       --jv-popover-arrow-rotate: 45deg;
@@ -477,9 +462,7 @@ defineExpose<JvPopoverExpose>({
 
     // 右侧位置的箭头样式
     &[data-placement='right'] {
-      top: calc(
-        var(--height) / 2 + var(--y) - var(--jv-popover-arrow-ratio) / 2
-      ); // 对齐到触发元素的中间
+      top: calc(var(--height) / 2 + var(--y) - var(--jv-popover-arrow-ratio) / 2); // 对齐到触发元素的中间
       left: calc(var(--jv-popover-arrow-size) / -2);
 
       --jv-popover-arrow-rotate: -45deg;
@@ -488,10 +471,7 @@ defineExpose<JvPopoverExpose>({
     }
 
     &[data-placement='right-start'] {
-      top: max(
-        var(--jv-popover-arrow-offset),
-        var(--y) + var(--jv-popover-arrow-ratio)
-      ); // 对齐到触发元素的开始位置
+      top: max(var(--jv-popover-arrow-offset), var(--y) + var(--jv-popover-arrow-ratio)); // 对齐到触发元素的开始位置
       left: calc(var(--jv-popover-arrow-size) / -2);
 
       --jv-popover-arrow-rotate: -45deg;

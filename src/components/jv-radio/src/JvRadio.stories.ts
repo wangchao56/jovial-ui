@@ -9,11 +9,11 @@ const meta: Meta<typeof JvRadio> = {
   argTypes: {
     modelValue: { control: 'text' },
     label: { control: 'text' },
-    disabled: { control: 'boolean' }
+    disabled: { control: 'boolean' },
   },
   args: {
-    label: '选项1'
-  }
+    label: '选项1',
+  },
 }
 
 export default meta
@@ -21,7 +21,7 @@ export default meta
 type Story = StoryObj<typeof JvRadio>
 
 export const Basic: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { JvRadio },
     setup() {
       const value = ref('')
@@ -31,12 +31,12 @@ export const Basic: Story = {
       <JvRadio v-model="value" v-bind="args" />
       <JvRadio v-model="value" label="选项2" />
       <div style="margin-top: 10px">当前选中: {{ value }}</div>
-    `
-  })
+    `,
+  }),
 }
 
 export const Disabled: Story = {
   args: {
-    disabled: true
-  }
+    disabled: true,
+  },
 }

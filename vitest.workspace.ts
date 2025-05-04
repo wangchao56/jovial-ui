@@ -3,8 +3,8 @@ import { fileURLToPath } from 'node:url'
 import { storybookTest } from '@storybook/experimental-addon-test/vitest-plugin'
 import { defineWorkspace } from 'vitest/config'
 
-const dirname =
-  typeof __dirname !== 'undefined'
+const dirname
+  = typeof __dirname !== 'undefined'
     ? __dirname
     : path.dirname(fileURLToPath(import.meta.url))
 
@@ -20,8 +20,8 @@ export default defineWorkspace([
         configDir: path.join(dirname, '.storybook'),
         // This should match your package.json script to run Storybook
         // The --ci flag will skip prompts and not open a browser
-        storybookScript: 'pnpm storybook --ci'
-      })
+        storybookScript: 'pnpm storybook --ci',
+      }),
     ],
     test: {
       name: 'storybook',
@@ -31,9 +31,9 @@ export default defineWorkspace([
         name: 'chromium',
         // Make sure to install Playwright
         provider: 'playwright',
-        headless: true
+        headless: true,
       },
-      setupFiles: ['./.storybook/vitest.setup.ts']
-    }
-  }
+      setupFiles: ['./.storybook/vitest.setup.ts'],
+    },
+  },
 ])

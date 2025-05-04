@@ -29,5 +29,5 @@ export interface JvRadioGroupContext {
   disabled: boolean
   updateValue: (value: string | number) => void
 }
-export const radioGroupKey: InjectionKey<JvRadioGroupContext> =
-  Symbol('radioGroupKey')
+export const radioGroupKey: InjectionKey<JvRadioGroupContext>
+  = Symbol('radioGroupKey')

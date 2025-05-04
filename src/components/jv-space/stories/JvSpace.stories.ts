@@ -43,21 +43,21 @@ const meta: Meta<typeof JvSpace> = {
           { id: 'layout-table', enabled: false },
           // 由于JvSpace本身是布局组件，可以禁用一些不适用的规则
           { id: 'empty-heading', enabled: false },
-          { id: 'no-aria-label-on-structure', enabled: false }
-        ]
+          { id: 'no-aria-label-on-structure', enabled: false },
+        ],
       },
       // 禁用不需要的可访问性检查
       disable: false,
       // 可选：自定义元素选择器
-      element: '#storybook-root'
+      element: '#storybook-root',
     },
     // 组件描述
     docs: {
       description: {
         component:
-          '一个灵活的布局组件，用于控制元素之间的间距，支持水平和垂直排列。'
-      }
-    }
+          '一个灵活的布局组件，用于控制元素之间的间距，支持水平和垂直排列。',
+      },
+    },
   },
   argTypes: {
     /**
@@ -70,10 +70,10 @@ const meta: Meta<typeof JvSpace> = {
       description: '间距大小',
       table: {
         type: {
-          summary: 'number | string | [number | string, number | string]'
+          summary: 'number | string | [number | string, number | string]',
         },
-        defaultValue: { summary: 'medium (8px)' }
-      }
+        defaultValue: { summary: 'medium (8px)' },
+      },
     },
     /**
      * 排列方向
@@ -85,9 +85,9 @@ const meta: Meta<typeof JvSpace> = {
       options: ['horizontal', 'vertical'],
       description: '排列方向',
       table: {
-        type: { summary: "'horizontal' | 'vertical'" },
-        defaultValue: { summary: 'horizontal' }
-      }
+        type: { summary: '\'horizontal\' | \'vertical\'' },
+        defaultValue: { summary: 'horizontal' },
+      },
     },
     /**
      * 垂直对齐方式（当 direction 为 horizontal 时生效）
@@ -101,9 +101,9 @@ const meta: Meta<typeof JvSpace> = {
       options: ['start', 'end', 'center', 'baseline'],
       description: '对齐方式',
       table: {
-        type: { summary: "'start' | 'end' | 'center' | 'baseline'" },
-        defaultValue: { summary: 'start' }
-      }
+        type: { summary: '\'start\' | \'end\' | \'center\' | \'baseline\'' },
+        defaultValue: { summary: 'start' },
+      },
     },
     /**
      * 主轴对齐方式
@@ -120,10 +120,10 @@ const meta: Meta<typeof JvSpace> = {
       table: {
         type: {
           summary:
-            "'start' | 'end' | 'center' | 'space-around' | 'space-between'"
+            '\'start\' | \'end\' | \'center\' | \'space-around\' | \'space-between\'',
         },
-        defaultValue: { summary: 'start' }
-      }
+        defaultValue: { summary: 'start' },
+      },
     },
     /**
      * 是否自动换行，仅在 direction 为 horizontal 时有效
@@ -133,8 +133,8 @@ const meta: Meta<typeof JvSpace> = {
       description: '是否换行',
       table: {
         type: { summary: 'boolean' },
-        defaultValue: { summary: 'false' }
-      }
+        defaultValue: { summary: 'false' },
+      },
     },
     /**
      * 是否填充父容器宽度
@@ -144,8 +144,8 @@ const meta: Meta<typeof JvSpace> = {
       description: '是否填充父容器',
       table: {
         type: { summary: 'boolean' },
-        defaultValue: { summary: 'false' }
-      }
+        defaultValue: { summary: 'false' },
+      },
     },
     /**
      * ARIA角色属性，用于指定组件的语义
@@ -157,8 +157,8 @@ const meta: Meta<typeof JvSpace> = {
       table: {
         type: { summary: 'string' },
         defaultValue: { summary: 'group' },
-        category: '可访问性'
-      }
+        category: '可访问性',
+      },
     },
     /**
      * ARIA标签，用于为屏幕阅读器提供组件描述
@@ -169,8 +169,8 @@ const meta: Meta<typeof JvSpace> = {
       table: {
         type: { summary: 'string' },
         defaultValue: { summary: 'undefined' },
-        category: '可访问性'
-      }
+        category: '可访问性',
+      },
     },
     /**
      * 指向标签元素ID的引用，用于关联外部标签
@@ -181,8 +181,8 @@ const meta: Meta<typeof JvSpace> = {
       table: {
         type: { summary: 'string' },
         defaultValue: { summary: 'undefined' },
-        category: '可访问性'
-      }
+        category: '可访问性',
+      },
     },
     /**
      * 指向描述元素ID的引用，用于关联外部描述
@@ -193,10 +193,10 @@ const meta: Meta<typeof JvSpace> = {
       table: {
         type: { summary: 'string' },
         defaultValue: { summary: 'undefined' },
-        category: '可访问性'
-      }
-    }
-  }
+        category: '可访问性',
+      },
+    },
+  },
 }
 
 export default meta
@@ -217,7 +217,7 @@ type Story = StoryObj<typeof JvSpace>
  * ```
  */
 export const 基础用法: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { JvSpace },
     setup() {
       return { args }
@@ -228,19 +228,19 @@ export const 基础用法: Story = {
         <div style="padding: 20px; background-color: #f0f0f0;">元素2</div>
         <div style="padding: 20px; background-color: #f0f0f0;">元素3</div>
       </JvSpace>
-    `
+    `,
   }),
   args: {
     size: 8,
-    direction: 'horizontal'
+    direction: 'horizontal',
   },
   parameters: {
     a11y: {
       config: {
-        rules: [{ id: 'color-contrast', enabled: true }]
-      }
-    }
-  }
+        rules: [{ id: 'color-contrast', enabled: true }],
+      },
+    },
+  },
 }
 
 /**
@@ -260,15 +260,15 @@ export const 垂直排列: Story = {
   render: 基础用法.render,
   args: {
     size: 16,
-    direction: 'vertical'
+    direction: 'vertical',
   },
   parameters: {
     a11y: {
       config: {
-        rules: [{ id: 'color-contrast', enabled: true }]
-      }
-    }
-  }
+        rules: [{ id: 'color-contrast', enabled: true }],
+      },
+    },
+  },
 }
 
 /**
@@ -288,15 +288,15 @@ export const 自定义间距: Story = {
   render: 基础用法.render,
   args: {
     size: 24,
-    direction: 'horizontal'
+    direction: 'horizontal',
   },
   parameters: {
     a11y: {
       config: {
-        rules: [{ id: 'color-contrast', enabled: true }]
-      }
-    }
-  }
+        rules: [{ id: 'color-contrast', enabled: true }],
+      },
+    },
+  },
 }
 
 /**
@@ -318,15 +318,15 @@ export const 不同的水平垂直间距: Story = {
   args: {
     size: [16, 8],
     direction: 'horizontal',
-    wrap: true
+    wrap: true,
   },
   parameters: {
     a11y: {
       config: {
-        rules: [{ id: 'color-contrast', enabled: true }]
-      }
-    }
-  }
+        rules: [{ id: 'color-contrast', enabled: true }],
+      },
+    },
+  },
 }
 
 /**
@@ -343,7 +343,7 @@ export const 不同的水平垂直间距: Story = {
  * ```
  */
 export const 对齐方式: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { JvSpace },
     setup() {
       return { args }
@@ -354,19 +354,19 @@ export const 对齐方式: Story = {
         <div style="padding: 20px; background-color: #f0f0f0;">中等元素</div>
         <div style="padding: 30px; background-color: #f0f0f0;">较大元素</div>
       </JvSpace>
-    `
+    `,
   }),
   args: {
     size: 16,
-    align: 'center'
+    align: 'center',
   },
   parameters: {
     a11y: {
       config: {
-        rules: [{ id: 'color-contrast', enabled: true }]
-      }
-    }
-  }
+        rules: [{ id: 'color-contrast', enabled: true }],
+      },
+    },
+  },
 }
 
 /**
@@ -383,7 +383,7 @@ export const 对齐方式: Story = {
  * ```
  */
 export const 主轴对齐方式: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { JvSpace },
     setup() {
       return { args }
@@ -394,19 +394,19 @@ export const 主轴对齐方式: Story = {
         <div style="padding: 15px; background-color: #f0f0f0;">元素2</div>
         <div style="padding: 15px; background-color: #f0f0f0;">元素3</div>
       </JvSpace>
-    `
+    `,
   }),
   args: {
     size: 16,
-    justify: 'space-between'
+    justify: 'space-between',
   },
   parameters: {
     a11y: {
       config: {
-        rules: [{ id: 'color-contrast', enabled: true }]
-      }
-    }
-  }
+        rules: [{ id: 'color-contrast', enabled: true }],
+      },
+    },
+  },
 }
 
 /**
@@ -424,7 +424,7 @@ export const 主轴对齐方式: Story = {
  * ```
  */
 export const 自动换行: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { JvSpace },
     setup() {
       return { args }
@@ -438,19 +438,19 @@ export const 自动换行: Story = {
         <div style="padding: 15px; background-color: #f0f0f0;">元素5</div>
         <div style="padding: 15px; background-color: #f0f0f0;">元素6</div>
       </JvSpace>
-    `
+    `,
   }),
   args: {
     size: 16,
-    wrap: true
+    wrap: true,
   },
   parameters: {
     a11y: {
       config: {
-        rules: [{ id: 'color-contrast', enabled: true }]
-      }
-    }
-  }
+        rules: [{ id: 'color-contrast', enabled: true }],
+      },
+    },
+  },
 }
 
 /**
@@ -468,7 +468,7 @@ export const 自动换行: Story = {
  * ```
  */
 export const 填充父容器: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { JvSpace },
     setup() {
       return { args }
@@ -481,20 +481,20 @@ export const 填充父容器: Story = {
           <div style="padding: 15px; background-color: #f0f0f0;">元素3</div>
         </JvSpace>
       </div>
-    `
+    `,
   }),
   args: {
     size: 16,
     fill: true,
-    justify: 'space-between'
+    justify: 'space-between',
   },
   parameters: {
     a11y: {
       config: {
-        rules: [{ id: 'color-contrast', enabled: true }]
-      }
-    }
-  }
+        rules: [{ id: 'color-contrast', enabled: true }],
+      },
+    },
+  },
 }
 
 /**
@@ -516,7 +516,7 @@ export const 填充父容器: Story = {
  * ```
  */
 export const 可访问性支持: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { JvSpace },
     setup() {
       return { args }
@@ -535,12 +535,12 @@ export const 可访问性支持: Story = {
           <button style="padding: 10px 20px; background-color: #4096ff; color: white; border: none; border-radius: 4px; cursor: pointer;">关于我们</button>
         </JvSpace>
       </div>
-    `
+    `,
   }),
   args: {
     size: 16,
     direction: 'horizontal',
-    role: 'navigation'
+    role: 'navigation',
   },
   parameters: {
     a11y: {
@@ -548,15 +548,15 @@ export const 可访问性支持: Story = {
         rules: [
           { id: 'color-contrast', enabled: true },
           { id: 'button-name', enabled: true },
-          { id: 'aria-valid-attr-value', enabled: true }
-        ]
-      }
+          { id: 'aria-valid-attr-value', enabled: true },
+        ],
+      },
     },
     docs: {
       description: {
         story:
-          '通过设置适当的ARIA属性，可以使Space组件更加友好地支持屏幕阅读器等辅助技术。'
-      }
-    }
-  }
+          '通过设置适当的ARIA属性，可以使Space组件更加友好地支持屏幕阅读器等辅助技术。',
+      },
+    },
+  },
 }

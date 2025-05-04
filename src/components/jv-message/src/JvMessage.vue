@@ -3,7 +3,7 @@ import type {
   JvMessageEmits,
   JvMessageExpose,
   JvMessageProps,
-  MessageType
+  MessageType,
 } from './types'
 import JvButton from '@/components/jv-button/src/JvButton.vue'
 import JvIcon from '@/components/jv-icon/src/JvIcon.vue'
@@ -20,7 +20,7 @@ const {
   duration = 3000,
   center = false,
   variant = '',
-  autoClose = false
+  autoClose = false,
 } = defineProps<JvMessageProps>()
 
 const emit = defineEmits<JvMessageEmits>()
@@ -70,13 +70,13 @@ const iconName = computed(() => {
     info: 'mdi:information',
     success: 'mdi:check-circle',
     warning: 'mdi:alert',
-    error: 'mdi:close-circle'
+    error: 'mdi:close-circle',
   }
   return iconMap[type as MessageType]
 })
 
 defineExpose<JvMessageExpose>({
-  close
+  close,
 })
 </script>
 
@@ -88,7 +88,7 @@ defineExpose<JvMessageExpose>({
         bem.b(),
         bem.m(`type-${type}`),
         bem.is('center', center),
-        variant ? bem.m(`variant-${variant}`) : ''
+        variant ? bem.m(`variant-${variant}`) : '',
       ]"
       :style="{ zIndex: currentZIndex }"
       role="alert"

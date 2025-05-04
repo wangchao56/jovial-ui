@@ -9,7 +9,7 @@ import {
   onBeforeUnmount,
   onMounted,
   ref,
-  useId
+  useId,
 } from 'vue'
 import { JVTOOLTIP_NAME } from './types'
 
@@ -23,7 +23,7 @@ const {
   showArrow = true,
   offset = [8, 8],
   referenceRect = null,
-  placementStrategy = 'prevent-overflow'
+  placementStrategy = 'prevent-overflow',
 } = defineProps<JvTooltipProps>()
 
 // 定义显示状态的模型值
@@ -37,7 +37,7 @@ const actualPlacement = ref<PlacementType>(placement)
 const triggerEl = ref<HTMLElement | null>(null)
 const localReferenceRect = ref<DOMRect | null>(null)
 const tooltipContentEl = ref<HTMLElement | null>(null)
-const tooltipSize = ref<{ width?: number; height?: number }>({})
+const tooltipSize = ref<{ width?: number, height?: number }>({})
 
 // 接收实际放置位置的方法
 function handleActualPlacementChange(newPlacement: string) {
@@ -54,15 +54,19 @@ function setRef(el: HTMLElement) {
       if (triggerMethod === 'hover') {
         el.addEventListener('mouseenter', handleMouseEnter)
         el.addEventListener('mouseleave', handleMouseLeave)
-      } else if (triggerMethod === 'click') {
+      }
+      else if (triggerMethod === 'click') {
         el.addEventListener('click', handleClick)
-      } else if (triggerMethod === 'focus') {
+      }
+      else if (triggerMethod === 'focus') {
         el.addEventListener('focus', handleFocus)
         el.addEventListener('blur', handleBlur)
-      } else if (triggerMethod === 'contextmenu') {
+      }
+      else if (triggerMethod === 'contextmenu') {
         el.addEventListener('contextmenu', handleContextMenu)
       }
-    } else {
+    }
+    else {
       // 如果提供了referenceRect，直接展示tooltip
       visible.value = true
     }
@@ -78,7 +82,7 @@ function updateTooltipSize() {
       if (rect.width > 0 && rect.height > 0) {
         tooltipSize.value = {
           width: rect.width,
-          height: rect.height
+          height: rect.height,
         }
       }
     }
@@ -138,12 +142,15 @@ function cleanupEventListeners() {
     if (triggerMethod === 'hover') {
       triggerEl.value.removeEventListener('mouseenter', handleMouseEnter)
       triggerEl.value.removeEventListener('mouseleave', handleMouseLeave)
-    } else if (triggerMethod === 'click') {
+    }
+    else if (triggerMethod === 'click') {
       triggerEl.value.removeEventListener('click', handleClick)
-    } else if (triggerMethod === 'focus') {
+    }
+    else if (triggerMethod === 'focus') {
       triggerEl.value.removeEventListener('focus', handleFocus)
       triggerEl.value.removeEventListener('blur', handleBlur)
-    } else if (triggerMethod === 'contextmenu') {
+    }
+    else if (triggerMethod === 'contextmenu') {
       triggerEl.value.removeEventListener('contextmenu', handleContextMenu)
     }
   }
