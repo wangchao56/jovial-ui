@@ -12,7 +12,7 @@
   },
   "npm": {
     "publish": true,
-    "publishPath": "./dist"
+    "publishPath": "."
   },
   "hooks": {
     "before:init": "pnpm lint",
