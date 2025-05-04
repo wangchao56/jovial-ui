@@ -13,6 +13,8 @@ dist-ssr
 *.local
 examples
 
+storybook-static
+
 # Editor directories and files
 .vscode
 .cursorrules
