@@ -1,0 +1,61 @@
+// 过渡动画规范 遵循vue3的transition规范 给出一些常用的过渡动画
+
+// 过渡动画类型
+$transition-types: (
+  'fade': 'opacity 0.3s ease',
+  'slide': 'transform 0.3s ease',
+  'zoom': 'transform 0.3s ease',
+  'bounce': 'transform 0.3s ease',
+  'slide-up': 'transform 0.3s ease',
+  'slide-down': 'transform 0.3s ease',
+  'slide-left': 'transform 0.3s ease',
+  'slide-right': 'transform 0.3s ease',
+  'slide-up-down': 'transform 0.3s ease',
+  'slide-left-right': 'transform 0.3s ease',
+  'fade-up': 'opacity 0.3s ease',
+  'fade-down': 'opacity 0.3s ease',
+  'fade-left': 'opacity 0.3s ease',
+  'fade-right': 'opacity 0.3s ease',
+  'fade-up-down': 'opacity 0.3s ease',
+  'fade-left-right': 'opacity 0.3s ease',
+  'dialog': 'opacity 0.3s ease',
+);
+
+// 过渡动画变量
+:root {
+  @each $type, $value in $transition-types {
+    --jv-transition-#{$type}: #{$value};
+  }
+}
+
+// 过渡动画混入
+@mixin transition($type: 'fade') {
+  transition: var(--jv-transition-#{$type});
+}
+
+// 过渡动画类
+@each $type, $value in $transition-types {
+  // 过渡动画类
+  .jv-transition-#{$type}-enter-active,
+  .jv-transition-#{$type}-leave-active {
+    @include transition($type);
+  }
+
+  .jv-transition-#{$type}-enter-from,
+  .jv-transition-#{$type}-leave-to {
+    opacity: 0;
+  }
+
+  .jv-transition-#{$type}-enter-to,
+  .jv-transition-#{$type}-leave-from {
+    opacity: 1;
+  }
+
+  .jv-transition-#{$type}-enter-active {
+    transition-delay: 0.3s;
+  }
+
+  .jv-transition-#{$type}-leave-active {
+    transition-delay: 0s;
+  }
+}

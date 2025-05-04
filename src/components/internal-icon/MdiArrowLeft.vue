@@ -1,0 +1,20 @@
+<script lang="ts">
+export default {
+  name: 'MdiArrowLeft'
+}
+</script>
+
+<template>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="1em"
+    height="1em"
+    viewBox="0 0 24 24"
+  >
+    <!-- Icon from Material Design Icons by Pictogrammers - https://github.com/Templarian/MaterialDesign/blob/master/LICENSE -->
+    <path
+      fill="currentColor"
+      d="M20 11v2H8l5.5 5.5l-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5L8 11z"
+    />
+  </svg>
+</template>

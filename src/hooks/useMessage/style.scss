@@ -1,0 +1,32 @@
+// Message容器样式
+.jv-message-container {
+  position: fixed;
+  top: 20px;
+  right: 0;
+  left: 50%;
+  z-index: var(--jv-zindex-message, 5000);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  min-width: max-content;
+  max-width: calc(100% - 20px);
+  min-height: max-content;
+  transform: translateX(-50%);
+  pointer-events: none;
+
+  .jv-message {
+    position: static;
+    margin-bottom: 10px;
+    pointer-events: auto;
+    transform: translateX(0%);
+
+    // 垂直方向堆叠时的动画
+    &.jv-message-fade-enter-from,
+    &.jv-message-fade-leave-to {
+      opacity: 0;
+      transform: translate(0%, -20px);
+    }
+  }
+}

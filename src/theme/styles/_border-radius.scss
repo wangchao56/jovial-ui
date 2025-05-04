@@ -1,0 +1,359 @@
+// 边框圆角工具类
+// 提供完整的圆角样式集合
+
+// 基础变量
+$border-radius-base: 4px;
+$border-radius-none: 0;
+$border-radius-sm: 2px;
+$border-radius-md: 8px;
+$border-radius-lg: 16px;
+$border-radius-xl: 24px;
+$border-radius-pill: 9999px;
+$border-radius-circle: 50%;
+$border-radius-shaped: 24px 0;
+$border-radius-square: 4px;
+
+// CSS变量
+:root {
+  --jv-rounded: #{$border-radius-base};
+  --jv-rounded-0: #{$border-radius-none};
+  --jv-rounded-sm: #{$border-radius-sm};
+  --jv-rounded-md: #{$border-radius-md};
+  --jv-rounded-lg: #{$border-radius-lg};
+  --jv-rounded-xl: #{$border-radius-xl};
+  --jv-rounded-pill: #{$border-radius-pill};
+  --jv-rounded-circle: #{$border-radius-circle};
+  --jv-rounded-shaped: #{$border-radius-shaped};
+  --jv-rounded-square: #{$border-radius-square};
+}
+
+// 全部边框圆角
+.rounded {
+  border-radius: $border-radius-base;
+}
+
+.rounded-0 {
+  border-radius: $border-radius-none;
+}
+
+.rounded-sm {
+  border-radius: $border-radius-sm;
+}
+
+.rounded-lg {
+  border-radius: $border-radius-lg;
+}
+
+.rounded-xl {
+  border-radius: $border-radius-xl;
+}
+
+.rounded-pill {
+  border-radius: $border-radius-pill;
+}
+
+.rounded-circle {
+  border-radius: $border-radius-circle;
+}
+
+.rounded-shaped {
+  border-radius: $border-radius-shaped;
+}
+
+// 顶部边框圆角
+.rounded-t {
+  border-top-left-radius: $border-radius-base;
+  border-top-right-radius: $border-radius-base;
+}
+
+.rounded-t-0 {
+  border-top-left-radius: $border-radius-none;
+  border-top-right-radius: $border-radius-none;
+}
+
+.rounded-t-sm {
+  border-top-left-radius: $border-radius-sm;
+  border-top-right-radius: $border-radius-sm;
+}
+
+.rounded-t-lg {
+  border-top-left-radius: $border-radius-lg;
+  border-top-right-radius: $border-radius-lg;
+}
+
+.rounded-t-xl {
+  border-top-left-radius: $border-radius-xl;
+  border-top-right-radius: $border-radius-xl;
+}
+
+.rounded-t-pill {
+  border-top-left-radius: $border-radius-pill;
+  border-top-right-radius: $border-radius-pill;
+}
+
+.rounded-t-circle {
+  border-top-left-radius: $border-radius-circle;
+  border-top-right-radius: $border-radius-circle;
+}
+
+.rounded-t-shaped {
+  border-top-left-radius: 24px;
+  border-top-right-radius: 0;
+}
+
+// 顶部右侧圆角
+.rounded-te {
+  border-top-right-radius: $border-radius-base;
+}
+
+.rounded-te-0 {
+  border-top-right-radius: $border-radius-none;
+}
+
+.rounded-te-sm {
+  border-top-right-radius: $border-radius-sm;
+}
+
+.rounded-te-lg {
+  border-top-right-radius: $border-radius-lg;
+}
+
+.rounded-te-xl {
+  border-top-right-radius: $border-radius-xl;
+}
+
+.rounded-te-pill {
+  border-top-right-radius: $border-radius-pill;
+}
+
+.rounded-te-circle {
+  border-top-right-radius: $border-radius-circle;
+}
+
+.rounded-te-shaped {
+  border-top-right-radius: 24px;
+  border-top-left-radius: 0;
+}
+
+// 顶部左侧圆角
+.rounded-ts {
+  border-top-left-radius: $border-radius-base;
+}
+
+.rounded-ts-0 {
+  border-top-left-radius: $border-radius-none;
+}
+
+.rounded-ts-sm {
+  border-top-left-radius: $border-radius-sm;
+}
+
+.rounded-ts-lg {
+  border-top-left-radius: $border-radius-lg;
+}
+
+.rounded-ts-xl {
+  border-top-left-radius: $border-radius-xl;
+}
+
+.rounded-ts-pill {
+  border-top-left-radius: $border-radius-pill;
+}
+
+.rounded-ts-circle {
+  border-top-left-radius: $border-radius-circle;
+}
+
+.rounded-ts-shaped {
+  border-top-left-radius: 24px;
+  border-top-right-radius: 0;
+}
+
+// inline-end 圆角（右侧）
+.rounded-e {
+  border-top-right-radius: $border-radius-base;
+  border-bottom-right-radius: $border-radius-base;
+}
+
+.rounded-e-0 {
+  border-top-right-radius: $border-radius-none;
+  border-bottom-right-radius: $border-radius-none;
+}
+
+.rounded-e-sm {
+  border-top-right-radius: $border-radius-sm;
+  border-bottom-right-radius: $border-radius-sm;
+}
+
+.rounded-e-lg {
+  border-top-right-radius: $border-radius-lg;
+  border-bottom-right-radius: $border-radius-lg;
+}
+
+.rounded-e-xl {
+  border-top-right-radius: $border-radius-xl;
+  border-bottom-right-radius: $border-radius-xl;
+}
+
+.rounded-e-pill {
+  border-top-right-radius: $border-radius-pill;
+  border-bottom-right-radius: $border-radius-pill;
+}
+
+.rounded-e-circle {
+  border-top-right-radius: $border-radius-circle;
+  border-bottom-right-radius: $border-radius-circle;
+}
+
+.rounded-e-shaped {
+  border-radius: 24px 0 0 24px;
+}
+
+// 底部圆角
+.rounded-b {
+  border-bottom-left-radius: $border-radius-base;
+  border-bottom-right-radius: $border-radius-base;
+}
+
+.rounded-b-0 {
+  border-bottom-left-radius: $border-radius-none;
+  border-bottom-right-radius: $border-radius-none;
+}
+
+.rounded-b-sm {
+  border-bottom-left-radius: $border-radius-sm;
+  border-bottom-right-radius: $border-radius-sm;
+}
+
+.rounded-b-lg {
+  border-bottom-left-radius: $border-radius-lg;
+  border-bottom-right-radius: $border-radius-lg;
+}
+
+.rounded-b-xl {
+  border-bottom-left-radius: $border-radius-xl;
+  border-bottom-right-radius: $border-radius-xl;
+}
+
+.rounded-b-pill {
+  border-bottom-left-radius: $border-radius-pill;
+  border-bottom-right-radius: $border-radius-pill;
+}
+
+.rounded-b-circle {
+  border-bottom-left-radius: $border-radius-circle;
+  border-bottom-right-radius: $border-radius-circle;
+}
+
+.rounded-b-shaped {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 24px;
+}
+
+// 底部右侧圆角
+.rounded-be {
+  border-bottom-right-radius: $border-radius-base;
+}
+
+.rounded-be-0 {
+  border-bottom-right-radius: $border-radius-none;
+}
+
+.rounded-be-sm {
+  border-bottom-right-radius: $border-radius-sm;
+}
+
+.rounded-be-lg {
+  border-bottom-right-radius: $border-radius-lg;
+}
+
+.rounded-be-xl {
+  border-bottom-right-radius: $border-radius-xl;
+}
+
+.rounded-be-pill {
+  border-bottom-right-radius: $border-radius-pill;
+}
+
+.rounded-be-circle {
+  border-bottom-right-radius: $border-radius-circle;
+}
+
+.rounded-be-shaped {
+  border-bottom-right-radius: 24px;
+  border-bottom-left-radius: 0;
+}
+
+// 左下角圆角
+.rounded-bs {
+  border-bottom-left-radius: $border-radius-base;
+}
+
+.rounded-bs-0 {
+  border-bottom-left-radius: $border-radius-none;
+}
+
+.rounded-bs-sm {
+  border-bottom-left-radius: $border-radius-sm;
+}
+
+.rounded-bs-lg {
+  border-bottom-left-radius: $border-radius-lg;
+}
+
+.rounded-bs-xl {
+  border-bottom-left-radius: $border-radius-xl;
+}
+
+.rounded-bs-pill {
+  border-bottom-left-radius: $border-radius-pill;
+}
+
+.rounded-bs-circle {
+  border-bottom-left-radius: $border-radius-circle;
+}
+
+.rounded-bs-shaped {
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 0;
+}
+
+// inline-start 圆角（左侧）
+.rounded-s {
+  border-top-left-radius: $border-radius-base;
+  border-bottom-left-radius: $border-radius-base;
+}
+
+.rounded-s-0 {
+  border-top-left-radius: $border-radius-none;
+  border-bottom-left-radius: $border-radius-none;
+}
+
+.rounded-s-sm {
+  border-top-left-radius: $border-radius-sm;
+  border-bottom-left-radius: $border-radius-sm;
+}
+
+.rounded-s-lg {
+  border-top-left-radius: $border-radius-lg;
+  border-bottom-left-radius: $border-radius-lg;
+}
+
+.rounded-s-xl {
+  border-top-left-radius: $border-radius-xl;
+  border-bottom-left-radius: $border-radius-xl;
+}
+
+.rounded-s-pill {
+  border-top-left-radius: $border-radius-pill;
+  border-bottom-left-radius: $border-radius-pill;
+}
+
+.rounded-s-circle {
+  border-top-left-radius: $border-radius-circle;
+  border-bottom-left-radius: $border-radius-circle;
+}
+
+.rounded-s-shaped {
+  border-radius: 24px 0 0 24px;
+}

@@ -1,0 +1,149 @@
+/** 英语语言包 */
+export default {
+  badge: 'Badge',
+  open: 'Open',
+  close: 'Close',
+  dismiss: 'Dismiss',
+  modal: {
+    cancel: 'Cancel',
+    confirm: 'Confirm'
+  },
+  confirmEdit: {
+    ok: 'OK',
+    cancel: 'Cancel'
+  },
+  dataIterator: {
+    noResultsText: 'No results found',
+    loadingText: 'Loading...'
+  },
+  dataTable: {
+    itemsPerPageText: 'Items per page:',
+    ariaLabel: {
+      sortDescending: 'Sort descending',
+      sortAscending: 'Sort ascending',
+      sortNone: 'No sort',
+      activateNone: 'Click to remove sorting',
+      activateDescending: 'Click to sort descending',
+      activateAscending: 'Click to sort ascending'
+    },
+    sortBy: 'Sort by'
+  },
+  dataFooter: {
+    itemsPerPageText: 'Items per page:',
+    itemsPerPageAll: 'All',
+    nextPage: 'Next page',
+    prevPage: 'Previous page',
+    firstPage: 'First page',
+    lastPage: 'Last page',
+    pageText: '{0}-{1} of {2}'
+  },
+  dateRangeInput: {
+    divider: 'to'
+  },
+  datePicker: {
+    itemsSelected: '{0} selected',
+    range: {
+      title: 'Select date',
+      header: 'Enter date'
+    },
+    title: 'Select date',
+    header: 'Enter date',
+    input: {
+      placeholder: 'Enter date'
+    }
+  },
+  noDataText: 'No data available',
+  carousel: {
+    prev: 'Previous',
+    next: 'Next',
+    ariaLabel: {
+      delimiter: 'Carousel {0} of {1}'
+    }
+  },
+  calendar: {
+    title: 'Calendar',
+    moreEvents: '还有 {0} 项',
+    today: 'Today',
+    year: 'Year',
+    month: 'Month',
+    week: 'Week',
+    day: 'Day',
+    nextMonth: 'Next Month',
+    prevMonth: 'Previous Month',
+    nextYear: 'Next Year',
+    prevYear: 'Previous Year',
+    selectDate: 'Select Date',
+    selectTime: 'Select Time',
+    // 星期
+    sunday: 'Sunday',
+    monday: 'Monday',
+    tuesday: 'Tuesday',
+    wednesday: 'Wednesday',
+    thursday: 'Thursday',
+    friday: 'Friday',
+    saturday: 'Saturday',
+    // 星期简写
+    sun: 'Sun',
+    mon: 'Mon',
+    tue: 'Tue',
+    wed: 'Wed',
+    thu: 'Thu',
+    fri: 'Fri',
+    sat: 'Sat'
+  },
+  input: {
+    clear: 'Clear {0}',
+    prependAction: 'Prepend {0}',
+    appendAction: 'Append {0}',
+    otp: 'Enter OTP character {0}',
+    placeholder: 'Enter {0}'
+  },
+  fileInput: {
+    counter: '{0} files',
+    counterSize: '{0} files (total {1})'
+  },
+  fileUpload: {
+    title: 'Drag and drop files here',
+    divider: 'or',
+    browse: 'Browse files'
+  },
+  timePicker: {
+    am: 'AM',
+    pm: 'PM',
+    title: 'Select time'
+  },
+  pagination: {
+    ariaLabel: {
+      root: 'Pagination navigation',
+      next: 'Next page',
+      previous: 'Previous page',
+      page: 'Go to page {0}',
+      currentPage: 'Current page {0}',
+      first: 'First page',
+      last: 'Last page'
+    },
+    total: 'Total {0} items',
+    prev: 'Previous',
+    next: 'Next',
+    jumpTo: 'Jump to',
+    page: 'page',
+    itemsPerPage: 'items/page',
+    pageSize: 'Items per page',
+    goto: 'Go to',
+    pageOf: 'Page {0} of {1}'
+  },
+  stepper: {
+    next: 'Next page',
+    prev: 'Previous page'
+  },
+  rating: {
+    ariaLabel: {
+      item: 'Rating {0} of {1}'
+    }
+  },
+  loading: 'Loading...',
+  infiniteScroll: {
+    loadMore: 'Load more',
+    empty: 'No more'
+  }
+}

@@ -1,0 +1,97 @@
+// Material Design 24层阴影规范
+
+// 阴影透明度
+$penumbra-opacity: 0.14; // 半影透明度
+$umbra-opacity: 0.2; // 影子透明度
+$ambient-shadow-opacity: 0.12; // 环境阴影透明度
+
+// 阴影颜色
+$penumbra-color: rgba(0, 0, 0, $penumbra-opacity); // 半影颜色
+$umbra-color: rgba(0, 0, 0, $umbra-opacity); // 影子颜色
+$ambient-shadow-color: rgba(0, 0, 0, $ambient-shadow-opacity); // 环境阴影颜色
+
+// 24层阴影映射
+$elevation-shadows: (
+  0: none,
+  1: (
+    0px 2px 1px -1px $penumbra-color,
+    0px 1px 1px 0px $umbra-color,
+    0px 1px 3px 0px $ambient-shadow-color,
+  ),
+  2: (
+    0px 3px 1px -2px $penumbra-color,
+    0px 2px 2px 0px $umbra-color,
+    0px 1px 5px 0px $ambient-shadow-color,
+  ),
+  3: (
+    0px 3px 3px -2px $penumbra-color,
+    0px 3px 4px 0px $umbra-color,
+    0px 1px 8px 0px $ambient-shadow-color,
+  ),
+  4: (
+    0px 2px 4px -1px $penumbra-color,
+    0px 4px 5px 0px $umbra-color,
+    0px 1px 10px 0px $ambient-shadow-color,
+  ),
+  6: (
+    0px 3px 5px -1px $penumbra-color,
+    0px 6px 10px 0px $umbra-color,
+    0px 1px 18px 0px $ambient-shadow-color,
+  ),
+  8: (
+    0px 5px 5px -3px $penumbra-color,
+    0px 8px 10px 1px $umbra-color,
+    0px 3px 14px 2px $ambient-shadow-color,
+  ),
+  12: (
+    0px 7px 8px -4px $penumbra-color,
+    0px 12px 17px 2px $umbra-color,
+    0px 5px 22px 4px $ambient-shadow-color,
+  ),
+  16: (
+    0px 8px 10px -5px $penumbra-color,
+    0px 16px 24px 2px $umbra-color,
+    0px 6px 30px 5px $ambient-shadow-color,
+  ),
+  20: (
+    0px 10px 13px -6px $penumbra-color,
+    0px 20px 31px 3px $umbra-color,
+    0px 8px 38px 7px $ambient-shadow-color,
+  ),
+  24: (
+    0px 11px 15px -7px $penumbra-color,
+    0px 24px 38px 3px $umbra-color,
+    0px 9px 46px 8px $ambient-shadow-color,
+  ),
+);
+
+// 生成 CSS 变量和工具类
+@each $level, $shadow in $elevation-shadows {
+  // 定义工具类
+  .elevation-#{$level} {
+    box-shadow: var(--jv-elevation-#{$level}, #{$shadow}); // 提供回退值
+  }
+}
+
+// 定义 CSS 变量
+:root {
+  @each $level, $shadow in $elevation-shadows {
+    --jv-elevation-#{$level}: #{$shadow};
+  }
+
+  --jv-elevation-default: var(--jv-elevation-2);
+  --jv-elevation-hover: var(--jv-elevation-2);
+  --jv-elevation-active: var(--jv-elevation-4);
+  --jv-elevation-focus: var(--jv-elevation-4);
+  --jv-elevation-disabled: var(--jv-elevation-0);
+  --jv-elevation-readonly: var(--jv-elevation-0);
+}
+
+// 阴影混入
+@mixin elevation($level) {
+  @if map.has-key($elevation-shadows, $level) {
+    box-shadow: var(--jv-elevation-#{$level}, #{map.get($elevation-shadows, $level)});
+  } @else {
+    @warn "Invalid elevation level: #{$level}.";
+  }
+}

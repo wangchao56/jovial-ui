@@ -1,0 +1,151 @@
+{
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-standard-scss",
+    "stylelint-config-recommended-vue/scss"
+  ],
+  "plugins": ["stylelint-order"],
+  "overrides": [
+    {
+      "files": ["**/*.vue"],
+      "customSyntax": "postcss-html"
+    },
+    {
+      "files": ["**/*.scss"],
+      "customSyntax": "postcss-scss"
+    }
+  ],
+  "rules": {
+    "selector-pseudo-class-no-unknown": [
+      true,
+      {
+        "ignorePseudoClasses": [
+          "deep",
+          "global",
+          "slotted",
+          "v-deep",
+          "v-global",
+          "v-slotted"
+        ]
+      }
+    ],
+    "selector-pseudo-element-no-unknown": [
+      true,
+      {
+        "ignorePseudoElements": ["v-deep", "v-global", "v-slotted"]
+      }
+    ],
+    "at-rule-no-unknown": null,
+    "scss/at-rule-no-unknown": [
+      true,
+      {
+        "ignoreAtRules": [
+          "tailwind",
+          "apply",
+          "variants",
+          "responsive",
+          "screen",
+          "include",
+          "mixin",
+          "forward",
+          "use"
+        ]
+      }
+    ],
+    "no-empty-source": null,
+    "no-descending-specificity": null,
+    "declaration-empty-line-before": null,
+    "keyframes-name-pattern": null,
+    "selector-class-pattern": null,
+    "custom-property-pattern": null,
+    "color-function-notation": "legacy",
+    "alpha-value-notation": "number",
+    "selector-not-notation": "simple",
+    "import-notation": "string",
+    "order/properties-order": [
+      "position",
+      "top",
+      "right",
+      "bottom",
+      "left",
+      "z-index",
+      "display",
+      "float",
+      "clear",
+      "visibility",
+      "overflow",
+      "clip",
+      "flex",
+      "flex-direction",
+      "flex-order",
+      "flex-pack",
+      "flex-align",
+      "justify-content",
+      "align-items",
+      "align-content",
+      "flex-basis",
+      "flex-grow",
+      "flex-shrink",
+      "flex-wrap",
+      "gap",
+      "box-sizing",
+      "width",
+      "min-width",
+      "max-width",
+      "height",
+      "min-height",
+      "max-height",
+      "margin",
+      "margin-top",
+      "margin-right",
+      "margin-bottom",
+      "margin-left",
+      "padding",
+      "padding-top",
+      "padding-right",
+      "padding-bottom",
+      "padding-left",
+      "border",
+      "border-width",
+      "border-style",
+      "border-color",
+      "border-radius",
+      "border-top",
+      "border-right",
+      "border-bottom",
+      "border-left",
+      "box-shadow",
+      "background",
+      "background-color",
+      "background-image",
+      "background-repeat",
+      "background-position",
+      "background-size",
+      "color",
+      "font",
+      "font-family",
+      "font-size",
+      "font-weight",
+      "line-height",
+      "text-align",
+      "text-decoration",
+      "text-shadow",
+      "white-space",
+      "cursor",
+      "opacity",
+      "filter",
+      "transform",
+      "transition",
+      "animation"
+    ]
+  },
+  "ignoreFiles": [
+    "node_modules/**/*",
+    "dist/**/*",
+    "**/*.js",
+    "**/*.ts",
+    "**/*.jsx",
+    "**/*.tsx",
+    "**/*.md"
+  ]
+}

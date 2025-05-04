@@ -1,0 +1,183 @@
+// 透明度工具类
+// 提供完整的透明度样式集合
+
+// 基础变量
+$opacity-0: 0;
+$opacity-10: 0.1;
+$opacity-20: 0.2;
+$opacity-30: 0.3;
+$opacity-40: 0.4;
+$opacity-50: 0.5;
+$opacity-60: 0.6;
+$opacity-70: 0.7;
+$opacity-80: 0.8;
+$opacity-90: 0.9;
+$opacity-100: 1;
+
+// 交互状态透明度变量
+$opacity-hover: 0.8;
+$opacity-focus: 0.9;
+$opacity-selected: 1;
+$opacity-activated: 0.85;
+$opacity-pressed: 0.7;
+$opacity-dragged: 0.65;
+
+// CSS变量
+:root {
+  --jv-opacity-0: #{$opacity-0};
+  --jv-opacity-10: #{$opacity-10};
+  --jv-opacity-20: #{$opacity-20};
+  --jv-opacity-30: #{$opacity-30};
+  --jv-opacity-40: #{$opacity-40};
+  --jv-opacity-50: #{$opacity-50};
+  --jv-opacity-60: #{$opacity-60};
+  --jv-opacity-70: #{$opacity-70};
+  --jv-opacity-80: #{$opacity-80};
+  --jv-opacity-90: #{$opacity-90};
+  --jv-opacity-100: #{$opacity-100};
+
+  // 交互状态透明度变量
+  --jv-hover-opacity: #{$opacity-hover};
+  --jv-focus-opacity: #{$opacity-focus};
+  --jv-selected-opacity: #{$opacity-selected};
+  --jv-activated-opacity: #{$opacity-activated};
+  --jv-pressed-opacity: #{$opacity-pressed};
+  --jv-dragged-opacity: #{$opacity-dragged};
+}
+
+// 基础透明度类
+.opacity-0 {
+  opacity: $opacity-0;
+}
+
+.opacity-10 {
+  opacity: $opacity-10;
+}
+
+.opacity-20 {
+  opacity: $opacity-20;
+}
+
+.opacity-30 {
+  opacity: $opacity-30;
+}
+
+.opacity-40 {
+  opacity: $opacity-40;
+}
+
+.opacity-50 {
+  opacity: $opacity-50;
+}
+
+.opacity-60 {
+  opacity: $opacity-60;
+}
+
+.opacity-70 {
+  opacity: $opacity-70;
+}
+
+.opacity-80 {
+  opacity: $opacity-80;
+}
+
+.opacity-90 {
+  opacity: $opacity-90;
+}
+
+.opacity-100 {
+  opacity: $opacity-100;
+}
+
+// 交互状态透明度类
+.opacity-hover {
+  opacity: var(--jv-hover-opacity);
+}
+
+.opacity-focus {
+  opacity: var(--jv-focus-opacity);
+}
+
+.opacity-selected {
+  opacity: var(--jv-selected-opacity);
+}
+
+.opacity-activated {
+  opacity: var(--jv-activated-opacity);
+}
+
+.opacity-pressed {
+  opacity: var(--jv-pressed-opacity);
+}
+
+.opacity-dragged {
+  opacity: var(--jv-dragged-opacity);
+}
+
+// 悬停时的透明度变化
+.hover\:opacity-0:hover {
+  opacity: $opacity-0;
+}
+
+.hover\:opacity-10:hover {
+  opacity: $opacity-10;
+}
+
+.hover\:opacity-20:hover {
+  opacity: $opacity-20;
+}
+
+.hover\:opacity-30:hover {
+  opacity: $opacity-30;
+}
+
+.hover\:opacity-40:hover {
+  opacity: $opacity-40;
+}
+
+.hover\:opacity-50:hover {
+  opacity: $opacity-50;
+}
+
+.hover\:opacity-60:hover {
+  opacity: $opacity-60;
+}
+
+.hover\:opacity-70:hover {
+  opacity: $opacity-70;
+}
+
+.hover\:opacity-80:hover {
+  opacity: $opacity-80;
+}
+
+.hover\:opacity-90:hover {
+  opacity: $opacity-90;
+}
+
+.hover\:opacity-100:hover {
+  opacity: $opacity-100;
+}
+
+// focus状态的透明度变化
+.focus\:opacity-100:focus {
+  opacity: $opacity-100;
+}
+
+// 动画过渡
+.transition-opacity {
+  transition-property: opacity;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+// 组合示例: 悬停时淡入淡出
+.fade-in-out {
+  opacity: $opacity-70;
+  transition: opacity 0.3s ease;
+
+  &:hover {
+    opacity: $opacity-100;
+  }
+}

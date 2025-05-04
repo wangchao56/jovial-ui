@@ -1,0 +1,24 @@
+@use 'sass:map';
+
+$jv-input-size-options: (
+  small: (
+    height: 28px,
+    font-size: 12px,
+    padding-x: 8px,
+  ),
+  medium: (
+    height: 36px,
+    font-size: 14px,
+    padding-x: 12px,
+  ),
+  large: (
+    height: 44px,
+    font-size: 16px,
+    padding-x: 16px,
+  ),
+  xlarge: (
+    height: 52px,
+    font-size: 18px,
+    padding-x: 16px,
+  ),
+);

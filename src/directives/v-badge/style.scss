@@ -1,0 +1,24 @@
+// Badge指令样式
+.v-badge-wrapper {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 9;
+  transform: translate(50%, -50%);
+
+  // 确保指令中的徽章不受父元素影响
+  .jv-badge {
+    position: static;
+    display: block;
+
+    .jv-badge__content {
+      position: static;
+      display: flex;
+      transform: none;
+
+      &.jv-badge__content--is-fixed {
+        position: static;
+      }
+    }
+  }
+}

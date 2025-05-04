@@ -1,0 +1,97 @@
+@use 'sass:color';
+@use 'sass:map';
+
+// 基础颜色定义
+$color-white: #fff;
+$color-black: #000;
+$color-primary: #067d75;
+$color-text: #333;
+
+// 灰色系列
+$color-gray-50: #fafafa;
+$color-gray-100: #f5f5f5;
+$color-gray-200: #e5e5e5;
+$color-gray-300: #d4d4d4;
+$color-gray-400: #a3a3a3;
+$color-gray-500: #737373;
+$color-gray-600: #525252;
+$color-gray-700: #404040;
+$color-gray-800: #262626;
+$color-gray-900: #171717;
+$theme-colors: (
+  'light': (
+    'primary': #067d75,
+    'secondary': #015751,
+    'accent': #ffcc29,
+    'neutral': #f0f0f0,
+    'error': #b20d05,
+    'warning': #c44201,
+    'success': #008127,
+    'info': #0069e1,
+    'background': #fff,
+    'surface': #ededed,
+    'on-primary': #fff,
+    'on-secondary': #fff,
+    'on-accent': #fff,
+    'on-neutral': #fff,
+    'on-error': #fff,
+    'on-warning': #fff,
+    'on-success': #fff,
+    'on-info': #fff,
+    'on-background': #282828,
+    'on-surface': #32343a,
+  ),
+  'dark': (
+    'primary': #4cada4,
+    'secondary': #00b2a6,
+    'accent': #ffcc29,
+    'neutral': #f0f0f0,
+    'error': #ff564c,
+    'warning': #ec6e33,
+    'success': #0cd748,
+    'info': #07f,
+    'background': #282828,
+    'surface': #32343a,
+    'on-primary': #fff,
+    'on-secondary': #fff,
+    'on-accent': #fff,
+    'on-neutral': #fff,
+    'on-error': #fff,
+    'on-warning': #fff,
+    'on-success': #fff,
+    'on-info': #fff,
+    'on-background': #fff,
+    'on-surface': #ededed,
+  ),
+);
+$light-colors: map.get($theme-colors, 'light');
+$dark-colors: map.get($theme-colors, 'dark');
+
+@function create-rgb($clr) {
+  @return #{color.channel($clr, 'red')}, #{color.channel($clr, 'green')}, #{color.channel($clr, 'blue')};
+}
+
+// 循环生成css变量
+@each $theme, $colors in $theme-colors {
+  [data-theme='#{$theme}'] {
+    @each $color, $value in $colors {
+      --jv-theme-#{$color}: #{$value};
+      --jv-theme-#{$color}-rgb: #{create-rgb($value)};
+    }
+  }
+
+  @if $theme == 'light' {
+    :root {
+      color-scheme: #{$theme};
+
+      @each $color, $value in $colors {
+        --jv-theme-#{$color}: #{$value};
+        --jv-theme-#{$color}-rgb: #{create-rgb($value)};
+      }
+    }
+  }
+}
+
+:root {
+  --jv-border-color: #{$color-gray-300};
+}
