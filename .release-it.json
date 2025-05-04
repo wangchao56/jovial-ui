@@ -15,7 +15,8 @@
     "publishPath": "./dist"
   },
   "hooks": {
-    "before:init": ["pnpm lint", "pnpm build:all"],
+    "before:init": "pnpm lint",
+    "before:build": "pnpm build:all",
     "after:release": "echo Successfully released ${name} v${version} to ${repo.repository}."
   },
   "plugins": {

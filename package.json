@@ -23,9 +23,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
-    "build:lib": "vue-tsc -b && vite build --mode lib",
-    "build:components": "vue-tsc -b && vite build --mode components",
-    "build:all": "pnpm run build:lib && pnpm run build:components",
+    "build:lib": "vite build --mode lib",
+    "build:components": "vite build --mode components",
+    "build:all": "npm run build:lib && npm run build:components",
     "preview": "vite preview",
     "s:dev": "storybook dev -p 6006",
     "s:build": "storybook build",
