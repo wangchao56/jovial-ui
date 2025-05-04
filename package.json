@@ -35,6 +35,8 @@
     "lint:fix": "eslint . --ext .js,.ts,.vue --fix",
     "lint:style": "stylelint src/**/*.{css,scss,vue} --cache --fix --allow-empty-input",
     "lint:style:fix": "stylelint src/**/*.{css,scss,vue} --cache --fix --allow-empty-input",
+    "lint:all": "pnpm lint && pnpm lint:style",
+    "lint:all:fix": "pnpm lint:all && pnpm lint:style:fix",
     "gen:component": "node scripts/generate-component.cjs",
     "release": "release-it",
     "release:dry-run": "release-it --dry-run"
