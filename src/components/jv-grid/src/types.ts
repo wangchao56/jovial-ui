@@ -1,3 +1,4 @@
+import type { Breakpoint } from '@/hooks/useBreakpoints'
 import { createNamespace } from '@/utils'
 
 export const JVGRID_NAME = 'JvGrid'
@@ -6,14 +7,26 @@ export const bem = createNamespace(JVGRID_NAME)
 export interface JvGridProps {
   // 列数
   cols?: number | string
+  // 响应式列数
+  responsiveCols?: Partial<Record<Breakpoint, number>>
   // 行数
   rows?: number | string
+  // 响应式行数
+  responsiveRows?: Partial<Record<Breakpoint, number>>
   // 行间距
   rowGap?: number | string
+  // 响应式行间距
+  responsiveRowGap?: Partial<Record<Breakpoint, number | string>>
   // 列间距
   colGap?: number | string
+  // 响应式列间距
+  responsiveColGap?: Partial<Record<Breakpoint, number | string>>
   // 栅格间距，可以是单个值或者[行间距, 列间距]
-  gap?: number | string | [number | string, number | string]
+  gap?: GapType
+  // 响应式间距
+  responsiveGap?: Partial<
+    Record<Breakpoint, number | string | [number | string, number | string]>
+  >
   // 标题
   header?: string
   // 子标题
@@ -37,16 +50,9 @@ export interface JvGridProps {
   // 是否可点击
   clickable?: boolean
   // 颜色类型
-  colorType?:
-    | 'default'
-    | 'primary'
-    | 'secondary'
-    | 'success'
-    | 'warning'
-    | 'danger'
-    | 'info'
+  colorType?: ColorType
   // 变体
-  variant?: 'elevated' | 'outlined' | 'tonal'
+  variant?: Extract<Variant, 'elevated' | 'outlined' | 'tonal'>
   // ARIA角色
   role?: string
 }
@@ -58,10 +64,6 @@ export interface JvGridItemPosition {
   colEnd?: number | string
   rowSpan?: number
   colSpan?: number
-}
-
-export interface JvGridEmits {
-  (e: 'click', event: MouseEvent): void
 }
 
 export interface JvGridSlots {

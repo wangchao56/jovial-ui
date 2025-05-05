@@ -1,29 +1,13 @@
 import type { Meta, StoryFn, StoryObj } from '@storybook/vue3'
+import { getOptions } from '@/constants'
 import JvButton from '@components/jv-button'
 import JvSpace from '@components/jv-space'
 import { expect } from '@storybook/test'
 
-const colorTypeOptions = [
-  'default',
-  'primary',
-  'secondary',
-  'success',
-  'warning',
-  'error',
-  'info',
-]
-const variantOptions = [
-  'elevated',
-  'text',
-  'outlined',
-  'tonal',
-  'plain',
-  'dashed',
-  'flat',
-]
-
-const sizeOptions = ['tiny', 'small', 'medium', 'large', 'xlarge']
-const shapeOptions = ['pill', 'square']
+const colorTypeOptions = getOptions('colorType')
+const variantOptions = getOptions('variant', ['link', 'solid'])
+const sizeOptions = getOptions('size')
+const shapeOptions = getOptions('shape')
 export default {
   title: '通用组件/Button 按钮',
   component: JvButton,
@@ -32,65 +16,65 @@ export default {
     variant: {
       control: { type: 'select' },
       options: variantOptions,
-      defaultValue: 'elevated',
+      defaultValue: 'elevated'
     },
     colorType: {
       control: { type: 'select' },
       defaultValue: 'default',
-      options: colorTypeOptions,
+      options: colorTypeOptions
     },
     size: {
       control: { type: 'select' },
       defaultValue: 'medium',
-      options: sizeOptions,
+      options: sizeOptions
     },
     disabled: { control: 'boolean' },
     loading: { control: 'boolean' },
     block: { control: 'boolean' },
     shape: { control: 'select', options: shapeOptions, defaultValue: 'square' },
     icon: { control: 'text' },
-    content: { control: 'text' },
-  },
+    content: { control: 'text' }
+  }
 } as Meta
 
-const Template: StoryFn = args => ({
+const Template: StoryFn = (args) => ({
   components: { JvButton },
   setup() {
     return { args }
   },
-  template: '<JvButton v-bind="args">{{ args.content || "按钮" }}</JvButton>',
+  template: '<JvButton v-bind="args">{{ args.content || "按钮" }}</JvButton>'
 })
 
 export const 基础按钮 = Template.bind({})
 基础按钮.args = {
   variant: 'primary',
-  content: '基础按钮',
+  content: '基础按钮'
 }
 
 export const 禁用 = Template.bind({})
 禁用.args = {
   disabled: true,
-  content: '禁用按钮',
+  content: '禁用按钮'
 }
 
 export const 加载中 = Template.bind({})
 加载中.args = {
   loading: true,
-  content: '加载中',
+  content: '加载中'
 }
 
 export const 块级按钮 = Template.bind({})
 块级按钮.args = {
   block: true,
-  label: '块级按钮',
+  label: '块级按钮'
 }
 
 export const 按钮形状: StoryObj = {
   args: {
     variant: 'elevated',
-    colorType: 'primary',
+    colorType: 'primary'
   },
-  render: args => ({
+  render: (args) => ({
     components: { JvButton, JvSpace },
     setup() {
       return { args, shapeOptions }
@@ -99,11 +83,11 @@ export const 按钮形状: StoryObj = {
       <JvSpace :gap="12">
         <JvButton v-bind="args" v-for="shape in shapeOptions" :shape="shape"  :content="shape" />
       </JvSpace>
-    `,
-  }),
+    `
+  })
 }
 export const 不同尺寸: StoryObj = {
-  render: args => ({
+  render: (args) => ({
     components: { JvButton },
     setup() {
       return { args }
@@ -114,12 +98,12 @@ export const 不同尺寸: StoryObj = {
         <JvButton v-bind="args" size="medium">中</JvButton>
         <JvButton v-bind="args" size="large">大</JvButton>
       </div>
-    `,
-  }),
+    `
+  })
 }
 
 export const 不同颜色: StoryObj = {
-  render: args => ({
+  render: (args) => ({
     components: { JvButton, JvSpace },
     setup() {
       return { args, colorTypeOptions }
@@ -130,8 +114,8 @@ export const 不同颜色: StoryObj = {
           BUTTON
         </JvButton>
       </JvSpace>
-    `,
-  }),
+    `
+  })
 }
 
 /**
@@ -146,7 +130,7 @@ export const 不同颜色: StoryObj = {
  */
 
 export const 不同变体: StoryObj = {
-  render: args => ({
+  render: (args) => ({
     components: { JvButton, JvSpace },
     setup() {
       return { args, colorTypeOptions, variantOptions }
@@ -160,37 +144,37 @@ export const 不同变体: StoryObj = {
           BUTTON
        </JvButton>
       </JvSpace>
-    `,
-  }),
+    `
+  })
 }
 
 export const 图标按钮: StoryObj = {
   args: {
     variant: 'elevated',
-    icon: 'mdi:home',
+    icon: 'mdi:home'
   },
-  render: args => ({
+  render: (args) => ({
     components: { JvButton },
     setup() {
       return { args }
     },
-    template: '<JvButton v-bind="args"  />',
+    template: '<JvButton v-bind="args"  />'
   }),
   play: async ({ canvasElement }) => {
     const canvas = canvasElement as HTMLElement
     const button = canvas.querySelector('button') as HTMLButtonElement
     expect(button).toBeTruthy()
-  },
+  }
 }
 
 // 按钮堆叠
 export const 按钮堆叠: StoryObj = {
-  render: args => ({
+  render: (args) => ({
     components: { JvButton },
     setup() {
       return { args }
     },
     template:
-      '<JvButton v-bind="args" prepend-icon="mdi:plus" append-icon="mdi:minus" stacked>按钮</JvButton>',
-  }),
+      '<JvButton v-bind="args" prepend-icon="mdi:plus" append-icon="mdi:minus" stacked>按钮</JvButton>'
+  })
 }

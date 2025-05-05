@@ -34,8 +34,7 @@ export function toCamelCase(str: string): string {
  */
 export function toKebabCase(str = '') {
   // 如果缓存中已经存在该字符串的转换结果，则直接返回缓存中的结果
-  if (toKebabCase.cache.has(str))
-    return toKebabCase.cache.get(str)!
+  if (toKebabCase.cache.has(str)) return toKebabCase.cache.get(str)!
   // 使用正则表达式将字符串中的非字母字符替换为连字符，并将大写字母转换为小写字母
   const kebab = str
     .replace(/[^a-z]/gi, '-')
@@ -77,7 +76,7 @@ enum TypeOptions {
   'Float32Array' = '[object Float32Array]',
   'Float64Array' = '[object Float64Array]',
   'BigInt64Array' = '[object BigInt64Array]',
-  'BigUint64Array' = '[object BigUint64Array]',
+  'BigUint64Array' = '[object BigUint64Array]'
 }
 
 /**
@@ -88,18 +87,23 @@ enum TypeOptions {
 export function toJson(data: any) {
   return JSON.stringify(data, null, 2)
 }
-export function isObject(thing: any): boolean {
+export function isObject(thing: unknown): thing is Record<string, unknown> {
   return (
-    typeof thing === 'object'
-    && thing !== null
-    && Object.prototype.toString.call(thing) === TypeOptions.Object
+    typeof thing === 'object' &&
+    thing !== null &&
+    Object.prototype.toString.call(thing) === TypeOptions.Object
   )
 }
-export function isEmptyObject(thing: any) {
+export function isEmptyObject(
+  thing: unknown
+): thing is Record<string, unknown> {
   return isObject(thing) && Object.keys(thing).length === 0
 }
 
-export function hasOwnProperty(obj: any, key: string) {
+export function hasOwnProperty(
+  obj: unknown,
+  key: string
+): key is keyof typeof obj {
   /**
    * 直接调用`obj.hasOwnProperty`有可能会因为
    * obj 覆盖了 prototype 上的 hasOwnProperty 而产生错误
@@ -149,8 +153,8 @@ export function isFunction(value: any): value is Function {
  */
 export function isNumber(value: any): value is number {
   return (
-    getType(value) === TypeOptions['Number&NaN']
-    || (typeof value === 'number' && Number.isNaN(value))
+    getType(value) === TypeOptions['Number&NaN'] ||
+    (typeof value === 'number' && Number.isNaN(value))
   )
 }
 

@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { CSSProperties } from 'vue'
-import type { InternalIconName, JvIconProps, JvIconSize } from './types'
+import type { InternalIconName, JvIconProps } from './types'
 import { _internalIcons } from '@/components/internal-icon'
-import { isString } from '@/utils'
-import { Icon } from '@iconify/vue'
+import { getOptions } from '@/constants'
+import { convertToUnit, isString } from '@/utils'
 import { computed } from 'vue'
-import { bem as _bem, JVICON_NAME, sizeOptions } from './types'
+import { bem as _bem, JVICON_NAME } from './types'
 
 defineOptions({ name: JVICON_NAME, inheritAttrs: true })
 
@@ -17,18 +17,25 @@ const {
   rotate = 0,
   flip = false,
   spin = false,
-  disabled = false,
+  disabled = false
 } = defineProps<JvIconProps>()
 
+const options = getOptions('size')
+// 判断是否是内部图标
+const hasInnerIcon = computed(() => name && String(name).startsWith('$'))
+
 // 判断是否显示外部图标
-const showExternalIcon = computed(() => name && !String(name).startsWith('$'))
+const showExternalIcon = computed(() => name && !hasInnerIcon.value)
+
+const innerSize = computed(() =>
+  isString(size) && options.includes(size) ? size : false
+)
 // 计算图标样式
 const iconStyle = computed<CSSProperties>(() => {
   const result: CSSProperties = {}
-
   // 处理尺寸
-  if (!Number.isNaN(size)) {
-    const sizeValue = `${size}px`
+  if (!Number.isNaN(size) && innerSize.value === false) {
+    const sizeValue = convertToUnit(size)
     result.fontSize = sizeValue
     result.width = sizeValue
     result.height = sizeValue
@@ -47,13 +54,9 @@ const iconStyle = computed<CSSProperties>(() => {
   return result
 })
 
-const innerSize = computed(() =>
-  isString(size) && sizeOptions.includes(size as JvIconSize) ? size : '',
-)
-
 // 处理内部图标
 const internalIconVnode = computed(() => {
-  if (name && String(name).startsWith('$')) {
+  if (hasInnerIcon.value) {
     return _internalIcons[name as InternalIconName] || null
   }
   return null
@@ -66,6 +69,7 @@ const iconClasses = computed(() => [
   colorType && _bem.m(`type-${colorType}`),
   flip && _bem.m('flip'),
   spin && _bem.m('spin'),
+  disabled && _bem.m('disabled')
 ])
 </script>
 
@@ -77,24 +81,20 @@ const iconClasses = computed(() => [
     :aria-disabled="disabled"
   >
     <slot v-if="$slots.default" />
-    <Icon
+    <JvIconify
       v-else-if="showExternalIcon"
       :icon="name"
       :color="color"
       :rotate="rotate"
       :flip="flip ? 'horizontal' : undefined"
-      :class="{ 'jv-icon--spin': spin }"
+      :spin="spin"
     />
-    <component
-      :is="internalIconVnode"
-      v-else-if="internalIconVnode"
-      :class="{ 'jv-icon--spin': spin }"
-    />
+    <component :is="internalIconVnode" v-else-if="internalIconVnode" />
   </i>
 </template>
 
 <style lang="scss">
-.jv-icon {
+@include b(icon) {
   --jv-icon-size: 24px;
   --jv-icon-color: var(--jv-theme-primary);
 
@@ -109,60 +109,63 @@ const iconClasses = computed(() => [
   user-select: none;
 
   // 预设尺寸
-  &--size-small {
+  @include m(size-tiny) {
+    --jv-icon-size: 12px;
+  }
+
+  @include m(size-small) {
     --jv-icon-size: 16px;
   }
 
-  &--size-medium {
+  @include m(size-medium) {
     --jv-icon-size: 24px;
   }
 
-  &--size-large {
+  @include m(size-large) {
     --jv-icon-size: 32px;
   }
 
-  &--size-xlarge {
+  @include m(size-xlarge) {
     --jv-icon-size: 40px;
   }
 
   // 颜色类型
-  &--type-primary {
+  @include m(type-primary) {
     --jv-icon-color: var(--jv-theme-primary);
   }
 
-  &--type-secondary {
+  @include m(type-secondary) {
     --jv-icon-color: var(--jv-theme-secondary);
   }
 
-  &--type-success {
+  @include m(type-success) {
     --jv-icon-color: var(--jv-theme-success);
   }
 
-  &--type-warning {
+  @include m(type-warning) {
     --jv-icon-color: var(--jv-theme-warning);
   }
 
-  &--type-error {
+  @include m(type-error) {
     --jv-icon-color: var(--jv-theme-error);
   }
 
-  &--type-info {
+  @include m(type-info) {
     --jv-icon-color: var(--jv-theme-info);
   }
 
   // 动画效果
-  &--spin {
+  @include m(spin) {
     animation: jv-icon-spin 2s infinite linear;
   }
 
-  &--flip {
+  @include m(flip) {
     transform: scaleX(-1);
   }
 
-  &--disabled {
+  @include m(disabled) {
     cursor: not-allowed;
     opacity: 0.6;
-    pointer-events: none;
   }
 }
 

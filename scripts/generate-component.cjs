@@ -34,6 +34,17 @@ rl.question('请输入组件名称 (例如: button 将生成 jv-button): ', (ans
   const pascalCaseName = `Jv${name.charAt(0).toUpperCase() + name.slice(1)}`
   const componentDir = path.join(COMPONENTS_DIR, kebabCaseName)
   const srcDir = path.join(componentDir, 'src')
+  const storiesDir = path.join(componentDir, 'stories')
+
+  // 在stories目录中创建[组件名称].stories.ts和README.md文件
+  const storiesFilePath = path.join(storiesDir, `${name}.stories.ts`)
+  const readmeFilePath = path.join(storiesDir, 'README.md')
+  if (!fs.existsSync(storiesFilePath)) {
+    fs.writeFileSync(storiesFilePath, '')
+  }
+  if (!fs.existsSync(readmeFilePath)) {
+    fs.writeFileSync(readmeFilePath, '')
+  }
 
   // 创建组件目录结构
   if (!fs.existsSync(componentDir)) {
@@ -44,25 +55,22 @@ rl.question('请输入组件名称 (例如: button 将生成 jv-button): ', (ans
     fs.mkdirSync(srcDir, { recursive: true })
   }
 
+  if (!fs.existsSync(storiesDir)) {
+    fs.mkdirSync(storiesDir, { recursive: true })
+  }
+
   // 创建组件 Vue 文件
   const vueFilePath = path.join(srcDir, `${pascalCaseName}.vue`)
   const vueTemplate = `<script setup lang="ts">
 import { computed, toRefs } from 'vue'
-import { ${pascalCaseName.toUpperCase()}_NAME, type ${pascalCaseName}Props } from './types'
+import { ${pascalCaseName.toUpperCase()}_NAME, type ${pascalCaseName}Props, type ${pascalCaseName}Emits } from './types'
 
 defineOptions({ name: ${pascalCaseName.toUpperCase()}_NAME, inheritAttrs: false })
 
-const props = withDefaults(defineProps<${pascalCaseName}Props>(), {
-  // 默认属性值
-})
+const {} =defineProps<${pascalCaseName}Props>()
 
-// 解构 props 为响应式引用
-const { } = toRefs(props)
 
-defineEmits<{
-  // 定义事件
-  (e: 'click', event: MouseEvent): void
-}>()
+defineEmits<${pascalCaseName}Emits>()
 </script>
 
 <template>

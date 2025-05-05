@@ -5,7 +5,6 @@ export const JVTAG_NAME = 'JvTag'
 export const bem = createNamespace('jv-tag')
 
 export type TagType = 'primary' | 'success' | 'warning' | 'error' | 'info'
-export type TagSize = 'large' | 'medium' | 'small'
 
 export interface JvTagProps {
   /**
@@ -15,7 +14,7 @@ export interface JvTagProps {
   /**
    * 大小
    */
-  size?: TagSize
+  size?: SizeType
   /**
    * 形状 药丸
    */
@@ -29,9 +28,17 @@ export interface JvTagProps {
    */
   closable?: boolean
   /**
+   * 后置内容
+   */
+  closeIcon?: string
+  /**
+   * 前置内容
+   */
+  prependIcon?: string
+  /**
    * 内容
    */
-  content?: string
+  label?: string
   /**
    * 变体
    */
@@ -48,12 +55,13 @@ export interface JvTagProps {
 
 export interface JvTagEmits {
   (e: 'click', event: MouseEvent): void
-  (e: 'close', event: MouseEvent): void
-  (e: 'select', selected: boolean): void
+  (e: 'clickClose', event: MouseEvent): void
+  (e: 'groupSelect', selected: boolean): void
 }
 
 export interface JvTagSlots {
   default: Slot
+  prepend: Slot
 }
 
 export interface JvTagExpose {

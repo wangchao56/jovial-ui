@@ -29,14 +29,7 @@ export interface JvCardProps {
    * 卡片颜色类型
    * @default 'default'
    */
-  colorType?:
-    | 'default'
-    | 'primary'
-    | 'secondary'
-    | 'success'
-    | 'warning'
-    | 'danger'
-    | 'info'
+  colorType?: ColorType
   /**
    * 卡片变体
    * @default 'elevated'

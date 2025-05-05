@@ -12,28 +12,28 @@ export default {
   argTypes: {
     closeable: {
       control: 'boolean',
-      description: '是否可关闭',
+      description: '是否可关闭'
     },
     closeIcon: {
       control: 'text',
-      description: '关闭图标',
+      description: '关闭图标'
     },
     maskClosable: {
       control: 'boolean',
-      description: '是否点击遮罩关闭',
+      description: '是否点击遮罩关闭'
     },
     cancelText: {
       control: 'text',
-      description: '取消按钮文本',
+      description: '取消按钮文本'
     },
     confirmText: {
       control: 'text',
-      description: '确认按钮文本',
-    },
-  },
+      description: '确认按钮文本'
+    }
+  }
 } as Meta
 
-const Template: StoryFn = args => ({
+const Template: StoryFn = (args) => ({
   components: { JvModal, JvButton },
   setup() {
     const visible = ref(false)
@@ -55,7 +55,7 @@ const Template: StoryFn = args => ({
         </div>
       </JvModal>
     </div>
-  `,
+  `
 })
 
 export const 基础用法 = Template.bind({})
@@ -63,7 +63,7 @@ export const 基础用法 = Template.bind({})
   title: '基础模态框',
   content: '这是一个基础模态框内容',
   closeable: true,
-  maskClosable: true,
+  maskClosable: true
 }
 
 export const 自定义按钮文本 = Template.bind({})
@@ -71,21 +71,21 @@ export const 自定义按钮文本 = Template.bind({})
   title: '自定义按钮文本',
   content: '这是一个自定义按钮文本的模态框',
   cancelText: '返回',
-  confirmText: '同意',
+  confirmText: '同意'
 }
 
 export const 不可点击遮罩关闭 = Template.bind({})
 不可点击遮罩关闭.args = {
   title: '不可点击遮罩关闭',
   content: '点击遮罩不会关闭模态框',
-  maskClosable: false,
+  maskClosable: false
 }
 
 export const 不显示关闭按钮 = Template.bind({})
 不显示关闭按钮.args = {
   title: '不显示关闭按钮',
   content: '模态框不显示右上角关闭按钮',
-  closeable: false,
+  closeable: false
 }
 
 export const 自定义头部和底部: StoryObj = {
@@ -125,8 +125,8 @@ export const 自定义头部和底部: StoryObj = {
           </template>
         </JvModal>
       </div>
-    `,
-  }),
+    `
+  })
 }
 
 export const 确认对话框: StoryObj = {
@@ -139,12 +139,12 @@ export const 确认对话框: StoryObj = {
       }
 
       const handleConfirm = () => {
-        console.warn('确认操作')
+        // 此处可以添加确认操作逻辑
         visible.value = false
       }
 
       const handleCancel = () => {
-        console.warn('取消操作')
+        // 此处可以添加取消操作逻辑
         visible.value = false
       }
 
@@ -168,8 +168,8 @@ export const 确认对话框: StoryObj = {
           </div>
         </JvModal>
       </div>
-    `,
-  }),
+    `
+  })
 }
 
 export const 测试打开关闭: StoryObj = {
@@ -206,16 +206,16 @@ export const 测试打开关闭: StoryObj = {
           </div>
         </JvModal>
       </div>
-    `,
+    `
   }),
   play: async ({ canvasElement }) => {
     // 由于modal使用了overlay和mask，这里的测试比较简单
     const canvas = canvasElement as HTMLElement
     const openButton = canvas.querySelector(
-      '[data-testid="open-button"]',
+      '[data-testid="open-button"]'
     ) as HTMLElement
     const closeButton = canvas.querySelector(
-      '[data-testid="close-button"]',
+      '[data-testid="close-button"]'
     ) as HTMLElement
 
     // 点击打开按钮
@@ -223,7 +223,7 @@ export const 测试打开关闭: StoryObj = {
       openButton.click()
 
       // 给模态框动画一些时间
-      await new Promise(resolve => setTimeout(resolve, 500))
+      await new Promise((resolve) => setTimeout(resolve, 500))
 
       // 检查模态框是否打开
       const modalWrapper = document.querySelector('.jv-modal__wrapper')
@@ -234,8 +234,8 @@ export const 测试打开关闭: StoryObj = {
         closeButton.click()
 
         // 给模态框关闭动画一些时间
-        await new Promise(resolve => setTimeout(resolve, 500))
+        await new Promise((resolve) => setTimeout(resolve, 500))
       }
     }
-  },
+  }
 }

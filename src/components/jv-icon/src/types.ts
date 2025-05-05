@@ -9,13 +9,11 @@ export const bem = createNamespace(JVICON_NAME)
 // 处理预设尺寸
 export const sizeOptions = ['small', 'medium', 'large', 'xlarge'] as const
 
-export type JvIconSize = Exclude<SizeType, 'tiny'>
-
 export interface JvIconProps {
   /** 图标名称 */
   name?: InternalIconName | string | IconifyIcon
   /** 图标大小 */
-  size?: JvIconSize | number
+  size?: SizeType
   /** 图标颜色 */
   color?: string
   /** 图标颜色类型 */

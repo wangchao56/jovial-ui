@@ -5,24 +5,20 @@ import { bem, JVBADGE_NAME } from './types'
 
 defineOptions({ name: JVBADGE_NAME, inheritAttrs: false })
 
-const {
-  value,
-  max = 99,
-  dot = false,
-  hidden = false,
-  type = 'error',
-  offset,
-} = defineProps<JvBadgeProps>()
-
-// 声明组件事件
-const emit = defineEmits<{
-  (e: 'click', event: MouseEvent): void
-}>()
+const { value, max, dot, hidden, type, offset } = withDefaults(
+  defineProps<JvBadgeProps>(),
+  {
+    value: 0,
+    max: 99,
+    dot: false,
+    hidden: false,
+    type: 'error'
+  }
+)
 
 // 计算显示的内容
 const content = computed(() => {
-  if (dot)
-    return ''
+  if (dot) return ''
 
   if (typeof value === 'number' && typeof max === 'number') {
     return value > max ? `${max}+` : `${value}`
@@ -33,12 +29,11 @@ const content = computed(() => {
 
 // 计算样式
 const badgeStyle = computed(() => {
-  if (!offset)
-    return {}
+  if (!offset) return {}
 
   const [x, y] = offset
   return {
-    transform: `translate(${x}px, ${y}px)`,
+    transform: `translate(${x}px, ${y}px)`
   }
 })
 </script>
@@ -52,10 +47,9 @@ const badgeStyle = computed(() => {
         bem.e('content'),
         bem.m(`type-${type}`),
         bem.is('dot', dot),
-        bem.is('fixed', !!$slots.default),
+        bem.is('fixed', !!$slots.default)
       ]"
       :style="badgeStyle"
-      @click="emit('click', $event)"
     >
       {{ content }}
     </sup>

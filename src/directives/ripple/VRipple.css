@@ -1,0 +1,43 @@
+.v-ripple__container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  color: inherit;
+  pointer-events: none;
+  contain: strict;
+}
+
+.v-ripple__animation {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  border-radius: 50%;
+  background: currentcolor;
+  color: inherit;
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.v-ripple__animation--enter {
+  opacity: 0;
+  transition: none;
+}
+
+.v-ripple__animation--in {
+  opacity: calc(0.25 * var(--v-theme-overlay-multiplier));
+  transition:
+    transform 0.25s cubic-bezier(0, 0, 0.2, 1),
+    opacity 0.1s cubic-bezier(0, 0, 0.2, 1);
+}
+
+.v-ripple__animation--out {
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0, 0, 0.2, 1);
+}

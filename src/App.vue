@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import JvThemeProvider from '@/components/internal/JvThemeProvider.vue'
 import { ref } from 'vue'
+import ResponsiveGridExample from './components/examples/ResponsiveGrid.vue'
 import TableExample from './components/examples/TableExample.vue'
 import { useLocale } from './locale/adapters/jovial'
 // 测试locale
@@ -19,6 +20,7 @@ function _handleClick() {
 <template>
   <JvThemeProvider>
     <TableExample />
+    <ResponsiveGridExample />
   </JvThemeProvider>
 </template>
 

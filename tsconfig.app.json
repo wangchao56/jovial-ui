@@ -18,6 +18,7 @@
     "src/**/*.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
-    "src/**/*.stories.ts"
+    "src/**/*.stories.ts",
+    "src/**/*.md"
   ]
 }

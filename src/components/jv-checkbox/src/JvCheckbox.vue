@@ -6,7 +6,12 @@ import { bem, JVCHECKBOX_NAME } from './types'
 
 defineOptions({ name: JVCHECKBOX_NAME, inheritAttrs: false })
 
-const { label, disabled, indeterminate } = defineProps<JvCheckboxProps>()
+const {
+  label,
+  disabled = false,
+  indeterminate = false,
+  size = 'medium'
+} = defineProps<JvCheckboxProps>()
 
 const emit = defineEmits<{
   (e: 'click', event: MouseEvent): void
@@ -14,7 +19,7 @@ const emit = defineEmits<{
 }>()
 
 const internalValue = defineModel<boolean | Array<string | number>>(
-  'modelValue',
+  'modelValue'
 )
 
 const innerIcon = computed(() => {
@@ -34,8 +39,7 @@ const isChecked = computed(() => {
 })
 
 function handleClick(e: MouseEvent) {
-  if (disabled)
-    return
+  if (disabled) return
 
   emit('click', e)
 
@@ -44,8 +48,7 @@ function handleClick(e: MouseEvent) {
     newValue = [...internalValue.value]
     const index = newValue.indexOf(label!)
     index === -1 ? newValue.push(label!) : newValue.splice(index, 1)
-  }
-  else {
+  } else {
     newValue = !isChecked.value
   }
 
@@ -59,7 +62,7 @@ function handleClick(e: MouseEvent) {
       bem.b(),
       bem.is('checked', isChecked),
       bem.is('disabled', disabled),
-      bem.is('indeterminate', indeterminate),
+      bem.is('indeterminate', indeterminate)
     ]"
     @click="handleClick"
   >
@@ -71,7 +74,7 @@ function handleClick(e: MouseEvent) {
         :disabled="disabled"
         :checked="isChecked"
         hidden
-      >
+      />
       <JvButton
         :icon="innerIcon"
         :size="size"

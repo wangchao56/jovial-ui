@@ -1,9 +1,8 @@
+import type { Slot } from 'vue'
 import { createNamespace } from '@/utils'
 
 export const JVBADGE_NAME = 'JvBadge'
 export const bem = createNamespace(JVBADGE_NAME)
-
-export type BadgeType = 'primary' | 'success' | 'warning' | 'danger' | 'info'
 
 /**
  * JvBadge 属性
@@ -31,11 +30,15 @@ export interface JvBadgeProps {
   hidden?: boolean
   /**
    * 角标类型
-   * @default 'danger'
    */
-  type?: BadgeType
+  type?: ColorType
+
+  offset?: [number, number] | string
+}
+export interface JvBadgeSlots {
   /**
-   * 自定义角标位置偏移，格式为 [x, y]
+   * 默认插槽
+   * @default 徽标
    */
-  offset?: [number, number]
+  default: Slot
 }

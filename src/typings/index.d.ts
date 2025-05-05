@@ -2,7 +2,7 @@ type ColorType =
   | 'primary'
   | 'success'
   | 'warning'
-  | 'danger'
+  | 'error'
   | 'info'
   | 'default'
 type SizeType = 'xlarge' | 'large' | 'medium' | 'small' | 'tiny'
@@ -39,3 +39,27 @@ type PlacementType =
   | 'right-end'
 
 type TriggerMethodType = 'click' | 'hover' | 'focus' | 'contextmenu'
+
+type DirectionType = 'horizontal' | 'vertical'
+
+type JustifyType =
+  | 'start'
+  | 'end'
+  | 'center'
+  | 'between'
+  | 'around'
+  | 'evenly'
+  | 'left'
+  | 'right'
+
+type AlignType = 'start' | 'end' | 'center' | 'baseline' | 'stretch'
+
+type GapType = number | string | [number | string, number | string]
+
+type ContentAlignType =
+  | 'start'
+  | 'end'
+  | 'center'
+  | 'between'
+  | 'around'
+  | 'stretch'

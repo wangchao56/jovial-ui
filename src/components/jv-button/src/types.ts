@@ -1,4 +1,5 @@
 import type { InternalIconName } from '@/components/jv-icon/src/types'
+import type { Shape } from '@/constants'
 import type { Slot } from 'vue'
 import { createNamespace } from '@/utils'
 
@@ -6,10 +7,11 @@ export const JVBUTTON_NAME = 'JvButton' // 组件名称，用于注册组件，�
 export const bem = createNamespace(JVBUTTON_NAME) // 创建组件的 bem 命名空间，用于生成组件的 class 名称，例如：jv-button，jv-button--primary，jv-button__icon，jv-button__text
 
 // 提取Variant类型 中的一部分 作为新的类型
-type JvButtonVariant = Extract<
+export type JvButtonVariant = Extract<
   Variant,
   'text' | 'outlined' | 'tonal' | 'plain' | 'dashed' | 'elevated' | 'flat'
 >
+export type ButtonNativeType = 'button' | 'submit' | 'reset'
 export interface JvButtonProps {
   /**
    * 按钮类型
@@ -30,7 +32,7 @@ export interface JvButtonProps {
    * 按钮形状
    * @default 'square'
    */
-  shape?: 'square' | 'pill'
+  shape?: Shape
   /**
    * 按钮变体
    * @default 'text'
@@ -73,7 +75,7 @@ export interface JvButtonProps {
    * 按钮原生类型
    * @default 'button'
    */
-  nativeType?: 'button' | 'submit' | 'reset'
+  nativeType?: ButtonNativeType
   /**
    * 按钮内容
    */

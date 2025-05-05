@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { JvTagProps } from './types'
+import type { JvTagEmits, JvTagProps } from './types'
 import JvIcon from '@/components/jv-icon/src/JvIcon.vue'
 import { computed, ref } from 'vue'
 import { bem, JVTAG_NAME } from './types'
@@ -10,21 +10,23 @@ const {
   type = 'primary',
   size = 'medium',
   closable = false,
-  content = '',
+  label = '',
   variant = 'filled',
+  closeIcon = ''
 } = defineProps<JvTagProps>()
 
-const emit = defineEmits<{
-  (e: 'close', event: MouseEvent): void
-}>()
+const emit = defineEmits<JvTagEmits>()
 const visible = ref(true)
 function handleClose(e: MouseEvent) {
   e.stopPropagation()
   visible.value = false
-  emit('close', e)
+  emit('clickClose', e)
 }
 
-const closeIcon = computed(() => {
+const _closeIcon = computed(() => {
+  if (closeIcon) {
+    return closeIcon
+  }
   switch (variant) {
     case 'filled':
       return '$closeCircle'
@@ -45,17 +47,23 @@ const closeIcon = computed(() => {
       bem.m(`variant-${variant}`),
       bem.m(`size-${size}`),
       bem.m(`shape-${shape}`),
-      bem.is('closable', closable),
+      bem.is('closable', closable)
     ]"
     role="tag"
     tabindex="0"
+    @click="emit('click', $event)"
   >
+    <span :class="bem.e('prepend')">
+      <slot name="prepend">
+        <JvIcon :name="prependIcon" :size="size" />
+      </slot>
+    </span>
     <span :class="bem.e('content')">
-      <slot>{{ content }}</slot>
+      <slot>{{ label }}</slot>
     </span>
     <JvIcon
       v-if="closable"
-      :name="closeIcon"
+      :name="_closeIcon"
       :class="bem.e('close')"
       size="small"
       @click="handleClose"
@@ -70,25 +78,25 @@ const closeIcon = computed(() => {
 $jv-tag-size-map: (
   'small': (
     'padding': (
-      2px 8px,
+      2px 8px
     ),
     'font-size': 10px,
-    'max-height': 22px,
+    'max-height': 22px
   ),
   'medium': (
     'padding': (
-      4px 10px,
+      4px 10px
     ),
     'font-size': 12px,
-    'max-height': 26px,
+    'max-height': 26px
   ),
   'large': (
     'padding': (
-      6px 14px,
+      6px 14px
     ),
     'font-size': 14px,
-    'max-height': 34px,
-  ),
+    'max-height': 34px
+  )
 );
 $jv-tag-type-map: (primary, success, warning, error, info);
 
@@ -195,7 +203,11 @@ $jv-tag-type-map: (primary, success, warning, error, info);
   }
 
   @include m(variant-tonal) {
-    background-color: color-mix(in srgb, var(--jv-tag-background-color) 40%, var(--jv-tag-color));
+    background-color: color-mix(
+      in srgb,
+      var(--jv-tag-background-color) 40%,
+      var(--jv-tag-color)
+    );
     color: var(--jv-tag-background-color);
   }
 
@@ -209,7 +221,13 @@ $jv-tag-type-map: (primary, success, warning, error, info);
   }
 }
 
-@supports (color: color-mix(in srgb, var(--jv-tag-background-color) 40%, var(--jv-tag-color))) {
+@supports (
+  color: color-mix(
+      in srgb,
+      var(--jv-tag-background-color) 40%,
+      var(--jv-tag-color)
+    )
+) {
   .jv-tag--variant-tonal {
     background-color: rgba(var(--jv-tag-background-color-rgb), 0.4);
     color: rgba(var(--jv-tag-background-color-rgb), 0.4);
