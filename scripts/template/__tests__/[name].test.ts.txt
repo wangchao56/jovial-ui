@@ -1,0 +1,9 @@
+import { mount } from '@vue/test-utils'
+import { describe, expect, it } from 'vitest'
+import {{name:capitalize}} from '../src/{{name:capitalize}}.vue'
+
+describe('{{name:capitalize}}', () => {
+  it('renders correctly with default props', () => {
+    const wrapper = mount({{name:capitalize}})
+  })
+})

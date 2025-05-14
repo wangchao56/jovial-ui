@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { JvFlexProps } from './types'
 import { convertToUnit } from '@/utils'
-import { computed, withDefaults } from 'vue'
+import { computed } from 'vue'
 import { bem, JVFLEX_NAME } from './types'
 
 defineOptions({ name: JVFLEX_NAME, inheritAttrs: true })
@@ -11,12 +11,12 @@ const props = withDefaults(defineProps<JvFlexProps>(), {
   align: 'start',
   wrap: false,
   contentAlign: 'start',
-  gap: 0
+  gap: 0,
 })
 
 const gap = computed(() => {
   if (Array.isArray(props.gap)) {
-    return props.gap.map((item) => convertToUnit(item)).join(' ')
+    return props.gap.map(item => convertToUnit(item)).join(' ')
   }
   return convertToUnit(props.gap)
 })
@@ -32,7 +32,7 @@ const gap = computed(() => {
       bem.m(direction),
       justify && bem.m(`justify-${justify}`),
       align && bem.m(`align-${align}`),
-      contentAlign && bem.m(`content-${contentAlign}`)
+      contentAlign && bem.m(`content-${contentAlign}`),
     ]"
     v-bind="$attrs"
   >
@@ -48,6 +48,7 @@ const gap = computed(() => {
   align-items: baseline;
   gap: v-bind(gap);
   box-sizing: border-box;
+  width: 100%;
   min-width: fit-content;
 
   // 动画过渡

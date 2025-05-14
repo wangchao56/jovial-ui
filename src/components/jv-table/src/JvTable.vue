@@ -570,12 +570,12 @@ watch(
   line-height: 1.5;
 
   // 确保CSS变量存在默认值
-  --jv-theme-on-surface-variant: rgba(0, 0, 0, 0.6);
+  --jv-theme-on-surface-variant: rgb(0 0 0 / 0.6);
   --jv-theme-on-surface-rgb: 0, 0, 0;
   --jv-theme-primary-rgb: 33, 150, 243;
   --jv-theme-surface-variant: #f5f5f5;
-  --jv-theme-outline-variant: rgba(0, 0, 0, 0.12);
-  --jv-theme-outline: rgba(0, 0, 0, 0.38);
+  --jv-theme-outline-variant: rgb(0 0 0 / 0.12);
+  --jv-theme-outline: rgb(0 0 0 / 0.38);
   --jv-theme-primary: #2196f3;
   --jv-theme-background: #fff;
 
@@ -585,7 +585,7 @@ watch(
     overflow: auto; // 允许容器滚动
     flex-direction: column;
     width: 100%;
-    border: 1px solid var(--jv-theme-outline-variant, rgba(0, 0, 0, 0.12));
+    border: 1px solid var(--jv-theme-outline-variant, rgb(0 0 0 / 0.12));
     border-radius: 4px;
     background-color: var(--jv-theme-surface, #fff);
 
@@ -605,7 +605,7 @@ watch(
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgb(255 255 255 / 0.7);
   }
 
   &__loading-spinner {
@@ -678,18 +678,18 @@ watch(
 
     // 左侧最后一列添加阴影
     &.is-last-left-fixed {
-      box-shadow: 6px 0 6px -6px rgba(0, 0, 0, 0.15);
+      box-shadow: 6px 0 6px -6px rgb(0 0 0 / 0.15);
     }
 
     // 右侧第一列添加阴影
     &.is-first-right-fixed {
-      box-shadow: -6px 0 6px -6px rgba(0, 0, 0, 0.15);
+      box-shadow: -6px 0 6px -6px rgb(0 0 0 / 0.15);
     }
   }
 
   &__header-cell {
     background-color: var(--jv-theme-surface-variant, #f5f5f5);
-    color: var(--jv-theme-on-surface-variant, rgba(0, 0, 0, 0.6));
+    color: var(--jv-theme-on-surface-variant, rgb(0 0 0 / 0.6));
     font-weight: bold;
 
     &.is-sortable {
@@ -709,7 +709,7 @@ watch(
   }
 
   &__sort-icon {
-    color: var(--jv-theme-outline, rgba(0, 0, 0, 0.38));
+    color: var(--jv-theme-outline, rgb(0 0 0 / 0.38));
     font-size: 16px;
     transition: all 0.3s ease;
 
@@ -739,7 +739,7 @@ watch(
   &__empty-text {
     width: 100%;
     padding: 32px 0;
-    color: var(--jv-theme-outline, rgba(0, 0, 0, 0.38));
+    color: var(--jv-theme-outline, rgb(0 0 0 / 0.38));
     text-align: center;
   }
 

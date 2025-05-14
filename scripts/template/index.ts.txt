@@ -1,0 +1,13 @@
+import { withInstall } from '@/utils'
+import {{name:capitalize}}Component from './src/{{name:capitalize}}.vue'
+
+export const {{name:capitalize}} = withInstall({{name:capitalize}}Component)
+export default {{name:capitalize}}
+
+export * from './src/types'
+
+declare module 'vue' {
+  export interface GlobalComponents {
+    {{name:capitalize}}: typeof {{name:capitalize}}
+  }
+}

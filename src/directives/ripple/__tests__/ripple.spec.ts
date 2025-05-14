@@ -9,7 +9,7 @@ import Ripple from '../'
 
 const testComponent = defineComponent({
   directives: { Ripple },
-  template: '<div class="a" v-ripple />'
+  template: '<div class="a" v-ripple />',
 })
 
 describe('v-ripple', () => {
@@ -25,10 +25,10 @@ describe('v-ripple', () => {
       props: {
         ripple: {
           type: Boolean,
-          default: true
-        }
+          default: true,
+        },
       },
-      template: '<div class="a" v-ripple="ripple" />'
+      template: '<div class="a" v-ripple="ripple" />',
     })
     const el = wrapper.element
 
@@ -64,7 +64,7 @@ describe('v-ripple', () => {
       const wrapper = mount(testComponent)
 
       const keydownEvent = new KeyboardEvent('keydown', {
-        keyCode: keyCodes[key]
+        keyCode: keyCodes[key],
       })
       wrapper.element.dispatchEvent(keydownEvent)
 
@@ -75,7 +75,7 @@ describe('v-ripple', () => {
 
       vi.runAllTimers()
       expect(wrapper.find('.v-ripple__container').exists()).toBe(false)
-    }
+    },
   )
 
   it('should only ripple on one element', () => {
@@ -83,14 +83,14 @@ describe('v-ripple', () => {
 
     const wrapper = mount({
       directives: { Ripple },
-      template: '<div v-ripple><div class="child" v-ripple></div></div>'
+      template: '<div v-ripple><div class="child" v-ripple></div></div>',
     })
 
     const child = wrapper.find('.child').element
 
     const mousedownEvent = new MouseEvent('mousedown', {
       detail: 1,
-      bubbles: true
+      bubbles: true,
     })
     child.dispatchEvent(mousedownEvent)
 

@@ -1,0 +1,36 @@
+import type { Meta, StoryObj } from '@storybook/vue3'
+import {{name:capitalize}} from '../src/{{name:capitalize}}.vue'
+import readme from './README.md?raw'
+
+// 更多信息: https://storybook.js.org/docs/vue/writing-stories/introduction
+const meta = {
+  title: '{{component:category}}/{{name:capitalize}}',
+  component: {{name:capitalize}},
+  tags: ['autodocs'],
+  argTypes: {
+  },
+  args: {
+
+  },
+  parameters: {
+    docs: {
+      description: {
+        component: readme,
+      },
+    },
+  },
+} satisfies Meta<typeof {{name:capitalize}}>
+
+export default meta
+type Story = StoryObj<typeof meta>
+
+export const Default: Story = {
+
+  render: args => ({
+    components: { {{name:capitalize}} },
+    setup() {
+      return { args }
+    },
+    template: `<{{name:capitalize}} />`,
+  }),
+}

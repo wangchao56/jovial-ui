@@ -13,13 +13,9 @@ export interface JvIconProps {
   /** 图标名称 */
   name?: InternalIconName | string | IconifyIcon
   /** 图标大小 */
-  size?: SizeType
+  size?: SizeType | number | string
   /** 图标颜色 */
   color?: string
-  /** 图标颜色类型 */
-  colorType?: ColorType
-  /** 图标是否自动聚焦 */
-  autofocus?: boolean
   /** 翻转 */
   flip?: boolean
   /** 旋转角度 */

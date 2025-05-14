@@ -4,12 +4,12 @@ export type Breakpoint = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'
 
 // 断点配置，与_breakpoints.scss保持一致
 export const breakpoints: Record<Breakpoint, number> = {
-  xs: 480,
-  sm: 640,
-  md: 768,
-  lg: 1024,
-  xl: 1280,
-  '2xl': 1536
+  'xs': 480,
+  'sm': 640,
+  'md': 768,
+  'lg': 1024,
+  'xl': 1280,
+  '2xl': 1536,
 }
 
 /**
@@ -29,41 +29,46 @@ export function useBreakpoints() {
   const isXs = computed(() => windowWidth.value < breakpoints.sm)
   const isSm = computed(
     () =>
-      windowWidth.value >= breakpoints.sm && windowWidth.value < breakpoints.md
+      windowWidth.value >= breakpoints.sm && windowWidth.value < breakpoints.md,
   )
   const isMd = computed(
     () =>
-      windowWidth.value >= breakpoints.md && windowWidth.value < breakpoints.lg
+      windowWidth.value >= breakpoints.md && windowWidth.value < breakpoints.lg,
   )
   const isLg = computed(
     () =>
-      windowWidth.value >= breakpoints.lg && windowWidth.value < breakpoints.xl
+      windowWidth.value >= breakpoints.lg && windowWidth.value < breakpoints.xl,
   )
   const isXl = computed(
     () =>
-      windowWidth.value >= breakpoints.xl &&
-      windowWidth.value < breakpoints['2xl']
+      windowWidth.value >= breakpoints.xl
+      && windowWidth.value < breakpoints['2xl'],
   )
   const is2xl = computed(() => windowWidth.value >= breakpoints['2xl'])
 
   // 当前激活的断点
   const current = computed<Breakpoint>(() => {
-    if (is2xl.value) return '2xl'
-    if (isXl.value) return 'xl'
-    if (isLg.value) return 'lg'
-    if (isMd.value) return 'md'
-    if (isSm.value) return 'sm'
+    if (is2xl.value)
+      return '2xl'
+    if (isXl.value)
+      return 'xl'
+    if (isLg.value)
+      return 'lg'
+    if (isMd.value)
+      return 'md'
+    if (isSm.value)
+      return 'sm'
     return 'xs'
   })
 
   // 断点判断映射
   const isBreakpoint = computed(() => ({
-    xs: isXs.value,
-    sm: isSm.value,
-    md: isMd.value,
-    lg: isLg.value,
-    xl: isXl.value,
-    '2xl': is2xl.value
+    'xs': isXs.value,
+    'sm': isSm.value,
+    'md': isMd.value,
+    'lg': isLg.value,
+    'xl': isXl.value,
+    '2xl': is2xl.value,
   }))
 
   // 是否大于或等于特定断点
@@ -74,9 +79,12 @@ export function useBreakpoints() {
 
   // 窗口尺寸类别（参考 Material Design 窗口尺寸类别）
   const windowSizeClass = computed(() => {
-    if (windowWidth.value < 600) return 'compact'
-    if (windowWidth.value < 840) return 'medium'
-    if (windowWidth.value < 1200) return 'expanded'
+    if (windowWidth.value < 600)
+      return 'compact'
+    if (windowWidth.value < 840)
+      return 'medium'
+    if (windowWidth.value < 1200)
+      return 'expanded'
     return 'large'
   })
 
@@ -101,6 +109,6 @@ export function useBreakpoints() {
     isBreakpoint,
     gtOrEq,
     lt,
-    windowSizeClass
+    windowSizeClass,
   }
 }

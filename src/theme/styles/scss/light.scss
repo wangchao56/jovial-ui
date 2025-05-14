@@ -1,0 +1,101 @@
+@use 'sass:color';
+@use 'sass:map';
+@use 'sass:meta';
+
+// 亮色主题变量
+$light-theme: (
+  // 主要颜色
+  primary: rgb(0, 98, 92),
+  surface-tint: rgb(0, 106, 99),
+  on-primary: rgb(255, 255, 255),
+  primary-container: rgb(6, 125, 117),
+  on-primary-container: rgb(199, 255, 248),
+  // 次要颜色
+  secondary: rgb(68, 100, 96),
+  on-secondary: rgb(255, 255, 255),
+  secondary-container: rgb(198, 234, 228),
+  on-secondary-container: rgb(74, 106, 102),
+  // 第三颜色
+  tertiary: rgb(100, 75, 136),
+  on-tertiary: rgb(255, 255, 255),
+  tertiary-container: rgb(125, 99, 162),
+  on-tertiary-container: rgb(250, 240, 255),
+  // 错误颜色
+  error: rgb(186, 26, 26),
+  on-error: rgb(255, 255, 255),
+  error-container: rgb(255, 218, 214),
+  on-error-container: rgb(147, 0, 10),
+  // 背景和表面
+  background: rgb(246, 250, 248),
+  on-background: rgb(24, 28, 28),
+  surface: rgb(246, 250, 248),
+  on-surface: rgb(24, 28, 28),
+  surface-variant: rgb(217, 229, 226),
+  on-surface-variant: rgb(62, 73, 71),
+  // 轮廓
+  outline: rgb(110, 121, 119),
+  outline-variant: rgb(189, 201, 198),
+  // 阴影和遮罩
+  shadow: rgb(0, 0, 0),
+  scrim: rgb(0, 0, 0),
+  // 反转颜色
+  inverse-surface: rgb(45, 49, 48),
+  inverse-on-surface: rgb(238, 242, 240),
+  inverse-primary: rgb(121, 214, 204),
+  // 固定主要颜色
+  primary-fixed: rgb(150, 243, 233),
+  on-primary-fixed: rgb(0, 32, 29),
+  primary-fixed-dim: rgb(121, 214, 204),
+  on-primary-fixed-variant: rgb(0, 80, 75),
+  // 固定次要颜色
+  secondary-fixed: rgb(198, 234, 228),
+  on-secondary-fixed: rgb(0, 32, 29),
+  secondary-fixed-dim: rgb(170, 206, 200),
+  on-secondary-fixed-variant: rgb(44, 76, 73),
+  // 固定第三颜色
+  tertiary-fixed: rgb(237, 220, 255),
+  on-tertiary-fixed: rgb(38, 11, 72),
+  tertiary-fixed-dim: rgb(215, 186, 255),
+  on-tertiary-fixed-variant: rgb(83, 59, 118),
+  // 表面容器
+  surface-dim: rgb(215, 219, 217),
+  surface-bright: rgb(246, 250, 248),
+  surface-container-lowest: rgb(255, 255, 255),
+  surface-container-low: rgb(240, 244, 243),
+  surface-container: rgb(235, 239, 237),
+  surface-container-high: rgb(229, 233, 231),
+  surface-container-highest: rgb(223, 227, 226),
+  // 信息颜色
+  info-color: #004597,
+  info-on-color: rgb(255, 255, 255),
+  info-color-container: rgb(0, 92, 196),
+  info-on-color-container: rgb(205, 219, 255),
+  // 警告颜色
+  warning-color: #a03b00,
+  warning-on-color: rgb(255, 255, 255),
+  warning-color-container: rgb(201, 76, 0),
+  warning-on-color-container: rgb(255, 251, 255),
+  // 成功颜色
+  success-color: #00651d,
+  success-on-color: rgb(255, 255, 255),
+  success-color-container: rgb(0, 129, 39),
+  success-on-color-container: rgb(211, 255, 204)
+);
+
+// 使用SCSS生成CSS变量
+.light {
+  // 基本颜色变量
+  @each $key, $value in $light-theme {
+    --jv-theme-color-#{$key}: #{$value};
+
+    // 为RGB值创建单独的变量，用于透明度调整
+    @if meta.type-of($value) == 'color' {
+      // 提取RGB值（不含alpha通道）
+      $r: color.red($value);
+      $g: color.green($value);
+      $b: color.blue($value);
+
+      --jv-theme-color-#{$key}-rgb: #{$r} #{$g} #{$b};
+    }
+  }
+}

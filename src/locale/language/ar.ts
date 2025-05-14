@@ -1,0 +1,150 @@
+/** 阿拉伯语言包 */
+export default {
+  badge: 'شارة',
+  open: 'فتح',
+  close: 'إغلاق',
+  dismiss: 'إغلاق',
+  modal: {
+    cancel: 'إلغاء',
+    confirm: 'تأكيد',
+  },
+  confirmEdit: {
+    ok: 'موافق',
+    cancel: 'إلغاء',
+  },
+  dataIterator: {
+    noResultsText: 'لا توجد نتائج مطابقة',
+    loadingText: 'جاري التحميل...',
+  },
+  dataTable: {
+    itemsPerPageText: 'عدد العناصر في الصفحة:',
+    ariaLabel: {
+      sortDescending: ': ترتيب تنازلي.',
+      sortAscending: ': ترتيب تصاعدي.',
+      sortNone: ': غير مرتبة.',
+      activateNone: 'انقر لإزالة الترتيب.',
+      activateDescending: 'انقر للترتيب التنازلي.',
+      activateAscending: 'انقر للترتيب التصاعدي.',
+    },
+    sortBy: 'ترتيب حسب',
+  },
+  dataFooter: {
+    itemsPerPageText: 'عدد العناصر في الصفحة:',
+    itemsPerPageAll: 'الكل',
+    nextPage: 'الصفحة التالية',
+    prevPage: 'الصفحة السابقة',
+    firstPage: 'الصفحة الأولى',
+    lastPage: 'الصفحة الأخيرة',
+    pageText: '{0}-{1} من {2}',
+  },
+  dateRangeInput: {
+    divider: 'إلى',
+  },
+  datePicker: {
+    itemsSelected: 'تم اختيار {0}',
+    range: {
+      title: 'اختر التاريخ',
+      header: 'أدخل التاريخ',
+    },
+    title: 'اختر التاريخ',
+    header: 'أدخل التاريخ',
+    input: {
+      placeholder: 'أدخل التاريخ',
+    },
+  },
+  noDataText: 'لا توجد بيانات',
+  carousel: {
+    prev: 'السابق',
+    next: 'التالي',
+    ariaLabel: {
+      delimiter: 'شريحة {0} من {1}',
+    },
+  },
+  calendar: {
+    title: 'التقويم',
+    moreEvents: '{0} أكثر',
+    today: 'اليوم',
+    year: 'سنة',
+    month: 'شهر',
+    week: 'أسبوع',
+    day: 'يوم',
+    nextMonth: 'الشهر التالي',
+    prevMonth: 'الشهر السابق',
+    nextYear: 'السنة التالية',
+    prevYear: 'السنة السابقة',
+    selectDate: 'اختر التاريخ',
+    selectTime: 'اختر الوقت',
+    // أيام الأسبوع
+    sunday: 'الأحد',
+    monday: 'الاثنين',
+    tuesday: 'الثلاثاء',
+    wednesday: 'الأربعاء',
+    thursday: 'الخميس',
+    friday: 'الجمعة',
+    saturday: 'السبت',
+    // اختصار أيام الأسبوع
+    sun: 'أحد',
+    mon: 'اثن',
+    tue: 'ثلا',
+    wed: 'أرب',
+    thu: 'خمي',
+    fri: 'جمع',
+    sat: 'سبت',
+  },
+  input: {
+    clear: 'مسح {0}',
+    prependAction: '{0} إجراء أمامي',
+    appendAction: '{0} إجراء خلفي',
+    // إدخال رمز OTP
+    otp: 'الرجاء إدخال رمز OTP {0}',
+    placeholder: 'الرجاء إدخال {0}',
+  },
+  fileInput: {
+    counter: '{0} ملف',
+    counterSize: '{0} ملف (المجموع {1})',
+  },
+  fileUpload: {
+    title: 'اسحب الملفات هنا',
+    divider: 'أو',
+    browse: 'تصفح الملفات',
+  },
+  timePicker: {
+    am: 'ص',
+    pm: 'م',
+    title: 'اختر الوقت',
+  },
+  pagination: {
+    ariaLabel: {
+      root: 'التنقل بين الصفحات',
+      next: 'الصفحة التالية',
+      previous: 'الصفحة السابقة',
+      page: 'الانتقال إلى الصفحة {0}',
+      currentPage: 'الصفحة الحالية {0}',
+      first: 'الصفحة الأولى',
+      last: 'الصفحة الأخيرة',
+    },
+    total: 'المجموع {0}',
+    prev: 'السابق',
+    next: 'التالي',
+    jumpTo: 'انتقل إلى',
+    page: 'صفحة',
+    itemsPerPage: 'عناصر/صفحة',
+    pageSize: 'عرض في الصفحة',
+    goto: 'اذهب',
+    pageOf: 'الصفحة {0} من {1}',
+  },
+  stepper: {
+    next: 'التالي',
+    prev: 'السابق',
+  },
+  rating: {
+    ariaLabel: {
+      item: 'تقييم {0} من {1}',
+    },
+  },
+  loading: 'جاري التحميل...',
+  infiniteScroll: {
+    loadMore: 'تحميل المزيد',
+    empty: 'لا يوجد المزيد',
+  },
+}

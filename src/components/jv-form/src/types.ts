@@ -148,5 +148,5 @@ export interface JvFormContext {
     callback?: FormValidateCallback
   ) => Promise<FormValidateResult>
 }
-export const JvFormContextKey: InjectionKey<JvFormContext> =
-  Symbol('JvFormContext')
+export const JvFormContextKey: InjectionKey<JvFormContext>
+  = Symbol('JvFormContext')

@@ -58,7 +58,7 @@
     "keyframes-name-pattern": null,
     "selector-class-pattern": null,
     "custom-property-pattern": null,
-    "color-function-notation": "legacy",
+    "color-function-notation": "modern",
     "alpha-value-notation": "number",
     "selector-not-notation": "simple",
     "import-notation": "string",

@@ -20,5 +20,10 @@
     "src/**/*.vue",
     "src/**/*.stories.ts",
     "src/**/*.md"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "scripts/template"
   ]
 }

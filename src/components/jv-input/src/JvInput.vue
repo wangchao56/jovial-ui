@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { JvInputEmits, JvInputProps } from './types'
+import type { JvTextfieldEmits, JvTextfieldProps } from './types'
 import JvButton from '@/components/jv-button/src/JvButton.vue'
 import JvIcon from '@/components/jv-icon/src/JvIcon.vue'
 import { computed, ref } from 'vue'
@@ -21,9 +21,9 @@ const {
   suffixIcon = '',
   maxLength = undefined,
   showCount = false,
-} = defineProps<JvInputProps>()
+} = defineProps<JvTextfieldProps>()
 
-const emit = defineEmits<JvInputEmits>()
+const emit = defineEmits<JvTextfieldEmits>()
 
 const focused = ref(false)
 const passwordVisible = ref(false)
@@ -228,7 +228,7 @@ $jv-input-size-options: (
 
   &.is-focused .jv-input__wrapper {
     border-color: var(--jv-theme-primary, #409eff);
-    box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.1);
+    box-shadow: 0 0 0 2px rgb(64 158 255 / 0.1);
   }
 
   &.is-disabled .jv-input__wrapper {

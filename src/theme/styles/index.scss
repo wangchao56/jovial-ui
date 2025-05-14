@@ -1,10 +1,18 @@
-@use './variables' as *;
-@use './colors' as *;
-@use './bem' as *;
-@use './elevation' as *;
-@use './shapes' as *;
-@use './border-radius' as *;
-@use './opacity' as *;
-@use './breakpoints' as *;
-@use './typography' as *;
-@use './spacing' as *;
+// 导入所有工具类样式
+@use 'normalize' as *;
+@use 'bem' as *;
+@use 'variables' as *;
+@use 'breakpoints' as *;
+@use 'typography' as *;
+@use 'border-radius' as *;
+@use 'colors' as *;
+@use 'elevation' as *;
+@use 'flex' as *;
+@use 'font' as *;
+@use 'opacity' as *;
+@use 'shapes' as *;
+@use 'spacing' as *;
+@use 'transition' as *;
+
+// 工具类样式库入口
+// 提供完整的原子化CSS工具类集合

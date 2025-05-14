@@ -5,7 +5,7 @@ export const bem = createNamespace(JVRADIO_NAME)
 
 export interface JvRadioProps {
   /** 绑定值 */
-  modelValue: any
+  modelValue?: boolean
   /** 单选框值 */
   label: any
   /** 是否禁用 */
@@ -20,13 +20,14 @@ export interface JvRadioProps {
   size?: 'small' | 'medium' | 'large'
   /** 边框样式 */
   bordered?: boolean
-  /** 是否显示波纹效果 */
-  ripple?: boolean
 }
 
 export interface JvRadioEmits {
-  (e: 'update:modelValue', value: any): void
+  /** 更新绑定值 */
+  (e: 'update:modelValue', value: boolean): void
+  /** 点击事件 */
   (e: 'click', event: MouseEvent): void
+  /** 选中事件 */
   (e: 'change', value: any): void
 }
 

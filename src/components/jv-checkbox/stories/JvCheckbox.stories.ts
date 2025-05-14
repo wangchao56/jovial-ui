@@ -27,12 +27,12 @@ const meta: Meta<typeof JvCheckbox> = {
     size: {
       control: 'select',
       options: ['small', 'medium', 'large'],
-      defaultValue: 'medium'
-    }
+      defaultValue: 'medium',
+    },
   },
   args: {
-    label: 'Checkbox Label'
-  }
+    label: 'Checkbox Label',
+  },
 }
 
 export default meta
@@ -41,13 +41,13 @@ type Story = StoryObj<typeof JvCheckbox>
 
 // 基础用法
 export const Basic: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { JvCheckbox },
     setup() {
       return { args }
     },
-    template: '<JvCheckbox v-bind="args" />'
-  })
+    template: '<JvCheckbox v-bind="args" />',
+  }),
 }
 
 /**
@@ -57,8 +57,8 @@ export const Basic: Story = {
  */
 export const Disabled: Story = {
   args: {
-    disabled: true
-  }
+    disabled: true,
+  },
 }
 
 /**
@@ -68,8 +68,8 @@ export const Disabled: Story = {
  */
 export const Indeterminate: Story = {
   args: {
-    indeterminate: true
-  }
+    indeterminate: true,
+  },
 }
 
 /**
@@ -100,8 +100,8 @@ export const Group: Story = {
           disabled
         />
       </div>
-    `
-  })
+    `,
+  }),
 }
 
 /**
@@ -123,6 +123,6 @@ export const CustomValues: Story = {
         :false-value="'inactive'"
         label="Custom Value"
       />
-    `
-  })
+    `,
+  }),
 }

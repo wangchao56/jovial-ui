@@ -8,44 +8,44 @@ export const jvRadioGroupProps = {
   /** 单选框组的值 */
   modelValue: {
     type: [String, Number, Boolean] as PropType<string | number | boolean>,
-    default: undefined
+    default: undefined,
   },
   /** 是否禁用整个单选框组 */
   disabled: {
     type: Boolean,
-    default: false
+    default: false,
   },
   /** 单选框组的 name 属性 */
   name: String,
   /** 是否为垂直布局 */
   column: {
     type: Boolean,
-    default: false
+    default: false,
   },
   /** 是否为内联布局 */
   inline: {
     type: Boolean,
-    default: false
+    default: false,
   },
   /** 单选框组的标签 */
   label: String,
   /** 是否显示边框 */
   bordered: {
     type: Boolean,
-    default: false
+    default: false,
   },
   /** 是否使用紧凑模式 */
   compact: {
     type: Boolean,
-    default: false
+    default: false,
   },
   /** 自定义颜色 */
   color: String,
   /** 切换时是否有动画效果 */
   animated: {
     type: Boolean,
-    default: true
-  }
+    default: true,
+  },
 } as const
 
 export type JvRadioGroupProps = ExtractPropTypes<typeof jvRadioGroupProps>
@@ -110,8 +110,13 @@ export interface JvRadioGroupContext {
     args: any,
     valueType: string
   ) => void
+  /**
+   * 设置当前值
+   * @param {any} value - 新的值
+   */
+  setValue: (value: any) => void
 }
 
 /** Radio 组注入的 key */
-export const JvRadioGroupContextKey: InjectionKey<JvRadioGroupContext> =
-  Symbol.for('radioGroupContextKey')
+export const JvRadioGroupContextKey: InjectionKey<JvRadioGroupContext>
+  = Symbol.for('radioGroupContextKey')

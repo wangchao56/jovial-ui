@@ -174,6 +174,7 @@ export const 测试打开关闭: StoryObj = {
       const closeDrawer = () => {
         if (drawerRef.value) {
           drawerRef.value.close()
+          visible.value = false
         }
       }
 

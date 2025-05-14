@@ -1,4 +1,4 @@
-import type { JvTagProps, TagSize, TagType } from './types'
+import type { JvTagProps, TagType } from './types'
 import { createNamespace } from '@/utils'
 
 export const JVTAGGROUP_NAME = 'JvTagGroup'
@@ -14,7 +14,7 @@ export interface JvTagGroupProps {
   multiple?: boolean
   searchable?: boolean
   defaultTagType?: TagType
-  defaultTagSize?: TagSize
+  defaultTagSize?: 'small' | 'medium' | 'large'
   defaultTagVariant?: 'filled' | 'outlined' | 'tonal'
   defaultTagShape?: 'square' | 'pill'
 }

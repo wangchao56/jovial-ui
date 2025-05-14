@@ -45,4 +45,5 @@ export const _internalIcons = {
   $sortAscending: internalIcons.MdiSortAscending, // 升序
   $sortDescending: internalIcons.MdiSortDescending, // 降序
   $sortVariantOff: internalIcons.MdiSortVariantOff, // 排序关闭
+  $account: internalIcons.MdiAccount, // 账户
 }

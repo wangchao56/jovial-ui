@@ -17,6 +17,7 @@ const {
   target = 'viewport',
   maskZIndex = 1000,
   class: customClass,
+  showMask = true,
 } = defineProps<JvOverlayProps>()
 
 const emit = defineEmits<JvOverlayEmits>()
@@ -44,24 +45,7 @@ function handleEnterAfter() {
   emit('openAfter')
 }
 const overlayClass = computed(() => {
-  return [bem.b(), customClass]
-})
-
-const overlayStyle = computed<CSSProperties>(() => {
-  switch (target) {
-    case 'parent':
-      return {
-        position: 'relative',
-        width: '100%',
-        height: '100%',
-      }
-    default:
-      return {
-        position: 'fixed',
-        width: '100vw',
-        height: '100vh',
-      }
-  }
+  return [bem.b(), customClass, bem.m(target), bem.m(showMask ? 'mask-show' : 'mask-hide')]
 })
 
 const maskStyle = computed<CSSProperties>(() => {
@@ -83,22 +67,11 @@ function handleClickOverlay() {
 </script>
 
 <template>
-  <Teleport
-    :to="target === 'viewport' ? 'body' : parentEl?.id"
-    :disabled="target === 'parent'"
-  >
-    <Transition
-      name="jv-overlay"
-      @after-leave="handleLeaveAfter"
-      @after-enter="handleEnterAfter"
-    >
-      <div v-if="visible" :class="overlayClass" :style="overlayStyle">
+  <Teleport :to="target === 'viewport' ? 'body' : parentEl?.id" :disabled="target === 'parent'">
+    <Transition name="jv-overlay" @after-leave="handleLeaveAfter" @after-enter="handleEnterAfter">
+      <div v-if="visible" :class="overlayClass">
         <!-- 遮罩 -->
-        <span
-          :class="bem.e('mask')"
-          :style="maskStyle"
-          @click="handleClickOverlay"
-        />
+        <span v-if="showMask" :class="bem.e('mask')" :style="maskStyle" @click="handleClickOverlay" />
         <!-- 内容 -->
         <slot name="default" :style="contentStyle" />
       </div>
@@ -109,23 +82,57 @@ function handleClickOverlay() {
 <style lang="scss" scoped>
 @include b(overlay) {
   position: fixed;
-  top: 0;
-  left: 0;
+  inset: 0;
   z-index: 100;
-  width: 100vw;
-  max-width: 100vw;
-  height: 100vh;
-  max-height: 100vh;
   background-color: transparent;
+
+  //   背景模糊
+  backdrop-filter: blur(10px);
+
+  @include m(viewport) {
+    position: fixed;
+    z-index: 1000;
+
+    .jv-overlay__mask {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+  }
+
+  @include m(mask-show) {
+    height: 100vh;
+  }
+
+  @include m(mask-hide) {
+    height: fit-content;
+  }
+
+  @include m(parent) {
+    position: absolute;
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+
+    .jv-overlay__mask {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+  }
 
   @include e(mask) {
     position: fixed;
     top: 0;
     left: 0;
     z-index: -1;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    width: 100vw;
+    max-width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+    background-color: rgb(0 0 0 / 0.5);
     pointer-events: auto;
   }
 }

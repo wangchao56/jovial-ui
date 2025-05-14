@@ -6,7 +6,7 @@ import type {
   JvFormContext,
   JvFormEmits,
   JvFormItemContext,
-  JvFormProps
+  JvFormProps,
 } from './types'
 import { computed, provide, reactive, ref, watch } from 'vue'
 import { bem, JVFORM_NAME, JvFormContextKey } from './types'
@@ -31,20 +31,20 @@ function addField(field: JvFormItemContext) {
 // 移除表单项
 function removeField(field: JvFormItemContext) {
   if (field.prop) {
-    fields.value = fields.value.filter((item) => item !== field)
+    fields.value = fields.value.filter(item => item !== field)
   }
 }
 
 // 校验整个表单
 async function validate(
-  callback?: FormValidateCallback
+  callback?: FormValidateCallback,
 ): Promise<FormValidateResult> {
   if (!props.model) {
     console.warn('[JvForm] model is required for validate to work!')
     return {
       valid: false,
       errors: [],
-      fields: {}
+      fields: {},
     }
   }
 
@@ -55,7 +55,7 @@ async function validate(
 
   // 执行所有字段的验证
   const validateResults = await Promise.all(
-    fields.value.map((field) => field.validate('submit'))
+    fields.value.map(field => field.validate('submit')),
   )
 
   // 合并验证结果
@@ -75,18 +75,18 @@ async function validate(
   return {
     valid,
     errors,
-    fields: validationFields
+    fields: validationFields,
   }
 }
 
 // 验证指定字段
 async function validateField(
   fieldProps: string | string[],
-  callback?: FormValidateCallback
+  callback?: FormValidateCallback,
 ): Promise<FormValidateResult> {
   const props_array = Array.isArray(fieldProps) ? fieldProps : [fieldProps]
   const fieldsToValidate = fields.value.filter(
-    (field) => field.prop && props_array.includes(field.prop)
+    field => field.prop && props_array.includes(field.prop),
   )
 
   if (fieldsToValidate.length === 0) {
@@ -94,7 +94,7 @@ async function validateField(
     return {
       valid: false,
       errors: [],
-      fields: {}
+      fields: {},
     }
   }
 
@@ -104,7 +104,7 @@ async function validateField(
 
   // 执行指定字段的验证
   const validateResults = await Promise.all(
-    fieldsToValidate.map((field) => field.validate('submit'))
+    fieldsToValidate.map(field => field.validate('submit')),
   )
 
   // 合并验证结果
@@ -124,14 +124,15 @@ async function validateField(
   return {
     valid,
     errors,
-    fields: validationFields
+    fields: validationFields,
   }
 }
 
 // 重置表单
 function resetFields() {
-  if (!fields.value.length) return
-  fields.value.forEach((field) => field.resetField())
+  if (!fields.value.length)
+    return
+  fields.value.forEach(field => field.resetField())
 }
 
 // 清除验证信息
@@ -144,16 +145,16 @@ function clearValidate(fieldProps?: string | string[]) {
 
   const fieldsToReset = props_array.length
     ? fields.value.filter(
-        (field) => field.prop && props_array.includes(field.prop)
+        field => field.prop && props_array.includes(field.prop),
       )
     : fields.value
 
-  fieldsToReset.forEach((field) => field.clearValidate())
+  fieldsToReset.forEach(field => field.clearValidate())
 }
 
 // 清除所有验证信息
 function clearValidateAll() {
-  fields.value.forEach((field) => field.clearValidate())
+  fields.value.forEach(field => field.clearValidate())
 }
 
 // 获取表单数据
@@ -163,7 +164,8 @@ function getFieldsValue() {
 
 // 设置表单数据
 function setFieldsValue(newFields: Record<string, any>) {
-  if (!props.model) return
+  if (!props.model)
+    return
 
   Object.keys(newFields).forEach((key) => {
     if (props.model && Object.prototype.hasOwnProperty.call(props.model, key)) {
@@ -204,8 +206,8 @@ provide(
     size: props.size,
     addField,
     removeField,
-    validateField
-  })
+    validateField,
+  }),
 )
 
 // 监听规则变化
@@ -216,7 +218,7 @@ watch(
       validate()
     }
   },
-  { deep: true }
+  { deep: true },
 )
 
 // 暴露方法
@@ -227,7 +229,7 @@ defineExpose({
   clearValidate,
   clearValidateAll,
   getFieldsValue,
-  setFieldsValue
+  setFieldsValue,
 })
 </script>
 
@@ -237,8 +239,8 @@ defineExpose({
       bem.b(),
       {
         [bem.m('inline')]: props.inline,
-        [bem.m(`label-${props.labelPosition}`)]: props.labelPosition
-      }
+        [bem.m(`label-${props.labelPosition}`)]: props.labelPosition,
+      },
     ]"
     role="form"
     :aria-label="formAriaLabel"

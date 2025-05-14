@@ -28,6 +28,8 @@ export interface JvSelectProps {
   size?: 'small' | 'medium' | 'large'
   /** 是否多选 */
   multiple?: boolean
+  /** 是否内联 */
+  inline?: boolean
 }
 
 export interface JvSelectEmits {

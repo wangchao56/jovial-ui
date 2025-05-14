@@ -10,7 +10,7 @@ export type {
   JvRadioGroupEmits,
   JvRadioGroupExpose,
   JvRadioGroupProps,
-  JvRadioGroupSlots
+  JvRadioGroupSlots,
 } from './src/group'
 // 导出类型
 export * from './src/types'

@@ -1,0 +1,16 @@
+import type { Slot } from 'vue'
+import { createNamespace } from '@/utils'
+
+export const {{name:upper}}_NAME = '{{name:capitalize}}'
+export const bem = createNamespace({{name:upper}}_NAME)
+
+/**
+ * {{name}} 属性
+ * 用于显示{{name}}
+ */
+export interface {{name:capitalize}}Props {
+ 
+}
+export interface {{name:capitalize}}Slots {
+ 
+}

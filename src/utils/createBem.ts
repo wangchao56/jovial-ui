@@ -45,7 +45,7 @@ function _bem(
 interface BEMRecord {
   b: (blockSuffix?: string) => string
   e: (element: string) => string
-  m: (modifier: string) => string
+  m: (modifier?: string) => string
   be: (blockSuffix: string, element: string) => string
   em: (element: string, modifier: string) => string
   bm: (blockSuffix: string, modifier: string) => string
@@ -97,14 +97,14 @@ export type BemRecord = ReturnType<typeof createBEM>
  * @param namespace   命名空间
  * @returns            返回一个对象，对象中包含b、e、m、be、em、bm、bem方法
  * @example
- * const bem = createNamespace('button')
- * bem.b() // 'jv-button'
- * bem.e('text') // 'jv-button__text'
- * bem.m('primary') // 'jv-button--primary'
- * bem.be('text', 'primary') // 'jv-button__text--primary'
- * bem.em('text', 'primary') // 'jv-button__text--primary'
- * bem.bm('text', 'primary') // 'jv-button__text--primary'
- * bem.bem('text', 'primary') // 'jv-button__text--primary
+ * const bem = createNamespace('jv-progress')
+ * bem.b() // 'jv-progress'
+ * bem.e('text') // 'jv-progress__text'
+ * bem.m('primary') // 'jv-progress--primary'
+ * bem.be('text', 'primary') // 'jv-progress__text--primary'
+ * bem.em('text', 'primary') // 'jv-progress__text--primary'
+ * bem.bm('text', 'primary') // 'jv-progress__text--primary'
+ * bem.bem('text', 'primary') // 'jv-progress__text--primary
  */
 export function createNamespace(namespace: string): BemRecord {
   // 处理命名空间

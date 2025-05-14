@@ -5,30 +5,31 @@
   "private": false,
   "exports": {
     ".": {
-      "types": "./dist/types/index.d.ts",
-      "import": "./dist/jovial-ui.es.js",
-      "require": "./dist/jovial-ui.umd.js"
+      "types": "./dist-lib/types/index.d.ts",
+      "import": "./dist-lib/jovial-ui.es.js",
+      "require": "./dist-lib/jovial-ui.umd.js"
     },
-    "./dist/style.css": "./dist/style.css",
-    "./es": "./dist-components/index.js",
-    "./es/*": "./dist-components/*/index.js"
+    "./theme/styles/*": "./dist-lib/theme/styles/*",
+    "./style.css": "./dist-lib/style.css"
   },
-  "main": "dist/jovial-ui.umd.js",
-  "module": "dist/jovial-ui.es.js",
-  "types": "dist/types/index.d.ts",
+  "main": "dist-lib/jovial-ui.umd.js",
+  "module": "dist-lib/jovial-ui.es.js",
+  "types": "dist-lib/types/index.d.ts",
   "files": [
-    "dist",
-    "dist-components"
+    "dist-components",
+    "dist-lib"
   ],
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
-    "build:lib": "vite build --mode lib",
-    "build:components": "vite build --mode components",
+    "build:blog": "vue-tsc -b && vite build --outDir dist-blog --config vite.config.ts",
+    "build:lib": "vite --config vite.lib.config.ts build && node scripts/copy-styles.js",
+    "build:com": "vite --config vite.components.config.ts build && node scripts/copy-styles.js",
     "build:all": "npm run build:lib && npm run build:components",
     "preview": "vite preview",
+    "preview:blog": "vite preview --outDir dist-blog --port 52471 --open blog.html",
     "s:dev": "storybook dev -p 6006",
-    "s:build": "storybook build",
+    "build-storybook": "storybook build",
     "test-storybook": "vitest --project=storybook",
     "prepare": "husky install",
     "lint": "eslint . --ext .js,.ts,.vue --fix",
@@ -37,17 +38,22 @@
     "lint:style:fix": "stylelint src/**/*.{css,scss,vue} --cache --fix --allow-empty-input",
     "lint:all": "pnpm lint && pnpm lint:style",
     "lint:all:fix": "pnpm lint:all && pnpm lint:style:fix",
-    "gen:component": "node scripts/generate-component.cjs",
+    "g:com": "node scripts/generate-component.cjs",
     "release": "release-it",
     "release:dry-run": "release-it --dry-run"
   },
   "dependencies": {
     "@iconify/vue": "^4.3.0",
+    "@popperjs/core": "^2.11.8",
+    "@storybook/addon-actions": "^8.6.11",
     "@vueuse/core": "^13.0.0",
     "async-validator": "^4.2.5",
+    "axios": "^1.9.0",
     "date-fns": "^4.1.0",
+    "pinia": "^3.0.2",
     "vue": "^3.5.13",
-    "vue-i18n": "^11.1.3"
+    "vue-i18n": "^11.1.3",
+    "vue-router": "^4.5.1"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^4.11.0",
@@ -57,8 +63,8 @@
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.23.0",
     "@release-it/conventional-changelog": "^10.0.1",
-    "@storybook/addon-a11y": "^8.6.11",
-    "@storybook/addon-docs": "^8.6.11",
+    "@storybook/addon-a11y": "8.6.11",
+    "@storybook/addon-docs": "8.6.11",
     "@storybook/addon-essentials": "8.6.11",
     "@storybook/addon-interactions": "^8.6.11",
     "@storybook/addon-onboarding": "8.6.11",
@@ -83,6 +89,7 @@
     "eslint-plugin-vue": "^10.0.0",
     "globals": "^16.0.0",
     "husky": "^8.0.0",
+    "jsdom": "^26.1.0",
     "lint-staged": "^15.5.0",
     "playwright": "^1.51.1",
     "postcss": "^8.5.3",
@@ -115,14 +122,10 @@
   },
   "lint-staged": {
     "*.{js,ts,vue}": [
-      "eslint --fix",
-      "prettier --write"
+      "eslint --fix"
     ],
     "*.{css,scss,vue}": [
       "stylelint --fix --allow-empty-input"
-    ],
-    "*.{json,md}": [
-      "prettier --write"
     ]
   }
 }

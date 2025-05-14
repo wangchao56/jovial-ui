@@ -9,10 +9,6 @@ const props = defineProps<JvGridItemProps>()
 interface JvGridItemProps extends JvGridItemPosition {
   // 是否填充父容器
   fill?: boolean
-  // 是否禁用
-  disabled?: boolean
-  // 是否可点击
-  clickable?: boolean
 }
 
 // 自定义样式
@@ -59,8 +55,6 @@ const gridItemStyles = computed(() => {
     :class="[
       bem.e('item'),
       bem.is('fill', props.fill),
-      bem.is('clickable', props.clickable),
-      bem.is('disabled', props.disabled)
     ]"
     :style="gridItemStyles"
     v-bind="$attrs"
@@ -71,41 +65,15 @@ const gridItemStyles = computed(() => {
 </template>
 
 <style lang="scss" scoped>
-@use '@/theme/styles/elevation' as *;
-
 .jv-grid__item {
   position: relative;
   box-sizing: border-box;
   padding: 16px;
-  border-radius: var(--jv-rounded-sm);
   background-color: var(--jv-theme-surface);
-  transition: all 0.3s ease;
 
   &.is-fill {
     width: 100%;
     height: 100%;
-  }
-
-  &.is-clickable {
-    cursor: pointer;
-
-    &:hover {
-      box-shadow: var(--jv-elevation-4);
-      transform: translateY(-1px);
-    }
-
-    &:active {
-      box-shadow: var(--jv-elevation-1);
-      transform: translateY(0);
-    }
-  }
-
-  &.is-disabled {
-    background-color: var(--jv-theme-disabled);
-    color: var(--jv-theme-on-disabled);
-    cursor: not-allowed;
-    opacity: 0.6;
-    pointer-events: none;
   }
 }
 </style>

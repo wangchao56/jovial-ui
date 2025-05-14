@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { JvSelectOption } from '@components/jv-select/src/types'
 import type { JvPaginationEmits, JvPaginationProps } from './types'
-import { useLocale } from '@/locale/adapters/jovial'
+import { useLocale } from '@/locale'
 import JvSelect from '@components/jv-select/src/JvSelect.vue'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { bem } from './types'
@@ -25,7 +25,7 @@ const { current, t } = useLocale()
 // 转换pageSizes为JvSelect需要的选项格式
 const pageSizeOptions = computed<JvSelectOption[]>(() => {
   return pageSizes.map(size => ({
-    label: `${size}${t('$jv.pagination.itemsPerPage')}`,
+    label: `${size}${t('pagination.itemsPerPage')}`,
     value: size,
   }))
 })
@@ -52,6 +52,15 @@ watch(
   },
 )
 
+// 监听pageSize属性变化，确保双向绑定正确工作
+watch(
+  () => pageSizeProp,
+  (val) => {
+    if (val !== pageSize.value)
+      pageSize.value = val
+  },
+)
+
 function changePage(page: number) {
   if (page < 1 || page > totalPages.value)
     return
@@ -60,10 +69,15 @@ function changePage(page: number) {
   emit('change', page, pageSize.value)
 }
 
-function changePageSize(size: number) {
-  pageSize.value = size
-  emit('update:pageSize', size)
-  emit('change', currentPage.value, size)
+function changePageSize(size: number | string | number[] | string[]) {
+  // 确保转换为数字类型
+  const newSize = Number(size)
+  // 只有当转换结果是有效数字时才更新
+  if (!Number.isNaN(newSize)) {
+    pageSize.value = newSize
+    emit('update:pageSize', newSize)
+    emit('change', currentPage.value, newSize)
+  }
 }
 
 const pageList = computed(() => {
@@ -105,7 +119,7 @@ const pageList = computed(() => {
         @click="changePage(currentPage + 1)"
       >
         <span style="display: inline-block; transform: scaleX(-1)">←</span>
-        {{ t('$jv.pagination.next') }}
+        {{ t('pagination.next') }}
       </button>
       <template v-if="!simple">
         <button
@@ -119,7 +133,7 @@ const pageList = computed(() => {
           :disabled="p === '...'"
           @click="typeof p === 'number' && changePage(p)"
         >
-          {{ p === '...' ? '...' : t('$jv.pagination.page', p) }}
+          {{ p === '...' ? '...' : t('pagination.page', p) }}
         </button>
       </template>
       <button
@@ -128,7 +142,7 @@ const pageList = computed(() => {
         @click="changePage(currentPage - 1)"
       >
         <span style="display: inline-block; transform: scaleX(-1)">→</span>
-        {{ t('$jv.pagination.prev') }}
+        {{ t('pagination.prev') }}
       </button>
     </template>
     <template v-else>
@@ -137,7 +151,7 @@ const pageList = computed(() => {
         :disabled="currentPage === 1"
         @click="changePage(currentPage - 1)"
       >
-        {{ t('$jv.pagination.prev') }}
+        {{ t('pagination.prev') }}
         <span style="display: inline-block">←</span>
       </button>
       <template v-if="!simple">
@@ -152,7 +166,7 @@ const pageList = computed(() => {
           :disabled="p === '...'"
           @click="typeof p === 'number' && changePage(p)"
         >
-          {{ p === '...' ? '...' : t('$jv.pagination.page', p) }}
+          {{ p === '...' ? '...' : t('pagination.page', p) }}
         </button>
       </template>
       <button
@@ -160,23 +174,22 @@ const pageList = computed(() => {
         :disabled="currentPage === totalPages"
         @click="changePage(currentPage + 1)"
       >
-        {{ t('$jv.pagination.next') }}
+        {{ t('pagination.next') }}
         <span style="display: inline-block">→</span>
       </button>
     </template>
-    <span :class="bem.e('total')">{{ t('$jv.pagination.total', total) }}</span>
-
+    <span :class="bem.e('total')">{{ t('pagination.total', total) }}</span>
     <!-- 使用JvSelect替换原生select -->
     <JvSelect
       v-model="pageSize"
+      inline
       :class="bem.e('select')"
       :options="pageSizeOptions"
       size="small"
       @change="changePageSize"
     />
-
     <span v-if="!simple" :class="bem.e('jump')">
-      {{ t('$jv.pagination.jumpTo') }}
+      {{ t('pagination.jumpTo') }}
       <input
         v-model.number="currentPage"
         type="number"
@@ -185,7 +198,7 @@ const pageList = computed(() => {
         style="width: 40px"
         @change="changePage(currentPage)"
       >
-      {{ t('$jv.pagination.page') }}
+      {{ t('pagination.page') }}
     </span>
   </nav>
 </template>
@@ -211,6 +224,7 @@ const pageList = computed(() => {
   --jv-pagination-total-color: #888;
   --jv-pagination-total-font-size: 14px;
   --jv-pagination-select-width: 100px;
+  --jv-pagination-select-width-mobile: 80px;
   --jv-pagination-select-radius: 4px;
   --jv-pagination-select-border: #ddd;
   --jv-pagination-select-padding: 2px 8px;
@@ -222,6 +236,7 @@ const pageList = computed(() => {
   --jv-pagination-input-font-size: 14px;
   --jv-pagination-input-font-size-mobile: 13px;
   --jv-pagination-input-width: 40px;
+  --jv-pagination-input-width-mobile: 32px;
   --jv-pagination-input-height-mobile: 24px;
   display: flex;
   align-items: center;
@@ -252,9 +267,13 @@ const pageList = computed(() => {
   }
 
   .jv-pagination__btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
     min-width: var(--jv-pagination-btn-min-width, 32px);
     height: var(--jv-pagination-btn-height, 32px);
     margin: 0 var(--jv-pagination-btn-margin-x, 2px);
+    padding: 0 8px;
     border: none;
     border-radius: var(--jv-pagination-btn-radius, 6px);
     background: var(--jv-pagination-btn-bg, #f5f5f7);
@@ -293,10 +312,15 @@ const pageList = computed(() => {
   }
 
   .jv-pagination__jump {
+    display: flex;
+    align-items: center;
     margin-left: var(--jv-pagination-jump-margin-left, 8px);
 
     input {
+      box-sizing: border-box;
       width: var(--jv-pagination-input-width, 40px);
+      height: var(--jv-pagination-btn-height, 32px);
+      margin: 0 4px;
       padding: var(--jv-pagination-input-padding, 2px 4px);
       border: 1px solid var(--jv-pagination-input-border, #ddd);
       border-radius: var(--jv-pagination-input-radius, 4px);
@@ -308,18 +332,30 @@ const pageList = computed(() => {
 
 @media (width <= 600px) {
   .jv-pagination {
+    gap: 4px;
     font-size: var(--jv-pagination-font-size-mobile, 13px);
 
     .jv-pagination__btn,
     .jv-pagination__total {
       min-width: var(--jv-pagination-btn-min-width-mobile, 28px);
       height: var(--jv-pagination-btn-height-mobile, 28px);
+      padding: 0 4px;
       font-size: var(--jv-pagination-font-size-mobile, 13px);
     }
 
+    .jv-pagination__select {
+      width: var(--jv-pagination-select-width-mobile, 80px);
+    }
+
     .jv-pagination__jump {
+      margin-left: 4px;
+      font-size: var(--jv-pagination-font-size-mobile, 13px);
+
       input {
+        width: var(--jv-pagination-input-width-mobile, 32px);
         height: var(--jv-pagination-input-height-mobile, 24px);
+        margin: 0 2px;
+        padding: 0 2px;
         font-size: var(--jv-pagination-input-font-size-mobile, 13px);
       }
     }

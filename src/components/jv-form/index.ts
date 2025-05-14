@@ -13,7 +13,7 @@ export {
   isRequiredField,
   mergeRules,
   setNestedValue,
-  validateField
+  validateField,
 } from './src/helper'
 // 显式导出item.ts中的内容
 export { JVFORMITEM_NAME } from './src/item'

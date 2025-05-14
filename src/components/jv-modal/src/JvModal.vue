@@ -1,22 +1,25 @@
 <script setup lang="ts">
+import type { LocaleInstance } from '@/locale'
 import type { JvModalEmits, JvModalExpose, JvModalProps } from './types'
 import JvButton from '@/components/jv-button/src/JvButton.vue'
+import JvCardHeader from '@/components/jv-card/src/JvCardHeader.vue'
 import JvOverlay from '@/components/jv-overlay/src/JvOverlay.vue'
 import { useZindex } from '@/hooks'
-import { useLocale } from '@/locale/adapters/jovial'
+import { useLocale } from '@/locale'
 import { computed, normalizeStyle, ref, useId, watch } from 'vue'
 import { bem, JVMODAL_NAME } from './types'
 
 defineOptions({ name: JVMODAL_NAME, inheritAttrs: false })
 
-const { maskClosable } = defineProps<JvModalProps>()
+const { title, closeable, closeIcon, maskClosable, cancelText, confirmText } = defineProps<JvModalProps>()
 const emit = defineEmits<JvModalEmits>()
 const modalVisible = ref(false)
 const overlayVisible = ref(false)
-const local = useLocale()
+const local = useLocale() as LocaleInstance
 const { currentZIndex, nextZindex } = useZindex()
 nextZindex()
-const visible = defineModel<boolean>('modelValue')
+const visible = defineModel<boolean>('modelValue', { default: false })
+
 function openModal() {
   visible.value = true
 }
@@ -90,7 +93,11 @@ function handleClickOverlay() {
     toggleModal()
   }
 }
-
+const cradHeaderProps = computed(() => {
+  return {
+    title,
+  }
+})
 defineExpose<JvModalExpose>({
   open: openModal,
   close: closeModal,
@@ -100,63 +107,33 @@ defineExpose<JvModalExpose>({
 <template>
   <slot name="trigger" :props="triggerProps" />
   <JvOverlay
-    target="viewport"
-    :model-value="overlayVisible"
-    :mask-z-index="maskZIndex"
-    class="jv-modal"
-    @open-after="overlayOpenAfter"
-    @close-after="overlayCloseAfter"
-    @click-overlay="handleClickOverlay"
+    target="viewport" :model-value="overlayVisible" :mask-z-index="maskZIndex" class="jv-modal"
+    @open-after="overlayOpenAfter" @close-after="overlayCloseAfter" @click-overlay="handleClickOverlay"
   >
     <template #default="{ style: contentStyle }">
-      <Transition
-        name="jv-modal"
-        @after-enter="handleOpenAfter"
-        @after-leave="handleCloseAfter"
-      >
+      <Transition name="jv-modal" @after-enter="handleOpenAfter" @after-leave="handleCloseAfter">
         <div
-          v-if="modalVisible"
-          :id="modalId"
-          :class="[bem.e('wrapper'), bem.is('open', visible)]"
+          v-if="modalVisible" :id="modalId" :class="[bem.e('wrapper'), bem.is('open', visible)]"
           :style="normalizeStyle(contentStyle)"
         >
-          <div :class="[bem.e('header')]">
-            <slot name="header">
-              <div :class="[bem.e('title')]">
-                <slot name="title">
-                  <span>标题</span>
-                </slot>
-              </div>
-            </slot>
-            <!-- 关闭按钮 -->
-            <JvButton
-              v-if="closeable"
-              size="small"
-              variant="text"
-              :icon="closeIcon"
-              @click="handleClose"
-            />
-          </div>
+          <JvCardHeader variant="flat" v-bind="cradHeaderProps">
+            <template #append>
+              <JvButton
+                v-if="closeable" size="medium" variant="text" :icon="closeIcon"
+                @click="handleClose"
+              />
+            </template>
+          </JvCardHeader>
           <div :class="[bem.e('body')]">
             <slot />
           </div>
           <div :class="[bem.e('footer')]">
             <slot name="footer">
-              <JvButton
-                size="small"
-                variant="outlined"
-                color-type="warning"
-                @click="handleCancel"
-              >
-                {{ cancelText || local.t('$jv.modal.cancel') }}
+              <JvButton size="medium" variant="outlined" color-type="warning" @click="handleCancel">
+                {{ cancelText || local.t('modal.cancel') }}
               </JvButton>
-              <JvButton
-                size="small"
-                variant="text"
-                color-type="primary"
-                @click="handleConfirm"
-              >
-                {{ confirmText || local.t('$jv.modal.confirm') }}
+              <JvButton size="medium" variant="text" color-type="primary" @click="handleConfirm">
+                {{ confirmText || local.t('modal.confirm') }}
               </JvButton>
             </slot>
           </div>
@@ -170,9 +147,11 @@ defineExpose<JvModalExpose>({
 @use '@/theme/styles/border-radius' as *;
 
 @include b(modal) {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
+  max-width: calc(100vw - 32px);
 
   @include e(wrapper) {
     display: flex;
@@ -183,7 +162,6 @@ defineExpose<JvModalExpose>({
     // 组件样式
     width: fit-content;
     height: fit-content;
-    padding: 16px;
     border-radius: var(--jv-rounded-md);
     box-shadow: var(--jv-elevation-4);
     background-color: #fff;
@@ -203,14 +181,18 @@ defineExpose<JvModalExpose>({
   }
 
   &__body {
-    padding: 16px;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0 16px 16px;
   }
 
   &__footer {
     display: flex;
     justify-content: flex-end;
-    align-self: flex-end;
     gap: 16px;
+    width: 100%;
+    padding: 0 16px 16px;
+    align-self: flex-end;
   }
 }
 

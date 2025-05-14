@@ -49,6 +49,8 @@ export interface JvPopoverProps {
   placementStrategy?: PlacementStrategy
   /** 箭头尺寸 */
   arrowSize?: number
+  /** 弹出层尺寸，用于预先指定弹出层尺寸以优化定位 */
+  popoverSize?: { width?: number, height?: number } | null
 }
 
 export interface JvPopoverEmits {

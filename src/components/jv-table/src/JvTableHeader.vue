@@ -161,10 +161,10 @@ function handleSortClick(column: TableColumn) {
   background-color: var(--jv-theme-background, #fff);
 
   // 确保CSS变量存在默认值
-  --jv-theme-on-surface-variant: rgba(0, 0, 0, 0.6);
+  --jv-theme-on-surface-variant: rgb(0 0 0 / 0.6);
   --jv-theme-on-surface-variant-rgb: 0, 0, 0;
   --jv-theme-surface-variant: #f5f5f5;
-  --jv-theme-outline-variant: rgba(0, 0, 0, 0.12);
+  --jv-theme-outline-variant: rgb(0 0 0 / 0.12);
   --jv-theme-primary: #2196f3;
 
   &.is-sticky {
@@ -172,7 +172,7 @@ function handleSortClick(column: TableColumn) {
     top: 0;
     z-index: 20;
     visibility: visible;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 4px rgb(0 0 0 / 0.05);
     opacity: 1;
   }
 }
@@ -239,12 +239,12 @@ function handleSortClick(column: TableColumn) {
 
   // 左侧最后一列添加阴影
   &.is-last-left-fixed {
-    box-shadow: 6px 0 6px -6px rgba(0, 0, 0, 0.2);
+    box-shadow: 6px 0 6px -6px rgb(0 0 0 / 0.2);
   }
 
   // 右侧第一列添加阴影
   &.is-first-right-fixed {
-    box-shadow: -6px 0 6px -6px rgba(0, 0, 0, 0.2);
+    box-shadow: -6px 0 6px -6px rgb(0 0 0 / 0.2);
   }
 }
 

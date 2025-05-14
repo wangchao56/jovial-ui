@@ -15,54 +15,54 @@ const meta: Meta<typeof JvFormItem> = {
   argTypes: {
     label: {
       control: 'text',
-      description: '标签文本'
+      description: '标签文本',
     },
     prop: {
       control: 'text',
-      description: '表单域字段名'
+      description: '表单域字段名',
     },
     required: {
       control: 'boolean',
-      description: '是否必填'
+      description: '是否必填',
     },
     rules: {
       control: 'object',
-      description: '验证规则'
+      description: '验证规则',
     },
     labelWidth: {
       control: { type: 'text' },
-      description: '标签宽度'
+      description: '标签宽度',
     },
     showMessage: {
       control: 'boolean',
-      description: '是否显示校验错误信息'
+      description: '是否显示校验错误信息',
     },
     errorPosition: {
       control: { type: 'select' },
       options: ['top', 'right', 'bottom'],
-      description: '错误信息显示位置'
+      description: '错误信息显示位置',
     },
     inline: {
       control: 'boolean',
-      description: '是否行内显示'
+      description: '是否行内显示',
     },
     labelPosition: {
       control: { type: 'select' },
       options: ['top', 'left', 'right'],
-      description: '标签位置'
+      description: '标签位置',
     },
     size: {
       control: { type: 'select' },
       options: ['small', 'medium', 'large', 'xlarge'],
-      description: '尺寸'
+      description: '尺寸',
     },
     wrapInput: {
       control: 'boolean',
       description: '是否使用label标签包裹input元素',
       table: {
-        defaultValue: { summary: 'true' }
-      }
-    }
+        defaultValue: { summary: 'true' },
+      },
+    },
   },
   args: {
     label: '字段名称',
@@ -71,19 +71,19 @@ const meta: Meta<typeof JvFormItem> = {
     errorPosition: 'bottom',
     inline: false,
     labelPosition: 'right',
-    size: 'medium'
-  }
+    size: 'medium',
+  },
 }
 
 export default meta
 
 // 基础表单项
 export const 基础表单项: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { JvFormItem, JvInput },
     setup() {
       const formData = reactive({
-        name: ''
+        name: '',
       })
 
       return { formData, ...args }
@@ -102,19 +102,19 @@ export const 基础表单项: Story = {
       >
         <JvInput v-model="formData.name" placeholder="请输入内容" />
       </JvFormItem>
-    `
-  })
+    `,
+  }),
 }
 
 // 不同标签位置
 export const 不同标签位置: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { JvFormItem, JvInput, JvSpace },
     setup() {
       const formData = reactive({
         field1: '',
         field2: '',
-        field3: ''
+        field3: '',
       })
 
       const positions = ['left', 'right', 'top']
@@ -134,13 +134,13 @@ export const 不同标签位置: Story = {
           </JvFormItem>
         </div>
       </div>
-    `
-  })
+    `,
+  }),
 }
 
 // 不同尺寸
 export const 不同尺寸: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { JvFormItem, JvInput, JvSpace },
     setup() {
       const sizes = ['small', 'medium', 'large', 'xlarge']
@@ -160,17 +160,17 @@ export const 不同尺寸: Story = {
           </JvFormItem>
         </div>
       </div>
-    `
-  })
+    `,
+  }),
 }
 
 // 错误状态
 export const 错误状态: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { JvFormItem, JvInput, JvSpace },
     setup() {
       const formData = reactive({
-        name: ''
+        name: '',
       })
 
       const errorPositions = ['top', 'right', 'bottom']
@@ -190,24 +190,24 @@ export const 错误状态: Story = {
           </JvFormItem>
         </div>
       </div>
-    `
-  })
+    `,
+  }),
 }
 
 // 行内表单项
 export const 行内表单项: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { JvFormItem, JvInput, JvSelect },
     setup() {
       const formData = reactive({
         name: '',
-        region: ''
+        region: '',
       })
 
       const options = [
         { label: '选项1', value: '1' },
         { label: '选项2', value: '2' },
-        { label: '选项3', value: '3' }
+        { label: '选项3', value: '3' },
       ]
 
       return { formData, options, ...args }
@@ -230,18 +230,18 @@ export const 行内表单项: Story = {
           <JvSelect v-model="formData.region" :options="options" placeholder="请选择地区" style="width: 200px" />
         </JvFormItem>
       </div>
-    `
-  })
+    `,
+  }),
 }
 
 // 标签关联方式
 export const 标签关联方式: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { JvFormItem, JvInput, JvSpace },
     setup() {
       const formData = reactive({
         name1: '',
-        name2: ''
+        name2: '',
       })
 
       return { formData, ...args }
@@ -270,6 +270,6 @@ export const 标签关联方式: Story = {
           当wrapInput设置为false时，使用for和id关联label和input（显式关联）。
         </p>
       </div>
-    `
-  })
+    `,
+  }),
 }

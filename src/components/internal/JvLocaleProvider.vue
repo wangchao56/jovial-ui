@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { createLocaleManager } from '@/locale'
-import { LocaleSymbol } from '@/locale/adapters/jovial'
+import { createLocale, LocaleSymbol } from '@/locale'
+import { isRTLLanguage } from '@/locale/helpers'
 import { provide, watch } from 'vue'
 
 defineOptions({
@@ -13,13 +13,8 @@ const props = defineProps<{
   messages?: Record<string, any>
 }>()
 
-const locale = createLocaleManager(props)
+const locale = createLocale(props)
 provide(LocaleSymbol, locale)
-
-function isRTLLanguage(locale: string): boolean {
-  return ['ar', 'he', 'fa', 'ur'].some(rtl => locale.startsWith(rtl))
-}
-
 watch(
   () => locale.current.value,
   (newLocale) => {

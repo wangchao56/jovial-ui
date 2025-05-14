@@ -7,5 +7,4 @@ export const JvGrid = withInstall(_JvGrid)
 export const JvGridItem = withInstall(_JvGridItem)
 
 export type { JvGridItemPosition, JvGridProps }
-
 export default JvGrid

@@ -1,10 +1,10 @@
 import type { LocaleInstance, LocaleOptions } from '@/locale/types'
-import type { ThemeInstance, ThemeOptions } from '@/theme'
+import type { ThemeInstance, ThemeOptions } from '@/theme/config/types'
 import type { App, Component, Directive } from 'vue'
 import type { DefaultsOptions } from './default'
-import { createLocaleManager } from '@/locale'
-import { LocaleSymbol } from '@/locale/adapters/jovial'
-import { createThemeManager, ThemeSymbol } from '@/theme/config'
+import { createLocale } from '@/locale'
+import { LocaleSymbol } from '@/locale/adapters/vue-i18n'
+import { createTheme, ThemeSymbol } from '@/theme/config'
 import { getUid } from '@/utils'
 import { createDefaults, DefaultsSymbol } from './default'
 
@@ -39,8 +39,8 @@ export function createJovialUI(jovial: JovialOptions = {}): JovialInstance {
   const { components = {}, directives = {}, locale: localeOptions } = options
 
   const defaults = createDefaults(options.defaults)
-  const theme = createThemeManager(options.theme)
-  const locale = createLocaleManager(localeOptions) // 创建国际化实例
+  const theme = createTheme(options.theme)
+  const locale = createLocale(localeOptions) // 创建国际化实例
 
   const install = (app: App): void => {
     for (const key in directives) {

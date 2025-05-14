@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { provideTheme, useTheme } from '@/theme/config/index'
+import { unref } from 'vue'
 
 defineOptions({
   name: 'JvThemeProvider',
@@ -16,9 +17,16 @@ provideTheme({ theme: props.theme })
 <template>
   <div
     class="jv-theme-provider"
-    :class="[theme.themeClasses]"
-    :data-theme="theme.name.value"
+    :class="[unref(theme.themeClasses)]"
   >
     <slot />
   </div>
 </template>
+
+<style lang="scss">
+.jv-theme-provider {
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--jv-theme-background);
+}
+</style>

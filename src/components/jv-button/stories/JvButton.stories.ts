@@ -1,14 +1,33 @@
-import type { Meta, StoryFn, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3'
+import JvFlex from '@/components/jv-flex'
 import { getOptions } from '@/constants'
 import JvButton from '@components/jv-button'
-import JvSpace from '@components/jv-space'
-import { expect } from '@storybook/test'
+import { ref } from 'vue'
 
 const colorTypeOptions = getOptions('colorType')
-const variantOptions = getOptions('variant', ['link', 'solid'])
+const variantOptions = ['elevated', 'flat', 'plain', 'dashed', 'tonal', 'outlined', 'text']
 const sizeOptions = getOptions('size')
 const shapeOptions = getOptions('shape')
-export default {
+
+/**
+ * # JvButton 按钮组件
+    JvButton 是一个功能丰富的按钮组件，支持多种变体、颜色和尺寸。它可以显示图标、处理不同状态（如加载中、禁用），
+    并支持各种交互事件。
+    ## 变体说明
+    - **elevated**: 使用阴影强调的按钮
+    - **flat**: 移除阴影效果的按钮
+    - **plain**: 移除背景色并降低默认透明度的按钮
+    - **dashed**: 使用虚线边框的按钮
+    - **tonal**: 使用低饱和度背景色的按钮
+    - **outlined**: 使用实线边框的按钮
+    - **text**: 仅有文本的按钮，没有背景和边框
+    ## 使用场景
+    - 页面交互操作
+    - 表单提交
+    - 导航链接
+    - 功能触发
+ */
+const meta = {
   title: '通用组件/Button 按钮',
   component: JvButton,
   tags: ['autodocs'],
@@ -16,165 +35,532 @@ export default {
     variant: {
       control: { type: 'select' },
       options: variantOptions,
-      defaultValue: 'elevated'
+      defaultValue: 'elevated',
+      description: '按钮变体样式',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: 'elevated' },
+      },
     },
-    colorType: {
+    color: {
       control: { type: 'select' },
       defaultValue: 'default',
-      options: colorTypeOptions
+      options: colorTypeOptions,
+      description: '按钮颜色风格',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: 'default' },
+      },
     },
     size: {
       control: { type: 'select' },
       defaultValue: 'medium',
-      options: sizeOptions
+      options: sizeOptions,
+      description: '按钮尺寸',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: 'medium' },
+      },
     },
-    disabled: { control: 'boolean' },
-    loading: { control: 'boolean' },
-    block: { control: 'boolean' },
-    shape: { control: 'select', options: shapeOptions, defaultValue: 'square' },
-    icon: { control: 'text' },
-    content: { control: 'text' }
-  }
-} as Meta
-
-const Template: StoryFn = (args) => ({
-  components: { JvButton },
-  setup() {
-    return { args }
+    disabled: {
+      control: 'boolean',
+      description: '是否禁用按钮',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
+    },
+    loading: {
+      control: 'boolean',
+      description: '是否显示加载状态',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
+    },
+    block: {
+      control: 'boolean',
+      description: '是否为块级按钮（宽度100%）',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
+    },
+    shape: {
+      control: { type: 'select' },
+      options: shapeOptions,
+      defaultValue: 'square',
+      description: '按钮形状',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: 'square' },
+      },
+    },
+    icon: {
+      control: 'text',
+      description: '按钮图标（仅图标模式）',
+      table: {
+        type: { summary: 'string' },
+      },
+    },
+    prependIcon: {
+      control: 'text',
+      description: '前置图标',
+      table: {
+        type: { summary: 'string' },
+      },
+    },
+    appendIcon: {
+      control: 'text',
+      description: '后置图标',
+      table: {
+        type: { summary: 'string' },
+      },
+    },
+    stacked: {
+      control: 'boolean',
+      description: '是否为堆叠按钮（图标在上，文字在下）',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
+    },
+    content: {
+      control: 'text',
+      description: '按钮文本内容',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: 'Button' },
+      },
+    },
+    nativeType: {
+      control: { type: 'select' },
+      options: ['button', 'submit', 'reset'],
+      defaultValue: 'button',
+      description: '原生按钮类型',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: 'button' },
+      },
+    },
   },
-  template: '<JvButton v-bind="args">{{ args.content || "按钮" }}</JvButton>'
-})
-
-export const 基础按钮 = Template.bind({})
-基础按钮.args = {
-  variant: 'primary',
-  content: '基础按钮'
-}
-
-export const 禁用 = Template.bind({})
-禁用.args = {
-  disabled: true,
-  content: '禁用按钮'
-}
-
-export const 加载中 = Template.bind({})
-加载中.args = {
-  loading: true,
-  content: '加载中'
-}
-
-export const 块级按钮 = Template.bind({})
-块级按钮.args = {
-  block: true,
-  label: '块级按钮'
-}
-
-export const 按钮形状: StoryObj = {
   args: {
     variant: 'elevated',
-    colorType: 'primary'
+    color: 'primary',
+    size: 'medium',
+    disabled: false,
   },
-  render: (args) => ({
-    components: { JvButton, JvSpace },
+} satisfies Meta<typeof JvButton>
+
+export default meta
+type Story = StoryObj<typeof meta>
+
+export const BaseUsage: Story = {
+  args: {
+    variant: 'elevated',
+    content: '基础按钮',
+  },
+  render: args => ({
+    components: { JvButton },
+    setup() {
+      return { args }
+    },
+    template: '<JvButton v-bind="args">{{ args.content || "按钮" }}</JvButton>',
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story: '最基本的按钮组件，使用默认的 elevated 变体和 primary 颜色。',
+      },
+    },
+  },
+}
+
+export const ButtonShape: Story = {
+  args: {
+    variant: 'elevated',
+    color: 'primary',
+  },
+  render: args => ({
+    components: { JvButton, JvFlex },
     setup() {
       return { args, shapeOptions }
     },
     template: `
-      <JvSpace :gap="12">
-        <JvButton v-bind="args" v-for="shape in shapeOptions" :shape="shape"  :content="shape" />
-      </JvSpace>
-    `
-  })
-}
-export const 不同尺寸: StoryObj = {
-  render: (args) => ({
-    components: { JvButton },
-    setup() {
-      return { args }
+      <JvFlex :gap="12">
+        <JvButton v-bind="args" v-for="shape in shapeOptions" :shape="shape" :content="shape" />
+      </JvFlex>
+    `,
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story: '按钮支持多种形状，包括方形 (square) 和胶囊形 (pill)。',
+      },
     },
-    template: `
-      <div style="display: flex; gap: 12px;">
-        <JvButton v-bind="args" size="small">小</JvButton>
-        <JvButton v-bind="args" size="medium">中</JvButton>
-        <JvButton v-bind="args" size="large">大</JvButton>
-      </div>
-    `
-  })
+  },
 }
 
-export const 不同颜色: StoryObj = {
-  render: (args) => ({
-    components: { JvButton, JvSpace },
+export const DifferentSizes: Story = {
+  render: args => ({
+    components: { JvButton, JvFlex },
+    setup() {
+      return { args, sizeOptions }
+    },
+    template: `
+      <JvFlex :gap="12" align="center">
+        <JvButton v-bind="args" v-for="size in sizeOptions" :size="size">
+          {{size}}
+        </JvButton>
+      </JvFlex>
+    `,
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story: '按钮支持多种尺寸：tiny, small, medium, large, xlarge。不同尺寸的按钮会自动调整字体大小、高度和内边距。',
+      },
+    },
+  },
+}
+
+export const DifferentColors: Story = {
+  render: args => ({
+    components: { JvButton, JvFlex },
     setup() {
       return { args, colorTypeOptions }
     },
     template: `
-      <JvSpace  :gap="12" >
-        <JvButton v-for="colorType in colorTypeOptions" v-bind="args" :color-type="colorType" >
-          BUTTON
+      <JvFlex :gap="12" wrap>
+        <JvButton v-for="color in colorTypeOptions" v-bind="args" :color="color">
+          {{ color }}
         </JvButton>
-      </JvSpace>
-    `
-  })
+      </JvFlex>
+    `,
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story: '按钮支持多种颜色风格：default, primary, secondary, success, warning, error, info。颜色会影响按钮的背景和文本颜色。',
+      },
+    },
+  },
 }
 
-/**
- * 变体
- * elevated  使用按钮的阴影强调
- * flat  移除按钮的阴影效果
- * plain  移移除背景颜色并且在未悬停时降低透明度
- * dashed  以当前文字颜色绘制细边框 边框样式为dashed
- * tonal  按钮的背景颜色被设为文字颜色的高透明度版本
- * outlined 以当前文字颜色绘制细边框 边框样式为solid 移除背景
- * text 移除背景颜色和阴影
- */
-
-export const 不同变体: StoryObj = {
-  render: (args) => ({
-    components: { JvButton, JvSpace },
+export const DifferentVariants: Story = {
+  args: {
+    color: 'primary',
+  },
+  render: args => ({
+    components: { JvButton, JvFlex },
     setup() {
-      return { args, colorTypeOptions, variantOptions }
+      return { args, variantOptions }
     },
     template: `
-      <JvSpace  :gap="12" >
-       <JvButton v-bind="args" v-for="variant in variantOptions" :variant="variant">
-            BUTTON
-       </JvButton>
-        <JvButton v-bind="args" v-for="variant in variantOptions" :variant="variant" color-type="success">
-          BUTTON
-       </JvButton>
-      </JvSpace>
-    `
-  })
+      <JvFlex :gap="12" direction="vertical">
+        <JvFlex :gap="12" wrap>
+          <JvButton v-bind="args" v-for="variant in variantOptions" :variant="variant">
+            {{ variant }}
+          </JvButton>
+        </JvFlex>
+      </JvFlex>
+    `,
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story: `
+按钮支持多种变体样式：
+- **elevated**: 使用阴影强调
+- **flat**: 移除阴影效果
+- **plain**: 移除背景颜色并降低透明度
+- **dashed**: 使用虚线边框
+- **tonal**: 使用低饱和度背景色
+- **outlined**: 使用实线边框
+- **text**: 无背景无边框
+        `,
+      },
+    },
+  },
 }
 
-export const 图标按钮: StoryObj = {
+export const IconButton: Story = {
   args: {
     variant: 'elevated',
-    icon: 'mdi:home'
+    icon: 'mdi:home',
+    color: 'primary',
   },
-  render: (args) => ({
-    components: { JvButton },
+  render: args => ({
+    components: { JvButton, JvFlex },
     setup() {
-      return { args }
+      const icons = ['mdi:home', 'mdi:heart', 'mdi:star', 'mdi:settings', 'mdi:plus']
+      return { args, icons, variantOptions, sizeOptions }
     },
-    template: '<JvButton v-bind="args"  />'
+    template: `
+      <JvFlex :gap="12" direction="vertical">
+        <div>单个图标按钮:</div>
+        <JvButton v-bind="args" />
+        
+        <div>不同图标:</div>
+        <JvFlex :gap="8">
+          <JvButton v-for="icon in icons" :icon="icon" :variant="args.variant" :color="args.color" />
+        </JvFlex>
+        
+        <div>不同变体的图标按钮:</div>
+        <JvFlex :gap="8">
+          <JvButton v-for="variant in variantOptions" :variant="variant" :icon="'mdi:home'" :color="args.color" />
+        </JvFlex>
+        
+        <div>不同尺寸的图标按钮:</div>
+        <JvFlex :gap="8" align="center">
+          <JvButton v-for="size in sizeOptions" :size="size" :icon="'mdi:home'" :variant="args.variant" :color="args.color" />
+        </JvFlex>
+      </JvFlex>
+    `,
   }),
-  play: async ({ canvasElement }) => {
-    const canvas = canvasElement as HTMLElement
-    const button = canvas.querySelector('button') as HTMLButtonElement
-    expect(button).toBeTruthy()
-  }
+  parameters: {
+    docs: {
+      description: {
+        story: '仅包含图标的按钮，适用于工具栏或紧凑型UI。图标按钮默认为正方形，并使用圆形边框。',
+      },
+    },
+  },
 }
 
-// 按钮堆叠
-export const 按钮堆叠: StoryObj = {
-  render: (args) => ({
-    components: { JvButton },
+export const PrependAndAppendIcon: Story = {
+  args: {
+    variant: 'elevated',
+    color: 'primary',
+    content: '带图标按钮',
+  },
+  render: args => ({
+    components: { JvButton, JvFlex },
     setup() {
-      return { args }
+      return { args, sizeOptions: sizeOptions.filter(size => ['small', 'medium', 'large', 'xlarge'].includes(size)) }
     },
-    template:
-      '<JvButton v-bind="args" prepend-icon="mdi:plus" append-icon="mdi:minus" stacked>按钮</JvButton>'
-  })
+    template: `
+      <JvFlex :gap="12" direction="vertical">
+        <JvFlex :gap="12" wrap>
+          <JvButton v-bind="args" prependIcon="mdi:arrow-left">前置图标</JvButton>
+          <JvButton v-bind="args" appendIcon="mdi:arrow-right">后置图标</JvButton>
+          <JvButton v-bind="args" prependIcon="mdi:thumb-up" appendIcon="mdi:thumb-down">
+            双侧图标
+          </JvButton>
+        </JvFlex>
+        
+        <div>不同尺寸的前置图标按钮:</div>
+        <JvFlex :gap="12" align="center">
+          <JvButton 
+            v-for="size in sizeOptions" 
+            :size="size" 
+            :variant="args.variant" 
+            :color="args.color"
+            prependIcon="mdi:check"
+          >
+            {{size}}尺寸
+          </JvButton>
+        </JvFlex>
+      </JvFlex>
+    `,
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story: '按钮可以在文本前后添加图标，增强视觉效果和信息传达。图标大小会随按钮尺寸自动调整。',
+      },
+    },
+  },
+}
+
+export const StackedButton: Story = {
+  args: {
+    variant: 'elevated',
+    color: 'primary',
+    stacked: true,
+  },
+  render: args => ({
+    components: { JvButton, JvFlex },
+    setup() {
+      const sizeOptions = ['medium', 'large', 'xlarge']
+      return { args, sizeOptions }
+    },
+    template: `
+      <JvFlex :gap="12">
+        <JvButton v-bind="args" prependIcon="mdi:home">主页</JvButton>
+        <JvButton v-bind="args" prependIcon="mdi:settings">设置</JvButton>
+        <JvButton v-for="size in sizeOptions" v-bind="args" :size="size" prependIcon="mdi:account">
+          {{size}}
+        </JvButton>
+      </JvFlex>
+    `,
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story: '堆叠按钮将图标放在文本上方，适用于导航栏或工具栏。在堆叠模式下，后置图标会被隐藏。',
+      },
+    },
+  },
+}
+
+export const DisabledState: Story = {
+  args: {
+    disabled: true,
+    content: '禁用按钮',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: '禁用状态的按钮无法点击，视觉上呈现为半透明状态。',
+      },
+    },
+  },
+}
+
+export const LoadingState: Story = {
+  args: {
+    loading: true,
+    content: '加载中',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: '加载状态用于表示操作正在进行中，按钮显示一个旋转的加载指示器。加载状态下的按钮内容会被隐藏。',
+      },
+    },
+  },
+}
+
+export const BlockButton: Story = {
+  args: {
+    block: true,
+    content: '块级按钮',
+  },
+  render: args => ({
+    components: { JvButton, JvFlex },
+    setup() {
+      return { args, variantOptions: variantOptions.slice(0, 3) }
+    },
+    template: `
+      <JvFlex :gap="12" direction="vertical" style="width: 100%; max-width: 400px;">
+        <JvButton v-bind="args" />
+        <JvButton v-for="variant in variantOptions" :variant="variant" v-bind="args">
+          {{ variant }}
+        </JvButton>
+      </JvFlex>
+    `,
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story: '块级按钮会占据父容器的全部宽度，适合在移动设备或表单底部使用。',
+      },
+    },
+  },
+}
+
+export const CustomStyles: Story = {
+  render: () => ({
+    components: { JvButton },
+    template: `
+      <div style="display: flex; flex-wrap: wrap; gap: 16px;">
+        <JvButton style="background: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%); color: white;">
+          渐变背景
+        </JvButton>
+        <JvButton style="border: 2px dashed #ff6b6b; color: #ff6b6b; background: transparent;">
+          自定义边框
+        </JvButton>
+        <JvButton 
+          style="box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;">
+          自定义阴影
+        </JvButton>
+        <JvButton 
+          style="font-family: 'Courier New', monospace; text-transform: uppercase; letter-spacing: 2px;">
+          自定义字体
+        </JvButton>
+      </div>
+    `,
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story: '通过style属性可以为按钮添加自定义样式，实现独特的视觉效果。支持CSS变量覆盖和行内样式属性。',
+      },
+    },
+  },
+}
+
+export const InteractionTest: Story = {
+  render: () => ({
+    components: { JvButton, JvFlex },
+    setup() {
+      const message = ref('')
+      return {
+        handleClick: () => { message.value = '按钮被点击了！' },
+        handleFocus: () => { message.value = '按钮获得焦点' },
+        handleBlur: () => { message.value = '按钮失去焦点' },
+        message,
+      }
+    },
+    template: `
+      <JvFlex :gap="12" direction="vertical">
+        <JvButton @click="handleClick" @focus="handleFocus" @blur="handleBlur">
+          点击我
+        </JvButton>
+        <div v-if="message">事件信息: {{ message }}</div>
+      </JvFlex>
+    `,
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story: '按钮支持多种交互事件，包括点击、获得焦点和失去焦点。通过事件处理可以实现复杂的交互逻辑。',
+      },
+    },
+  },
+}
+
+export const ButtonSizeAndFont: Story = {
+  render: () => ({
+    components: { JvButton, JvFlex },
+    setup() {
+      return { sizeOptions }
+    },
+    template: `
+      <JvFlex :gap="16" direction="vertical">
+        <div>不同尺寸按钮的字体大小变化：</div>
+        <JvFlex :gap="12" align="center">
+          <JvButton v-for="size in sizeOptions" :size="size" variant="elevated" color="primary">
+            {{size}}尺寸
+          </JvButton>
+        </JvFlex>
+        
+        <div>不同尺寸图标按钮：</div>
+        <JvFlex :gap="12" align="center">
+          <JvButton v-for="size in sizeOptions" :size="size" variant="elevated" color="primary" icon="mdi:check" />
+        </JvFlex>
+        
+        <div>不同尺寸堆叠按钮：</div>
+        <JvFlex :gap="12" align="center">
+          <JvButton 
+            v-for="size in sizeOptions" 
+            :size="size" 
+            variant="elevated" 
+            color="primary" 
+            stacked 
+            prependIcon="mdi:check"
+          >
+            {{size}}
+          </JvButton>
+        </JvFlex>
+      </JvFlex>
+    `,
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story: '展示不同尺寸按钮的字体大小变化。按钮的字体大小会随着按钮尺寸的变化而自动调整。',
+      },
+    },
+  },
 }

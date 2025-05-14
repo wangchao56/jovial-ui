@@ -3,8 +3,8 @@ import JvButton from '@components/jv-button'
 import JvCard, {
   JvCardActions,
   JvCardContent,
-  JvCardFooter,
   JvCardHeader,
+  JvCardMedia,
 } from '@components/jv-card'
 import JvSpace from '@components/jv-space'
 
@@ -29,16 +29,18 @@ const paddingOptions = ['none', 'xs', 'sm', 'md', 'lg', 'xl']
 const alignOptions = ['start', 'center', 'end']
 
 const meta: Meta<typeof JvCard> = {
-  title: '数据展示组件/Card 卡片',
+  title: '数据展示组件/Card 卡片/JvCard',
   component: JvCard,
-  subcomponents: { JvCardActions, JvCardHeader, JvCardContent, JvCardFooter },
+  subcomponents: { JvCardActions, JvCardHeader, JvCardContent, JvCardMedia },
   tags: ['autodocs'],
   argTypes: {
     title: { control: 'text' },
     subtitle: { control: 'text' },
-    width: { control: 'text' },
+    content: { control: 'text' },
+    image: { control: 'text' },
     height: { control: 'text' },
-    colorType: {
+    maxWidth: { control: 'number' },
+    color: {
       control: 'select',
       options: colorTypeOptions,
       defaultValue: 'default',
@@ -73,11 +75,14 @@ export default meta
 
 type Story = StoryObj<typeof JvCard>
 
-export const 基础卡片: Story = {
+export const Base: Story = {
   args: {
+    image: 'https://picsum.photos/300/150',
     title: '卡片标题',
     subtitle: '卡片副标题',
-    width: '300px',
+    content: '这是一个基础卡片，用于展示内容。',
+    maxWidth: 300,
+    variant: 'elevated',
   },
   render: args => ({
     components: { JvCard },
@@ -85,18 +90,17 @@ export const 基础卡片: Story = {
       return { args }
     },
     template: `
-      <JvCard v-bind="args">
-        这是一个基础卡片，用于展示内容。
+      <JvCard v-bind="args" >
       </JvCard>
     `,
   }),
 }
 
-export const 带操作的卡片_插槽方式: Story = {
+export const WithActions: Story = {
   args: {
     title: '卡片标题',
     subtitle: '卡片副标题',
-    width: '300px',
+    maxWidth: 300,
   },
   render: args => ({
     components: { JvCard, JvButton },
@@ -105,46 +109,28 @@ export const 带操作的卡片_插槽方式: Story = {
     },
     template: `
       <JvCard v-bind="args">
-        <template #default>
-          这是一个使用插槽方式添加操作按钮的卡片示例。
+        <template #title>
+          标题
+        </template>
+        <template #subtitle>
+          副标题
+        </template>
+        <template #content>
+          这是一个使用插槽方式添加内容区域的卡片示例。
         </template>
         <template #actions>
-          <JvButton size="small" variant="text">取消</JvButton>
-          <JvButton size="small" variant="elevated" color-type="primary">确定</JvButton>
+          <JvButton size="small" variant="dashed" color="error">取消</JvButton>
+          <JvButton size="small" variant="flat" color="primary">确定</JvButton>
         </template>
       </JvCard>
     `,
   }),
 }
 
-export const 带操作的卡片_子组件方式: Story = {
+export const WithAllSubcomponents: Story = {
   args: {
-    title: '卡片标题',
-    subtitle: '卡片副标题',
-    width: '300px',
-  },
-  render: args => ({
-    components: { JvCard, JvButton, JvCardActions },
-    setup() {
-      return { args }
-    },
-    template: `
-      <JvCard v-bind="args">
-        这是一个使用子组件方式添加操作按钮的卡片示例。
-        <JvCardActions>
-          <JvButton size="small" variant="text">取消</JvButton>
-          <JvButton size="small" variant="elevated" color-type="primary">确定</JvButton>
-        </JvCardActions>
-      </JvCard>
-    `,
-  }),
-}
-
-export const 使用所有子组件: Story = {
-  args: {
-    width: '300px',
     variant: 'elevated',
-    colorType: 'primary',
+    color: 'primary',
   },
   render: args => ({
     components: {
@@ -153,7 +139,6 @@ export const 使用所有子组件: Story = {
       JvCardHeader,
       JvCardContent,
       JvCardActions,
-      JvCardFooter,
     },
     setup() {
       return { args }
@@ -161,28 +146,33 @@ export const 使用所有子组件: Story = {
     template: `
       <JvCard v-bind="args">
         <JvCardHeader title="子组件方式" subtitle="使用所有子组件构建卡片" />
+        <div>
+          这是使用JvCardContent子组件添加的内容区域。
+          <br />
+          通过子组件方式构建卡片可以更加灵活地定制卡片结构。
+        </div>
         <JvCardContent>
           这是使用JvCardContent子组件添加的内容区域。
           <br />
           通过子组件方式构建卡片可以更加灵活地定制卡片结构。
         </JvCardContent>
-        <JvCardActions align="center">
+        <JvCardActions align="start">
           <JvButton size="small" variant="text">取消</JvButton>
-          <JvButton size="small" variant="elevated" color-type="primary">确定</JvButton>
+          <JvButton size="small" variant="tonal" color-type="primary">确定</JvButton>
         </JvCardActions>
-        <JvCardFooter>
-          <div style="font-size: 12px; color: gray;">这是使用JvCardFooter子组件添加的底部区域</div>
-        </JvCardFooter>
+        <template #media>
+          <img src="https://picsum.photos/300/150" alt="随机图片" />
+        </template>
       </JvCard>
     `,
   }),
 }
 
-export const 操作区对齐方式: Story = {
+export const ActionsAlign: Story = {
   args: {
     title: '操作区对齐方式',
     subtitle: '通过actionsAlign或align属性控制',
-    width: '300px',
+
   },
   render: args => ({
     components: { JvCard, JvButton, JvCardActions, JvSpace },
@@ -211,11 +201,11 @@ export const 操作区对齐方式: Story = {
   }),
 }
 
-export const 带媒体的卡片: Story = {
+export const WithMedia: Story = {
   args: {
     title: '媒体卡片',
     subtitle: '支持图片和视频',
-    width: '300px',
+
   },
   render: args => ({
     components: { JvCard },
@@ -232,13 +222,17 @@ export const 带媒体的卡片: Story = {
     `,
   }),
 }
-
-export const 可点击卡片: Story = {
+/**
+ * 可点击卡片 卡片由一个a标签包裹
+ */
+export const Clickable: Story = {
   args: {
     title: '可点击卡片',
     subtitle: '点击查看详情',
-    width: '300px',
     clickable: true,
+    href: 'https://www.baidu.com',
+    target: '_blank',
+    alt: '点击查看详情',
   },
   render: args => ({
     components: { JvCard },
@@ -252,8 +246,10 @@ export const 可点击卡片: Story = {
     `,
   }),
 }
-
-export const 不同变体: Story = {
+/**
+ * 卡片变体
+ */
+export const Variants: Story = {
   render: args => ({
     components: { JvCard, JvSpace },
     setup() {
@@ -276,7 +272,7 @@ export const 不同变体: Story = {
   }),
 }
 
-export const 不同颜色类型: Story = {
+export const Colors: Story = {
   render: args => ({
     components: { JvCard, JvSpace },
     setup() {
@@ -299,7 +295,7 @@ export const 不同颜色类型: Story = {
   }),
 }
 
-export const 不同圆角: Story = {
+export const Rounded: Story = {
   render: args => ({
     components: { JvCard, JvSpace },
     setup() {
@@ -322,7 +318,7 @@ export const 不同圆角: Story = {
   }),
 }
 
-export const 不同内边距: Story = {
+export const Padding: Story = {
   render: args => ({
     components: { JvCard, JvSpace },
     setup() {
@@ -345,11 +341,11 @@ export const 不同内边距: Story = {
   }),
 }
 
-export const 禁用状态: Story = {
+export const Disabled: Story = {
   args: {
     title: '禁用卡片',
     subtitle: '不可交互',
-    width: '300px',
+
     disabled: true,
     clickable: true,
   },
@@ -366,11 +362,11 @@ export const 禁用状态: Story = {
   }),
 }
 
-export const 自定义卡片: Story = {
+export const Custom: Story = {
   args: {
-    width: '300px',
+
     variant: 'outlined',
-    colorType: 'primary',
+    color: 'primary',
     rounded: 'roundedLg',
   },
   render: args => ({
@@ -380,7 +376,6 @@ export const 自定义卡片: Story = {
       JvCardActions,
       JvCardHeader,
       JvCardContent,
-      JvCardFooter,
     },
     setup() {
       return { args }
@@ -409,13 +404,12 @@ export const 自定义卡片: Story = {
   }),
 }
 
-export const 优先级展示: Story = {
+export const Priority: Story = {
   args: {
     title: '这是属性标题（低优先级）',
     subtitle: '这是属性副标题（低优先级）',
-    width: '350px',
     variant: 'outlined',
-    colorType: 'primary',
+    color: 'primary',
   },
   render: args => ({
     components: {
@@ -424,7 +418,6 @@ export const 优先级展示: Story = {
       JvCardHeader,
       JvCardContent,
       JvCardActions,
-      JvCardFooter,
     },
     setup() {
       return { args }

@@ -10,13 +10,13 @@ $border-radius-lg: 16px;
 $border-radius-xl: 24px;
 $border-radius-pill: 9999px;
 $border-radius-circle: 50%;
-$border-radius-shaped: 24px 0;
+$border-radius-shaped: 24px;
 $border-radius-square: 4px;
 
 // CSS变量
 :root {
   --jv-rounded: #{$border-radius-base};
-  --jv-rounded-0: #{$border-radius-none};
+  --jv-rounded-none: #{$border-radius-none};
   --jv-rounded-sm: #{$border-radius-sm};
   --jv-rounded-md: #{$border-radius-md};
   --jv-rounded-lg: #{$border-radius-lg};
@@ -32,7 +32,7 @@ $border-radius-square: 4px;
   border-radius: $border-radius-base;
 }
 
-.rounded-0 {
+.rounded-none {
   border-radius: $border-radius-none;
 }
 
@@ -66,7 +66,7 @@ $border-radius-square: 4px;
   border-top-right-radius: $border-radius-base;
 }
 
-.rounded-t-0 {
+.rounded-t-none {
   border-top-left-radius: $border-radius-none;
   border-top-right-radius: $border-radius-none;
 }
@@ -106,7 +106,7 @@ $border-radius-square: 4px;
   border-top-right-radius: $border-radius-base;
 }
 
-.rounded-te-0 {
+.rounded-te-none {
   border-top-right-radius: $border-radius-none;
 }
 
@@ -140,7 +140,7 @@ $border-radius-square: 4px;
   border-top-left-radius: $border-radius-base;
 }
 
-.rounded-ts-0 {
+.rounded-ts-none {
   border-top-left-radius: $border-radius-none;
 }
 
@@ -175,7 +175,7 @@ $border-radius-square: 4px;
   border-bottom-right-radius: $border-radius-base;
 }
 
-.rounded-e-0 {
+.rounded-e-none {
   border-top-right-radius: $border-radius-none;
   border-bottom-right-radius: $border-radius-none;
 }
@@ -215,7 +215,7 @@ $border-radius-square: 4px;
   border-bottom-right-radius: $border-radius-base;
 }
 
-.rounded-b-0 {
+.rounded-b-none {
   border-bottom-left-radius: $border-radius-none;
   border-bottom-right-radius: $border-radius-none;
 }
@@ -255,7 +255,7 @@ $border-radius-square: 4px;
   border-bottom-right-radius: $border-radius-base;
 }
 
-.rounded-be-0 {
+.rounded-be-none {
   border-bottom-right-radius: $border-radius-none;
 }
 
@@ -289,7 +289,7 @@ $border-radius-square: 4px;
   border-bottom-left-radius: $border-radius-base;
 }
 
-.rounded-bs-0 {
+.rounded-bs-none {
   border-bottom-left-radius: $border-radius-none;
 }
 
@@ -324,7 +324,7 @@ $border-radius-square: 4px;
   border-bottom-left-radius: $border-radius-base;
 }
 
-.rounded-s-0 {
+.rounded-s-none {
   border-top-left-radius: $border-radius-none;
   border-bottom-left-radius: $border-radius-none;
 }

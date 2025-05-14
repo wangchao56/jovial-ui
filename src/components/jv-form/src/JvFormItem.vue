@@ -5,7 +5,7 @@ import type {
   FormValidateResult,
   FormValidateRule,
   FormValidateStatus,
-  JvFormContext
+  JvFormContext,
 } from './types'
 import { useComponentId } from '@/hooks/useComponentId'
 import { computed, inject, onBeforeUnmount, onMounted, ref, watch } from 'vue'
@@ -16,7 +16,7 @@ import {
   isRequiredField,
   mergeRules,
   setNestedValue,
-  validateField
+  validateField,
 } from './helper'
 import { bem, JVFORMITEM_NAME } from './item'
 import { JvFormContextKey } from './types'
@@ -36,7 +36,7 @@ const {
   labelPosition,
   size,
   disabled: _disabled,
-  wrapInput = true // 默认使用包裹模式
+  wrapInput = true, // 默认使用包裹模式
 } = defineProps<JvFormItemProps>()
 
 const emit = defineEmits<JvFormItemEmits>()
@@ -44,7 +44,7 @@ const emit = defineEmits<JvFormItemEmits>()
 // 注入表单上下文
 const formContext = inject<JvFormContext | undefined>(
   JvFormContextKey,
-  undefined
+  undefined,
 )
 
 // 生成唯一ID
@@ -67,7 +67,7 @@ const isNested = computed(() => prop && prop.includes('.'))
 
 // 标签位置
 const computedLabelPosition = computed(
-  () => labelPosition || formContext?.labelPosition || 'left'
+  () => labelPosition || formContext?.labelPosition || 'left',
 )
 
 // 尺寸
@@ -81,7 +81,7 @@ const labelWrapperClass = computed(() => {
   const baseClasses = [
     bem.e('label-wrapper'),
     bem.is('required', isRequired.value && !formContext?.hideRequiredAsterisk),
-    bem.is('error', validateState.value === 'error')
+    bem.is('error', validateState.value === 'error'),
   ]
 
   if (labelPosition || formContext?.labelPosition) {
@@ -101,7 +101,8 @@ const labelWrapperClass = computed(() => {
 
 // 获取字段值
 const fieldValue = computed(() => {
-  if (!formContext?.model || !prop) return undefined
+  if (!formContext?.model || !prop)
+    return undefined
 
   if (isNested.value) {
     return getNestedValue(formContext.model, prop)
@@ -115,7 +116,7 @@ function getRules(trigger?: string): FormValidateRule[] {
   // 合并表单项规则和表单规则
   const rules = mergeRules(
     propRules,
-    formContext?.rules && prop ? formContext.rules[prop] : undefined
+    formContext?.rules && prop ? formContext.rules[prop] : undefined,
   )
 
   // 过滤规则
@@ -124,7 +125,7 @@ function getRules(trigger?: string): FormValidateRule[] {
 
 // 标签宽度
 const labelWidthStyle = computed(() =>
-  computeLabelWidthStyle(labelWidth ?? formContext?.labelWidth, labelPosition)
+  computeLabelWidthStyle(labelWidth ?? formContext?.labelWidth, labelPosition),
 )
 
 // 是否显示错误消息
@@ -133,20 +134,20 @@ const shouldShowMessage = computed(() =>
     ? showMessage
     : formContext?.showMessage !== undefined
       ? formContext.showMessage
-      : true
+      : true,
 )
 
 // 为屏幕阅读器添加的描述元素ID
 const ariaDescribedby = computed(() =>
   validateState.value === 'error' && shouldShowMessage.value
     ? `${uniqueId}-error`
-    : undefined
+    : undefined,
 )
 
 // 验证字段
 async function validate(
   trigger = '',
-  callback?: (result: FormValidateResult) => void
+  callback?: (result: FormValidateResult) => void,
 ): Promise<FormValidateResult> {
   // 如果没有绑定字段或表单上下文，则直接返回成功
   if (!prop || !formContext?.model) {
@@ -159,7 +160,8 @@ async function validate(
 
   // 如果没有规则，则直接返回成功
   if (rules.length === 0) {
-    if (callback) callback({ valid: true, errors: [], fields: {} })
+    if (callback)
+      callback({ valid: true, errors: [], fields: {} })
     return { valid: true, errors: [], fields: {} }
   }
 
@@ -176,7 +178,8 @@ async function validate(
 
     // 触发验证事件
     emit('validate', true, '')
-  } else {
+  }
+  else {
     // 校验失败
     validateState.value = 'error'
     validateMessage.value = result.message
@@ -186,7 +189,8 @@ async function validate(
   }
 
   // 执行回调
-  if (callback) callback(result)
+  if (callback)
+    callback(result)
 
   return result
 }
@@ -202,7 +206,8 @@ function resetField() {
     if (isNested.value) {
       // 处理嵌套字段
       setNestedValue(formContext.model, prop, initialValue.value)
-    } else {
+    }
+    else {
       formContext.model[prop] = initialValue.value
     }
   }
@@ -229,7 +234,7 @@ onMounted(() => {
       prop,
       validate,
       resetField,
-      clearValidate
+      clearValidate,
     })
 
     // 添加值监听
@@ -242,7 +247,7 @@ onMounted(() => {
           if (validateState.value === 'error') {
             validate('change')
           }
-        }
+        },
       )
     }
 
@@ -262,7 +267,7 @@ onBeforeUnmount(() => {
       prop,
       validate,
       resetField,
-      clearValidate
+      clearValidate,
     })
   }
 })
@@ -271,7 +276,7 @@ onBeforeUnmount(() => {
 defineExpose({
   validate,
   resetField,
-  clearValidate
+  clearValidate,
 })
 </script>
 
@@ -282,7 +287,7 @@ defineExpose({
       bem.is('error', validateState === 'error'),
       bem.is('success', validateState === 'success'),
       bem.is('validating', validateState === 'validating'),
-      bem.is('inline', inline || formContext?.inline)
+      bem.is('inline', inline || formContext?.inline),
     ]"
     role="group"
     :aria-labelledby="label ? `${uniqueId}-label` : undefined"
@@ -298,7 +303,7 @@ defineExpose({
           bem.is('required', isRequired && !formContext?.hideRequiredAsterisk),
           bem.is('error', validateState === 'error'),
           bem.m(`position-${computedLabelPosition}`),
-          bem.m(`size-${computedSize}`)
+          bem.m(`size-${computedSize}`),
         ]"
         :style="labelWidthStyle"
         :for="uniqueId"
@@ -310,9 +315,9 @@ defineExpose({
         <!-- 上方错误信息 -->
         <div
           v-if="
-            validateState === 'error' &&
-            shouldShowMessage &&
-            errorPosition === 'top'
+            validateState === 'error'
+              && shouldShowMessage
+              && errorPosition === 'top'
           "
           :id="`${uniqueId}-error`"
           :class="bem.e('error')"
@@ -329,9 +334,9 @@ defineExpose({
           <!-- 右侧错误信息 -->
           <div
             v-if="
-              validateState === 'error' &&
-              shouldShowMessage &&
-              errorPosition === 'right'
+              validateState === 'error'
+                && shouldShowMessage
+                && errorPosition === 'right'
             "
             :id="`${uniqueId}-error`"
             :class="[bem.e('error'), bem.em('error', 'right')]"
@@ -345,9 +350,9 @@ defineExpose({
         <!-- 下方错误信息 -->
         <div
           v-if="
-            validateState === 'error' &&
-            shouldShowMessage &&
-            errorPosition === 'bottom'
+            validateState === 'error'
+              && shouldShowMessage
+              && errorPosition === 'bottom'
           "
           :id="`${uniqueId}-error`"
           :class="bem.e('error')"
@@ -368,9 +373,9 @@ defineExpose({
           <!-- 上方错误信息 -->
           <div
             v-if="
-              validateState === 'error' &&
-              shouldShowMessage &&
-              errorPosition === 'top'
+              validateState === 'error'
+                && shouldShowMessage
+                && errorPosition === 'top'
             "
             :id="`${uniqueId}-error`"
             :class="bem.e('error')"
@@ -387,9 +392,9 @@ defineExpose({
             <!-- 右侧错误信息 -->
             <div
               v-if="
-                validateState === 'error' &&
-                shouldShowMessage &&
-                errorPosition === 'right'
+                validateState === 'error'
+                  && shouldShowMessage
+                  && errorPosition === 'right'
               "
               :id="`${uniqueId}-error`"
               :class="[bem.e('error'), bem.em('error', 'right')]"
@@ -403,9 +408,9 @@ defineExpose({
           <!-- 下方错误信息 -->
           <div
             v-if="
-              validateState === 'error' &&
-              shouldShowMessage &&
-              errorPosition === 'bottom'
+              validateState === 'error'
+                && shouldShowMessage
+                && errorPosition === 'bottom'
             "
             :id="`${uniqueId}-error`"
             :class="bem.e('error')"
@@ -422,9 +427,9 @@ defineExpose({
         <!-- 上方错误信息 -->
         <div
           v-if="
-            validateState === 'error' &&
-            shouldShowMessage &&
-            errorPosition === 'top'
+            validateState === 'error'
+              && shouldShowMessage
+              && errorPosition === 'top'
           "
           :id="`${uniqueId}-error`"
           :class="bem.e('error')"
@@ -441,9 +446,9 @@ defineExpose({
           <!-- 右侧错误信息 -->
           <div
             v-if="
-              validateState === 'error' &&
-              shouldShowMessage &&
-              errorPosition === 'right'
+              validateState === 'error'
+                && shouldShowMessage
+                && errorPosition === 'right'
             "
             :id="`${uniqueId}-error`"
             :class="[bem.e('error'), bem.em('error', 'right')]"
@@ -457,9 +462,9 @@ defineExpose({
         <!-- 下方错误信息 -->
         <div
           v-if="
-            validateState === 'error' &&
-            shouldShowMessage &&
-            errorPosition === 'bottom'
+            validateState === 'error'
+              && shouldShowMessage
+              && errorPosition === 'bottom'
           "
           :id="`${uniqueId}-error`"
           :class="bem.e('error')"

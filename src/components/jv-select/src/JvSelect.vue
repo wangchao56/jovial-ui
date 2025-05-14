@@ -7,7 +7,17 @@ import { bem, JVSELECT_NAME } from './types'
 
 defineOptions({ name: JVSELECT_NAME, inheritAttrs: false })
 
-const props = defineProps<JvSelectProps>()
+const {
+  inline = false,
+  modelValue = '',
+  options = [],
+  disabled = false,
+  readonly = false,
+  multiple = false,
+  placeholder = '请选择',
+  size = 'medium',
+  clearable = true,
+} = defineProps<JvSelectProps>()
 const emit = defineEmits<JvSelectEmits>()
 
 const showDropdown = ref(false)
@@ -15,33 +25,33 @@ const inputRef = ref()
 const dropdownRef = ref<HTMLElement | null>(null)
 
 const selectedLabel = computed(() => {
-  if (props.multiple && Array.isArray(props.modelValue)) {
-    return props.options
+  if (multiple && Array.isArray(modelValue)) {
+    return options
       .filter(opt =>
-        (props.modelValue as (string | number)[]).includes(opt.value),
+        (modelValue as (string | number)[]).includes(opt.value),
       )
       .map(opt => opt.label)
-      .join(', ')
+      .join(',')
   }
-  const found = props.options.find(opt => opt.value === props.modelValue)
+  const found = options.find(opt => opt.value === modelValue)
   return found ? found.label : ''
 })
 
 function handleSelect(option: JvSelectOption) {
-  if (props.disabled || props.readonly)
+  if (disabled || readonly)
     return
-  if (props.multiple && Array.isArray(props.modelValue)) {
-    const arr = [...props.modelValue] as (string | number)[]
+  if (multiple && Array.isArray(modelValue)) {
+    const arr = [...modelValue] as (string | number)[]
     const idx = arr.indexOf(option.value)
     if (idx > -1)
       arr.splice(idx, 1)
     else arr.push(option.value)
-    emit('update:modelValue', arr as typeof props.modelValue)
-    emit('change', arr as typeof props.modelValue)
+    emit('update:modelValue', arr as typeof modelValue)
+    emit('change', arr as typeof modelValue)
   }
   else {
-    emit('update:modelValue', option.value as typeof props.modelValue)
-    emit('change', option.value as typeof props.modelValue)
+    emit('update:modelValue', option.value as typeof modelValue)
+    emit('change', option.value as typeof modelValue)
     showDropdown.value = false
   }
 }
@@ -49,14 +59,14 @@ function handleSelect(option: JvSelectOption) {
 function handleClear() {
   emit(
     'update:modelValue',
-    (props.multiple ? [] : '') as typeof props.modelValue,
+    (multiple ? [] : '') as typeof modelValue,
   )
   emit('clear')
 }
 
 function handleFocus(e: FocusEvent) {
   emit('focus', e)
-  if (!props.disabled && !props.readonly) {
+  if (!disabled && !readonly) {
     showDropdown.value = true
   }
 }
@@ -69,16 +79,16 @@ function handleBlur(e: FocusEvent) {
 }
 
 function toggleDropdown() {
-  if (props.disabled || props.readonly)
+  if (disabled || readonly)
     return
   showDropdown.value = !showDropdown.value
 }
 
 function isSelected(option: JvSelectOption) {
-  if (props.multiple && Array.isArray(props.modelValue)) {
-    return (props.modelValue as (string | number)[]).includes(option.value)
+  if (multiple && Array.isArray(modelValue)) {
+    return (modelValue as (string | number)[]).includes(option.value)
   }
-  return props.modelValue === option.value
+  return modelValue === option.value
 }
 
 function handleClickOutside(e: MouseEvent) {
@@ -112,17 +122,18 @@ watchEffect(() => {
 
 <template>
   <div
-    :class="[bem.b(), { 'is-disabled': props.disabled }]"
+    :class="[bem.b(), { 'is-disabled': disabled }]"
     style="position: relative"
   >
     <JvInput
       ref="inputRef"
+      :inline="inline"
       :model-value="selectedLabel || ''"
-      :placeholder="props.placeholder || '请选择'"
-      :disabled="props.disabled"
+      :placeholder="placeholder || '请选择'"
+      :disabled="disabled"
       :readonly="true"
-      :clearable="props.clearable"
-      :size="props.size || 'medium'"
+      :clearable="clearable"
+      :size="size || 'medium'"
       type="text"
       variant="outlined"
       :prefix-icon="$slots.prefix ? '' : ''"
@@ -155,7 +166,7 @@ watchEffect(() => {
       :style="{ zIndex: 1000 }"
     >
       <div
-        v-for="option in props.options"
+        v-for="option in options"
         :key="option.value"
         :class="[
           bem.e('option'),
@@ -174,7 +185,7 @@ watchEffect(() => {
         />
       </div>
 
-      <div v-if="!props.options.length" :class="bem.e('empty')">
+      <div v-if="!options.length" :class="bem.e('empty')">
         暂无数据
       </div>
     </div>
@@ -202,7 +213,7 @@ watchEffect(() => {
     padding: 4px 0;
     border: 1px solid var(--jv-input-border-color, #dcdfe6);
     border-radius: var(--jv-input-border-radius, 4px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 8px rgb(0 0 0 / 0.08);
     background: #fff;
     overflow-y: auto;
   }

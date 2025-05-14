@@ -18,55 +18,55 @@ const meta: Meta<typeof JvForm> = {
   argTypes: {
     model: {
       control: 'object',
-      description: '表单数据对象'
+      description: '表单数据对象',
     },
     rules: {
       control: 'object',
-      description: '表单验证规则'
+      description: '表单验证规则',
     },
     labelWidth: {
       control: 'text',
-      description: '标签宽度'
+      description: '标签宽度',
     },
     labelPosition: {
       control: { type: 'select' },
       options: ['top', 'left', 'right'],
-      description: '标签位置'
+      description: '标签位置',
     },
     disabled: {
       control: 'boolean',
-      description: '是否禁用表单'
+      description: '是否禁用表单',
     },
     inline: {
       control: 'boolean',
-      description: '是否行内表单'
+      description: '是否行内表单',
     },
     showMessage: {
       control: 'boolean',
-      description: '是否显示校验错误信息'
+      description: '是否显示校验错误信息',
     },
     validateOnRuleChange: {
       control: 'boolean',
-      description: '规则变化时是否触发校验'
+      description: '规则变化时是否触发校验',
     },
     hideRequiredAsterisk: {
       control: 'boolean',
-      description: '隐藏必填星号'
+      description: '隐藏必填星号',
     },
     requireAsteriskPosition: {
       control: { type: 'select' },
       options: ['left', 'right'],
-      description: '必填星号位置'
+      description: '必填星号位置',
     },
     scrollToError: {
       control: 'boolean',
-      description: '校验错误时是否滚动到错误处'
+      description: '校验错误时是否滚动到错误处',
     },
     size: {
       control: { type: 'select' },
       options: ['small', 'medium', 'large', 'xlarge'],
-      description: '表单尺寸'
-    }
+      description: '表单尺寸',
+    },
   },
   args: {
     labelWidth: '100px',
@@ -78,8 +78,8 @@ const meta: Meta<typeof JvForm> = {
     hideRequiredAsterisk: false,
     requireAsteriskPosition: 'left',
     scrollToError: true,
-    size: 'medium'
-  }
+    size: 'medium',
+  },
 }
 
 export default meta
@@ -87,23 +87,23 @@ type Story = StoryObj<typeof JvForm>
 
 // 基础表单
 export const 基础表单: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { JvForm, JvFormItem, JvInput, JvButton, JvSpace },
     setup() {
       const formData = reactive({
         name: '',
-        email: ''
+        email: '',
       })
 
       const rules = {
         name: [
           { required: true, message: '请输入姓名', trigger: 'blur' },
-          { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
+          { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' },
         ],
         email: [
           { required: true, message: '请输入邮箱', trigger: 'blur' },
-          { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' }
-        ]
+          { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' },
+        ],
       }
 
       const formRef = ref()
@@ -155,18 +155,18 @@ export const 基础表单: Story = {
           </JvSpace>
         </JvFormItem>
       </JvForm>
-    `
-  })
+    `,
+  }),
 }
 
 // 行内表单
 export const 行内表单: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { JvForm, JvFormItem, JvInput, JvButton },
     setup() {
       const formData = reactive({
         username: '',
-        password: ''
+        password: '',
       })
 
       return { formData, ...args }
@@ -189,13 +189,13 @@ export const 行内表单: Story = {
           <JvButton type="primary">登录</JvButton>
         </JvFormItem>
       </JvForm>
-    `
-  })
+    `,
+  }),
 }
 
 // 不同尺寸
 export const 不同尺寸: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { JvForm, JvFormItem, JvInput, JvButton, JvSpace },
     setup() {
       const sizes = ['small', 'medium', 'large', 'xlarge']
@@ -204,7 +204,7 @@ export const 不同尺寸: Story = {
       sizes.forEach((size: string) => {
         forms[size] = reactive({
           name: '',
-          email: ''
+          email: '',
         })
       })
 
@@ -233,19 +233,19 @@ export const 不同尺寸: Story = {
           </JvForm>
         </div>
       </div>
-    `
-  })
+    `,
+  }),
 }
 
 // 不同标签位置
 export const 不同标签位置: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { JvForm, JvFormItem, JvInput, JvButton, JvSpace },
     setup() {
       const positions = ['left', 'right', 'top']
       const form = reactive({
         name: '',
-        email: ''
+        email: '',
       })
 
       return { positions, form, ...args }
@@ -269,13 +269,13 @@ export const 不同标签位置: Story = {
           </JvForm>
         </div>
       </div>
-    `
-  })
+    `,
+  }),
 }
 
 // 复杂表单
 export const 复杂表单: Story = {
-  render: (args) => ({
+  render: args => ({
     components: {
       JvForm,
       JvFormItem,
@@ -286,7 +286,7 @@ export const 复杂表单: Story = {
       JvCheckbox,
       JvSwitch,
       JvRadioGroup,
-      JvRadio
+      JvRadio,
     },
     setup() {
       const formData = reactive({
@@ -297,17 +297,17 @@ export const 复杂表单: Story = {
         occupation: '',
         interests: [],
         subscribe: false,
-        description: ''
+        description: '',
       })
 
       const rules = {
         name: [
           { required: true, message: '请输入姓名', trigger: 'blur' },
-          { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
+          { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' },
         ],
         email: [
           { required: true, message: '请输入邮箱', trigger: 'blur' },
-          { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' }
+          { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' },
         ],
         age: [
           { required: true, message: '请输入年龄', trigger: 'blur' },
@@ -316,32 +316,33 @@ export const 复杂表单: Story = {
             validator: (rule: any, value: any, callback: any) => {
               if (value && (value < 18 || value > 100)) {
                 callback(new Error('年龄必须在18-100之间'))
-              } else {
+              }
+              else {
                 callback()
               }
             },
-            trigger: 'blur'
-          }
+            trigger: 'blur',
+          },
         ],
         gender: [{ required: true, message: '请选择性别', trigger: 'change' }],
         occupation: [
-          { required: true, message: '请选择职业', trigger: 'change' }
+          { required: true, message: '请选择职业', trigger: 'change' },
         ],
         interests: [
           {
             type: 'array',
             required: true,
             message: '请至少选择一个兴趣爱好',
-            trigger: 'change'
-          }
-        ]
+            trigger: 'change',
+          },
+        ],
       }
 
       const occupations = [
         { label: '程序员', value: 'programmer' },
         { label: '设计师', value: 'designer' },
         { label: '产品经理', value: 'pm' },
-        { label: '其它', value: 'other' }
+        { label: '其它', value: 'other' },
       ]
 
       const formRef = ref()
@@ -367,7 +368,7 @@ export const 复杂表单: Story = {
         formRef,
         submitForm,
         resetForm,
-        ...args
+        ...args,
       }
     },
     template: `
@@ -434,26 +435,26 @@ export const 复杂表单: Story = {
           </JvSpace>
         </JvFormItem>
       </JvForm>
-    `
-  })
+    `,
+  }),
 }
 
 // 禁用状态
 export const 禁用状态: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { JvForm, JvFormItem, JvInput, JvButton, JvSpace, JvSelect },
     setup() {
       const formData = reactive({
         name: '张三',
         email: 'zhangsan@example.com',
-        region: 'beijing'
+        region: 'beijing',
       })
 
       const regions = [
         { label: '北京', value: 'beijing' },
         { label: '上海', value: 'shanghai' },
         { label: '广州', value: 'guangzhou' },
-        { label: '深圳', value: 'shenzhen' }
+        { label: '深圳', value: 'shenzhen' },
       ]
 
       return { formData, regions, ...args }
@@ -483,22 +484,22 @@ export const 禁用状态: Story = {
           </JvSpace>
         </JvFormItem>
       </JvForm>
-    `
-  })
+    `,
+  }),
 }
 
 // 动态表单
 export const 动态表单: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { JvForm, JvFormItem, JvInput, JvButton, JvSpace },
     setup() {
       const formData = reactive({
         domains: [
           {
             key: Date.now(),
-            value: ''
-          }
-        ]
+            value: '',
+          },
+        ],
       })
 
       const rules = {
@@ -515,17 +516,17 @@ export const 动态表单: Story = {
                   type: 'string',
                   pattern: /^[a-z0-9]+\.[a-z]{2,10}$/,
                   message: '请输入有效的域名',
-                  trigger: 'blur'
-                }
-              ]
-            }
-          }
-        }
+                  trigger: 'blur',
+                },
+              ],
+            },
+          },
+        },
       }
 
       const formRef = ref()
 
-      const removeDomain = (item: { key: number; value: string }) => {
+      const removeDomain = (item: { key: number, value: string }) => {
         const index = formData.domains.indexOf(item)
         if (index !== -1) {
           formData.domains.splice(index, 1)
@@ -535,7 +536,7 @@ export const 动态表单: Story = {
       const addDomain = () => {
         formData.domains.push({
           key: Date.now(),
-          value: ''
+          value: '',
         })
       }
 
@@ -556,7 +557,7 @@ export const 动态表单: Story = {
         removeDomain,
         addDomain,
         submitForm,
-        ...args
+        ...args,
       }
     },
     template: `
@@ -596,19 +597,19 @@ export const 动态表单: Story = {
           </JvSpace>
         </JvFormItem>
       </JvForm>
-    `
-  })
+    `,
+  }),
 }
 
 // 自定义验证规则
 export const 自定义验证规则: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { JvForm, JvFormItem, JvInput, JvButton, JvSpace },
     setup() {
       const formData = reactive({
         pass: '',
         checkPass: '',
-        age: ''
+        age: '',
       })
 
       const checkAge = (rule: any, value: any, callback: any) => {
@@ -632,7 +633,8 @@ export const 自定义验证规则: Story = {
       const validatePass = (rule: any, value: any, callback: any) => {
         if (value === '') {
           callback(new Error('请输入密码'))
-        } else {
+        }
+        else {
           if (formData.checkPass !== '') {
             formRef.value.validateField('checkPass')
           }
@@ -643,9 +645,11 @@ export const 自定义验证规则: Story = {
       const validatePass2 = (rule: any, value: any, callback: any) => {
         if (value === '') {
           callback(new Error('请再次输入密码'))
-        } else if (value !== formData.pass) {
+        }
+        else if (value !== formData.pass) {
           callback(new Error('两次输入密码不一致!'))
-        } else {
+        }
+        else {
           callback()
         }
       }
@@ -653,13 +657,13 @@ export const 自定义验证规则: Story = {
       const rules = {
         pass: [
           { required: true, message: '请输入密码', trigger: 'blur' },
-          { validator: validatePass, trigger: 'blur' }
+          { validator: validatePass, trigger: 'blur' },
         ],
         checkPass: [
           { required: true, message: '请再次输入密码', trigger: 'blur' },
-          { validator: validatePass2, trigger: 'blur' }
+          { validator: validatePass2, trigger: 'blur' },
         ],
-        age: [{ validator: checkAge, trigger: 'blur' }]
+        age: [{ validator: checkAge, trigger: 'blur' }],
       }
 
       const submitForm = async () => {
@@ -704,13 +708,13 @@ export const 自定义验证规则: Story = {
           </JvSpace>
         </JvFormItem>
       </JvForm>
-    `
-  })
+    `,
+  }),
 }
 
 // 嵌套字段验证
 export const 嵌套字段验证: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { JvForm, JvFormItem, JvInput, JvButton, JvSpace },
     setup() {
       const formData = reactive({
@@ -720,26 +724,26 @@ export const 嵌套字段验证: Story = {
           address: {
             city: '',
             street: '',
-            zip: ''
-          }
-        }
+            zip: '',
+          },
+        },
       })
 
       const rules = {
         'user.name': [
-          { required: true, message: '请输入用户名', trigger: 'blur' }
+          { required: true, message: '请输入用户名', trigger: 'blur' },
         ],
         'user.email': [
           { required: true, message: '请输入邮箱', trigger: 'blur' },
-          { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' }
+          { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' },
         ],
         'user.address.city': [
-          { required: true, message: '请输入城市', trigger: 'blur' }
+          { required: true, message: '请输入城市', trigger: 'blur' },
         ],
         'user.address.zip': [
           { required: true, message: '请输入邮编', trigger: 'blur' },
-          { pattern: /^\d{6}$/, message: '邮编必须为6位数字', trigger: 'blur' }
-        ]
+          { pattern: /^\d{6}$/, message: '邮编必须为6位数字', trigger: 'blur' },
+        ],
       }
 
       const formRef = ref()
@@ -796,6 +800,6 @@ export const 嵌套字段验证: Story = {
           </JvSpace>
         </JvFormItem>
       </JvForm>
-    `
-  })
+    `,
+  }),
 }

@@ -1,0 +1,24 @@
+<script setup lang="ts">
+import type { {{name:capitalize}}Props } from './types' 
+import { computed } from 'vue'
+import { bem, {{name:upper}}_NAME } from './types'
+
+defineOptions({ name: {{name:upper}}_NAME, inheritAttrs: false })
+
+const {} = withDefaults(
+  defineProps<{{name:capitalize}}Props>(),
+  {
+  }
+)
+</script>
+
+<template>
+  <div :class="bem.b()">
+    <slot />
+  </div>
+</template>
+
+<style lang="scss">
+@include b({{name}}) {
+}
+</style>

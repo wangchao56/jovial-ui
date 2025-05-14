@@ -1,4 +1,4 @@
-import type { InternalIconName } from '@/components/jv-icon/src/types'
+import type { JvIconProps } from '@/components/jv-icon/src/types'
 import type { Shape } from '@/constants'
 import type { Slot } from 'vue'
 import { createNamespace } from '@/utils'
@@ -14,10 +14,10 @@ export type JvButtonVariant = Extract<
 export type ButtonNativeType = 'button' | 'submit' | 'reset'
 export interface JvButtonProps {
   /**
-   * 按钮类型
-   * @default 'primary'
+   * 按钮颜色
+   * @default 'default'
    */
-  colorType?: ColorType
+  color?: ColorType
   /**
    * 按钮尺寸
    * @default 'medium'
@@ -29,19 +29,23 @@ export interface JvButtonProps {
    */
   disabled?: boolean
   /**
-   * 按钮形状
+   * 形状
    * @default 'square'
    */
   shape?: Shape
   /**
+   * 设置按钮的border-radius 优先级低于shape
+   */
+  rounded?: RoundedType
+  /**
    * 按钮变体
-   * @default 'text'
+   * @default 'elevated'
    */
   variant?: JvButtonVariant
   /**
    * 按钮图标
    */
-  icon?: InternalIconName | string
+  icon?: JvIconProps['name'] | JvIconProps
 
   /**
    * 按钮是否块级
@@ -51,11 +55,11 @@ export interface JvButtonProps {
   /**
    * 按钮前置图标
    */
-  prependIcon?: string
+  prependIcon?: JvIconProps['name'] | JvIconProps
   /**
    * 按钮后置图标
    */
-  appendIcon?: string
+  appendIcon?: JvIconProps['name'] | JvIconProps
   /**
    * 按钮是否堆叠
    * @default false

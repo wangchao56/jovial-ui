@@ -4,7 +4,7 @@ export const JVMESSAGE_NAME = 'JvMessage'
 export const bem = createNamespace(JVMESSAGE_NAME)
 
 export type MessageType = 'info' | 'success' | 'warning' | 'error'
-export type MessageVariant = 'outlined' | 'filled' | ''
+export type MessageVariant = 'outlined' | 'filled' | 'tonal'
 
 /**
  * JvMessage 属性
@@ -21,13 +21,11 @@ export interface JvMessageProps {
    * @default false
    */
   closable?: boolean
-
   /**
    * 自动关闭 默认true
    *
    */
   autoClose?: boolean
-
   /**
    * 是否显示图标
    * @default true
@@ -48,6 +46,11 @@ export interface JvMessageProps {
    * @default 'outlined'
    */
   variant?: MessageVariant
+
+  /**
+   * 消息内容
+   */
+  content?: string
 }
 
 export interface JvMessageEmits {

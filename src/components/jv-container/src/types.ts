@@ -12,21 +12,30 @@ export const c_main_bem = createNamespace(JVMAN_NAME)
 export const c_footer_bem = createNamespace(JVFOOTER_NAME)
 
 export interface JvContainerProps {
-  // 定义组件属性
+  fluid?: boolean
+  maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | false
+  tag?: string
 }
 
 export interface JvAsideProps {
-  // 定义组件属性
+  tag?: string
+  width?: number
+  fixed?: boolean
+  breakpoint?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'
 }
 
 export interface JvHeaderProps {
-  // 定义组件属性
+  tag?: string
+  height?: number
 }
 
 export interface JvMainProps {
-  // 定义组件属性
+  tag?: string
+  padding?: boolean
 }
 
 export interface JvFooterProps {
-  // 定义组件属性
+  tag?: string
+  height?: number
+  fixed?: boolean
 }

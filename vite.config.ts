@@ -1,6 +1,7 @@
 import type { PluginOption, UserConfig } from 'vite'
 import fs from 'node:fs'
 import { resolve } from 'node:path'
+import process from 'node:process'
 import vue from '@vitejs/plugin-vue'
 // tsx
 import vueJsx from '@vitejs/plugin-vue-jsx'
@@ -46,13 +47,34 @@ const baseConfig = {
 const devConfig: UserConfig = {
   ...baseConfig,
   server: {
-    port: 3000,
     open: true,
     host: true,
   },
   build: {
     sourcemap: true,
     rollupOptions: {
+      output: {
+        sourcemap: true,
+      },
+    },
+  },
+}
+
+// 博客应用配置
+const blogConfig: UserConfig = {
+  ...baseConfig,
+  server: {
+    port: 3001,
+    open: true,
+    host: true,
+  },
+  build: {
+    sourcemap: true,
+    outDir: 'dist-blog',
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, 'index.html'),
+      },
       output: {
         sourcemap: true,
       },
@@ -168,6 +190,10 @@ const componentsConfig: UserConfig = {
 // 根据命令行参数选择配置
 export default defineConfig(({ command, mode }) => {
   if (command === 'serve') {
+    // 根据命令行参数决定使用哪个配置
+    if (process.argv.includes('--blog')) {
+      return blogConfig
+    }
     return devConfig
   }
 
@@ -177,6 +203,11 @@ export default defineConfig(({ command, mode }) => {
 
   if (mode === 'components') {
     return componentsConfig
+  }
+
+  // 根据构建输出目录决定使用哪个配置
+  if (process.argv.includes('dist-blog')) {
+    return blogConfig
   }
 
   // 默认开发配置

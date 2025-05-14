@@ -84,3 +84,42 @@ Medium md Large tablet to laptop 960px > < 1280px
 Large lg Laptop to desktop 1280px > < 1920px
 Extra large xl 1080p to 1440p desktop 1920px > < 2560px
 Extra extra large xxl 4k and ultra-wide > 2560px
+
+## 工具类样式
+
+JovialUI 提供了一系列实用的工具类样式，您可以直接导入和使用这些样式：
+
+### 通过全量引入
+
+```js
+// 引入所有工具类样式
+import 'jovial-ui/style.css'
+```
+
+### 按需引入特定工具类
+
+```js
+// 仅引入圆角工具类
+import 'jovial-ui/theme/styles/border-radius.css'
+
+// 仅引入透明度工具类
+import 'jovial-ui/theme/styles/opacity.css'
+
+// 仅引入字体工具类
+import 'jovial-ui/theme/styles/font.css'
+```
+
+### 可用的工具类
+
+JovialUI 提供以下工具类：
+
+- `border-radius.css` - 圆角样式
+- `opacity.css` - 透明度样式
+- `elevation.css` - 阴影样式  
+- `font.css` - 字体样式
+- `flex.css` - Flex布局样式
+- `spacing.css` - 间距样式
+- `colors.css` - 颜色样式
+- `transition.css` - 过渡动画样式
+
+详细的工具类使用方法请参考文档。

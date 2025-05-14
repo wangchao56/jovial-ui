@@ -1,107 +1,64 @@
 <script setup lang="ts">
-import type { JvCardEmits, JvCardProps, JvCardSlots } from './types'
-import { consoleWarn, convertToUnit } from '@/utils'
-import { computed, onMounted, ref } from 'vue'
+import type { JvCardEmits, JvCardHeaderProps, JvCardProps, JvCardSlots } from './types'
+import { useComponentId } from '@/hooks/useComponentId'
+import { convertToUnit } from '@/utils'
+import { computed, h, provide, shallowRef } from 'vue'
 import JvCardActions from './JvCardActions.vue'
 import JvCardContent from './JvCardContent.vue'
-import JvCardFooter from './JvCardFooter.vue'
 import JvCardHeader from './JvCardHeader.vue'
+import JvCardMedia from './JvCardMedia.vue'
 import {
   bem,
   JVCARD_NAME,
   JVCARDACTIONS_NAME,
   JVCARDCONTENT_NAME,
-  JVCARDFOOTER_NAME,
+  JvCardContextKey,
   JVCARDHEADER_NAME,
+  JVCARDMEDIA_NAME,
 } from './types'
 
 defineOptions({ name: JVCARD_NAME, inheritAttrs: false })
 
-const {
-  title,
-  subtitle,
-  maxWidth,
-  colorType = 'default',
-  variant = 'elevated',
-  rounded = 'rounded',
-  bordered = false,
-  clickable = false,
-  disabled = false,
-  padding = 'md',
-  actionsAlign = 'end',
-  content,
-} = defineProps<JvCardProps>()
+// 使用解构写法定义props
+const props = withDefaults(defineProps<JvCardProps>(), {
+  tag: 'div',
+  color: 'default',
+  variant: 'elevated',
+  rounded: 'rounded',
+  bordered: false,
+  clickable: false,
+  disabled: false,
+  padding: 'md',
+  actionsAlign: 'end',
+  orientation: 'vertical',
+  flat: false,
+  loading: false,
+  objectFit: 'cover',
+})
 
 const emit = defineEmits<JvCardEmits>()
 
 // 获取插槽内容
 const slots = defineSlots<JvCardSlots>()
 
-// 检测是否有子组件
-const hasChildHeader = ref(false)
-const hasChildContent = ref(false)
-const hasChildActions = ref(false)
-const hasChildFooter = ref(false)
-const hasOtherContent = ref(false)
-
-// 在组件挂载和更新后检查子组件
-onMounted(checkChildren)
-
 // 卡片子组件名称列表
 const cardChildComponents = [
   JVCARDHEADER_NAME,
   JVCARDCONTENT_NAME,
   JVCARDACTIONS_NAME,
-  JVCARDFOOTER_NAME,
+  JVCARDMEDIA_NAME,
 ]
 
-// 检查子组件的存在
-function checkChildren() {
-  // 获取默认插槽的内容
-  const defaultSlotContent = slots.default?.() || []
-
-  // 查找直接子组件
-  hasChildHeader.value = defaultSlotContent.some((vnode) => {
-    return vnode.type && (vnode.type as any).name === JVCARDHEADER_NAME
-  })
-
-  hasChildContent.value = defaultSlotContent.some((vnode) => {
-    return vnode.type && (vnode.type as any).name === JVCARDCONTENT_NAME
-  })
-
-  hasChildActions.value = defaultSlotContent.some((vnode) => {
-    return vnode.type && (vnode.type as any).name === JVCARDACTIONS_NAME
-  })
-
-  hasChildFooter.value = defaultSlotContent.some((vnode) => {
-    return vnode.type && (vnode.type as any).name === JVCARDFOOTER_NAME
-  })
-
-  // 检查是否有非卡片子组件的内容
-  hasOtherContent.value = defaultSlotContent.some((vnode) => {
-    // 如果是文本节点或者非卡片子组件
-    return (
-      !vnode.type // 文本节点
-      || (typeof vnode.type === 'string' && vnode.type !== 'template') // HTML元素
-      || (vnode.type
-        && typeof vnode.type !== 'string'
-        && !cardChildComponents.includes((vnode.type as any).name || '')) // 其他组件
-    )
-  })
-
-  // 开发环境下输出警告
-  if (hasOtherContent.value && import.meta.env.DEV) {
-    consoleWarn(
-      `[JvCard] 警告: 检测到默认插槽中包含非卡片子组件的内容。
-      为了最佳实践，建议在默认插槽中仅使用 JvCardHeader、JvCardContent、JvCardActions 或 JvCardFooter 子组件。
-      如需添加内容，请使用 JvCardContent 子组件或 content 插槽。`,
-    )
-  }
+// 使用shallowRef提高性能
+const slotsDefault = shallowRef<ReturnType<NonNullable<typeof slots.default>> | undefined>()
+function updateSlotsDefault() {
+  slotsDefault.value = slots.default?.()
 }
+updateSlotsDefault()
 
 // 提取出slots.default中的非卡片子组件
-const otherContentVnode = computed(() => {
-  return slots.default?.()?.filter((vnode) => {
+const otherContentVnodes = computed(() => {
+  return slotsDefault.value?.filter((vnode) => {
     return (
       !vnode.type
       || !cardChildComponents.includes((vnode.type as any)?.name || '')
@@ -109,84 +66,156 @@ const otherContentVnode = computed(() => {
   })
 })
 
+// 包含卡片子组件的节点
+const cardChildVnodes = computed(() => {
+  return slotsDefault.value?.filter((vnode) => {
+    return cardChildComponents.includes((vnode.type as any)?.name || '')
+  })
+})
+
+// 检查子组件的存在情况
+const hasHeaderComponent = computed(() =>
+  cardChildVnodes.value?.some(vnode => (vnode.type as any)?.name === JVCARDHEADER_NAME),
+)
+const hasContentComponent = computed(() =>
+  cardChildVnodes.value?.some(vnode => (vnode.type as any)?.name === JVCARDCONTENT_NAME),
+)
+const hasActionsComponent = computed(() =>
+  cardChildVnodes.value?.some(vnode => (vnode.type as any)?.name === JVCARDACTIONS_NAME),
+)
+const hasMediaComponent = computed(() =>
+  cardChildVnodes.value?.some(vnode => (vnode.type as any)?.name === JVCARDMEDIA_NAME),
+)
+
 // 点击处理函数
 function handleClick(event: MouseEvent) {
-  if (disabled || !clickable)
+  if (props.disabled || !props.clickable)
     return
   emit('click', event)
 }
+
+// 计算卡片样式
+const cardStyles = computed(() => {
+  const styles: Record<string, any> = {}
+
+  if (props.maxWidth) {
+    styles.maxWidth = convertToUnit(props.maxWidth)
+  }
+
+  if (props.minWidth) {
+    styles.minWidth = convertToUnit(props.minWidth)
+  }
+
+  if (props.height) {
+    styles.height = convertToUnit(props.height)
+  }
+
+  if (typeof props.elevation === 'number') {
+    styles['--jv-card-box-shadow'] = `var(--jv-elevation-${props.elevation})`
+  }
+
+  return styles
+})
+
+// 计算是否有媒体内容
+const hasMedia = computed(() => Boolean(props.image || slots.media || hasMediaComponent.value))
+
+// 计算是否有头部内容
+const hasHeader = computed(() => Boolean(props.title || props.subtitle || props.description || slots.title || slots.subtitle || slots.description || hasHeaderComponent.value))
+
+// 计算是否有操作区内容
+const hasActions = computed(() => Boolean(slots.actions || hasActionsComponent.value))
+
+// 计算是否有内容区
+const hasContent = computed(() => Boolean(props.content || (otherContentVnodes.value && otherContentVnodes.value.length > 0) || slots.content || hasContentComponent.value))
+
+const cardHeaderProps = computed<JvCardHeaderProps>(() => {
+  return {
+    variant: 'flat',
+    title: props.title,
+    subtitle: props.subtitle,
+    description: props.description,
+  }
+})
+
+const cardId = useComponentId('jv-card')
+provide(JvCardContextKey, {
+  cardId,
+})
+
+// 公开方法
+defineExpose({
+  updateSlots: updateSlotsDefault,
+})
 </script>
 
 <template>
-  <div
-    :class="[
+  <component
+    :is="tag" :id="cardId" :class="[
       bem.b(),
       bem.m(`variant-${variant}`),
-      bem.m(`color-type-${colorType}`),
+      bem.m(`color-type-${color}`),
       bem.m(`padding-${padding}`),
       bem.m(`rounded-${rounded}`),
+      bem.m(`orientation-${orientation}`),
       bem.is('bordered', bordered),
       bem.is('clickable', clickable),
       bem.is('disabled', disabled),
-    ]"
-    v-bind="$attrs"
-    @click="handleClick"
+      bem.is('flat', flat),
+      bem.is('loading', loading),
+      bem.is('no-elevation', !elevation),
+    ]" :style="cardStyles" v-bind="$attrs" @click="handleClick"
   >
-    <!--  渲染剩余的子组件 -->
-    <slot />
-    <!-- 当没有子组件JvCardHeader时，使用插槽或属性渲染 -->
-    <template v-if="!hasChildHeader">
-      <JvCardHeader v-if="$slots.header" v-slot="headerProps">
-        <slot name="header" v-bind="headerProps" />
-      </JvCardHeader>
-      <JvCardHeader
-        v-else-if="title || subtitle || $slots.title || $slots.subtitle"
-        :title="title"
-        :subtitle="subtitle"
-      >
-        <template v-if="$slots.title" #title>
-          <slot name="title" />
-        </template>
-        <template v-if="$slots.subtitle" #subtitle>
-          <slot name="subtitle" />
-        </template>
-      </JvCardHeader>
-    </template>
-
-    <!-- 当没有子组件时，使用媒体插槽 -->
-    <div v-if="$slots.media" :class="bem.e('media')">
-      <slot name="media" />
+    <!-- 加载遮罩 -->
+    <div v-if="loading" :class="bem.e('loading-overlay')">
+      <div :class="bem.e('loading-spinner')" />
     </div>
 
-    <!-- 当没有子组件JvCardContent时，使用内容插槽或属性 -->
-    <JvCardContent
-      v-if="
-        !hasChildContent
-          && ($slots.content || content || otherContentVnode?.length)
-      "
-      :content="content"
-    >
-      <template v-if="$slots.content">
-        <slot name="content" />
-      </template>
-      <template v-else-if="otherContentVnode?.length">
-        <slot />
-      </template>
-    </JvCardContent>
+    <!-- 渲染子组件 - 首先检查是否有直接提供的子组件 -->
+    <template v-if="cardChildVnodes && cardChildVnodes.length > 0">
+      <!-- 渲染所有卡片子组件 -->
+      <component :is="node" v-for="(node, index) in cardChildVnodes" :key="index" />
 
-    <!-- 当没有子组件JvCardActions时，使用操作插槽 -->
-    <JvCardActions
-      v-if="!hasChildActions && $slots.actions"
-      :align="actionsAlign"
-    >
-      <slot name="actions" />
-    </JvCardActions>
+      <!-- 如果有非卡片子组件内容，但没有提供JvCardContent，则自动包装到内容区域 -->
+      <component
+        :is="h(JvCardContent, { content }, otherContentVnodes)"
+        v-if="otherContentVnodes && otherContentVnodes.length > 0 && !hasContentComponent"
+      />
+    </template>
+    <!-- 如果没有直接提供子组件，则使用属性和具名插槽方式渲染 -->
+    <template v-else>
+      <!-- 媒体内容 - 从插槽或属性渲染 -->
+      <JvCardMedia v-if="hasMedia" :image="image" :height="height" :object-fit="objectFit">
+        <slot name="media" />
+      </JvCardMedia>
 
-    <!-- 当没有子组件JvCardFooter时，使用底部插槽 -->
-    <JvCardFooter v-if="!hasChildFooter && $slots.footer">
-      <slot name="footer" />
-    </JvCardFooter>
-  </div>
+      <!-- 头部内容 - 从插槽或属性渲染 -->
+      <JvCardHeader v-if="hasHeader" v-bind="cardHeaderProps">
+        <template v-if="slots.title" #title>
+          <slot name="title" />
+        </template>
+        <template v-if="slots.subtitle" #subtitle>
+          <slot name="subtitle" />
+        </template>
+        <template v-if="slots.description" #description>
+          <slot name="description" />
+        </template>
+      </JvCardHeader>
+
+      <!-- 内容区 - 渲染插槽内容或非卡片子组件 -->
+      <JvCardContent v-if="hasContent" :content="content">
+        <slot v-if="slots.content" name="content" />
+        <template v-else>
+          <component :is="node" v-for="(node, index) in otherContentVnodes" :key="index" />
+        </template>
+      </JvCardContent>
+
+      <!-- 操作区 - 从插槽渲染 -->
+      <JvCardActions v-if="hasActions" :align="actionsAlign">
+        <slot name="actions" />
+      </JvCardActions>
+    </template>
+  </component>
 </template>
 
 <style lang="scss" scoped>
@@ -205,60 +234,76 @@ function handleClick(event: MouseEvent) {
   letter-spacing: 0.0125em;
 }
 
-// 卡片内边距映射
-$card-padding-map: (
-  'none': 0,
-  'xs': 4px,
-  'sm': 8px,
-  'md': 16px,
-  'lg': 24px,
-  'xl': 32px,
-);
-
 // 颜色类型列表
-$color-types: (primary, secondary, success, warning, error, info, default);
+$color-types: (primary, secondary, success, warning, error, info);
 
 // 变体列表
-$variants: (elevated, outlined, tonal);
+$variants: (elevated, outlined, tonal, filled, flat);
 
 @include b(card) {
   // ---------- CSS 变量定义 ----------
-  --jv-card-background: var(--jv-theme-background);
-  --jv-card-background-rgb: var(--jv-theme-background-rgb);
-  --jv-card-color: var(--jv-theme-on-background);
-  --jv-card-color-rgb: var(--jv-theme-on-background-rgb);
+  --jv-card-background: var(--jv-theme-surface);
+  --jv-card-background-rgb: var(--jv-theme-surface-rgb);
+  --jv-card-color: var(--jv-theme-on-surface);
+  --jv-card-color-rgb: var(--jv-theme-on-surface-rgb);
   --jv-card-border-radius: var(--jv-rounded);
   --jv-card-border-color: var(--jv-theme-outline);
   --jv-card-border-width: 0;
-  --jv-card-box-shadow: none;
-  --jv-card-padding: 16px;
+  --jv-card-box-shadow: var(--jv-elevation-6);
 
   // ---------- 布局样式 ----------
   position: relative;
-  display: flex;
+  display: grid;
   overflow: hidden;
-  flex-direction: column;
   box-sizing: border-box;
-  max-width: v-bind('convertToUnit(maxWidth)');
+  width: 100%;
   min-height: fit-content;
 
   border: var(--jv-card-border-width) solid var(--jv-card-border-color);
   border-radius: var(--jv-card-border-radius);
+  box-shadow: var(--jv-card-box-shadow);
   background: var(--jv-card-background);
   color: var(--jv-card-color);
-  transition: all 0.3s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, box-shadow, opacity;
+  grid-template-rows: auto auto 1fr auto;
+  grid-template-areas: 'media' 'header' 'content' 'actions';
+  contain: content;
+
+  // 水平方向布局
+  &.is-orientation-horizontal {
+    grid-template-columns: auto 1fr;
+    grid-template-areas:
+      'media header'
+      'media content'
+      'media actions';
+
+    .jv-card__media {
+      max-width: 200px;
+      height: 100%;
+      grid-row: span 3;
+    }
+  }
 
   // ---------- 子元素样式 ----------
-  @include e(media) {
-    overflow: hidden;
-    width: 100%;
+  @include e(loading-overlay) {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(255 255 255 / 0.7);
+    backdrop-filter: blur(2px);
+  }
 
-    img,
-    video {
-      display: block;
-      width: 100%;
-      object-fit: cover;
-    }
+  @include e(loading-spinner) {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(var(--jv-card-color-rgb), 0.1);
+    border-top-color: var(--jv-card-color);
+    border-radius: 50%;
+    animation: card-spinner 1s linear infinite;
   }
 
   @include m(actions-align-start) {
@@ -279,8 +324,19 @@ $variants: (elevated, outlined, tonal);
     }
   }
 
-  // ---------- 变体样式 ----------
+  @include m(actions-align-space-between) {
+    .jv-card__actions {
+      justify-content: space-between;
+    }
+  }
 
+  @include m(actions-align-space-around) {
+    .jv-card__actions {
+      justify-content: space-around;
+    }
+  }
+
+  // ---------- 变体样式 ----------
   @include m(variant-elevated) {
     --jv-card-box-shadow: var(--jv-elevation-6);
     box-shadow: var(--jv-card-box-shadow);
@@ -298,20 +354,29 @@ $variants: (elevated, outlined, tonal);
     --jv-card-background: rgba(var(--jv-card-color-rgb), 0.12);
   }
 
+  @include m(variant-filled) {
+    --jv-card-background: var(--jv-theme-surface-variant);
+  }
+
+  @include m(variant-flat) {
+    --jv-card-background: transparent;
+    --jv-card-box-shadow: none;
+  }
+
   // ---------- 颜色类型 ----------
+  @include m(color-type-default) {
+    --jv-card-background: var(--jv-theme-background);
+    --jv-card-background-rgb: var(--jv-theme-background-rgb);
+    --jv-card-color: var(--jv-theme-on-background);
+    --jv-card-color-rgb: var(--jv-theme-on-background-rgb);
+  }
+
   @each $type in $color-types {
     @include m(color-type-#{$type}) {
-      @if $type == default {
-        --jv-card-background: var(--jv-theme-background);
-        --jv-card-background-rgb: var(--jv-theme-background-rgb);
-        --jv-card-color: var(--jv-theme-on-background);
-        --jv-card-color-rgb: var(--jv-theme-on-background-rgb);
-      } @else {
-        --jv-card-background: var(--jv-theme-#{$type});
-        --jv-card-background-rgb: var(--jv-theme-#{$type}-rgb);
-        --jv-card-color: var(--jv-theme-on-#{$type});
-        --jv-card-color-rgb: var(--jv-theme-on-#{$type}-rgb);
-      }
+      --jv-card-background: var(--jv-theme-#{$type});
+      --jv-card-background-rgb: var(--jv-theme-#{$type}-rgb);
+      --jv-card-color: var(--jv-theme-on-#{$type});
+      --jv-card-color-rgb: var(--jv-theme-on-#{$type}-rgb);
     }
   }
 
@@ -336,11 +401,17 @@ $variants: (elevated, outlined, tonal);
     --jv-card-border-radius: var(--jv-rounded-pill);
   }
 
-  // ---------- 内边距样式 ----------
-  @each $name, $value in $card-padding-map {
-    @include m(padding-#{$name}) {
-      --jv-card-padding: #{$value};
-    }
+  @include m(rounded-none) {
+    --jv-card-border-radius: 0;
+  }
+
+  // ---------- 方向样式 ----------
+  @include m(orientation-horizontal) {
+    grid-template-areas: 'media header' 'media content' 'media actions';
+  }
+
+  @include m(orientation-vertical) {
+    grid-template-areas: 'media' 'header' 'content' 'actions';
   }
 
   // ---------- 状态样式 ----------
@@ -350,12 +421,10 @@ $variants: (elevated, outlined, tonal);
 
   @include when(clickable) {
     cursor: pointer;
-    transition: all 0.3s ease;
-
-    // 可点击时，hover 时增加阴影，点击时缩小阴影
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 
     &:hover {
-      box-shadow: var(--jv-elevation-6);
+      box-shadow: var(--jv-elevation-8);
       transform: translateY(-2px);
     }
 
@@ -371,6 +440,17 @@ $variants: (elevated, outlined, tonal);
     --jv-card-box-shadow: none;
     cursor: not-allowed;
     opacity: 0.6;
+    pointer-events: none;
+  }
+
+  @include when(no-elevation) {
+    --jv-card-box-shadow: none;
+  }
+}
+
+@keyframes card-spinner {
+  to {
+    transform: rotate(360deg);
   }
 }
 </style>

@@ -1,26 +1,51 @@
 <script setup lang="ts">
 import type { JvTagEmits, JvTagProps } from './types'
 import JvIcon from '@/components/jv-icon/src/JvIcon.vue'
-import { computed, ref } from 'vue'
+import { useTheme } from '@/theme'
+import { computed, ref, useSlots, watch } from 'vue'
 import { bem, JVTAG_NAME } from './types'
 
 defineOptions({ name: JVTAG_NAME, inheritAttrs: false })
-
 const {
-  type = 'primary',
+  type = 'info',
   size = 'medium',
+  shape = 'square',
   closable = false,
   label = '',
-  variant = 'filled',
-  closeIcon = ''
+  variant = 'tonal',
+  closeIcon = '',
+  prependIcon = '',
+  selectable = false,
+  selected = false,
 } = defineProps<JvTagProps>()
 
 const emit = defineEmits<JvTagEmits>()
 const visible = ref(true)
+const isSelected = ref(selected)
+const slots = useSlots()
+const theme = useTheme()
+// 监听selected属性变化
+watch(
+  () => selected,
+  (val) => {
+    isSelected.value = val
+  },
+)
+
 function handleClose(e: MouseEvent) {
   e.stopPropagation()
   visible.value = false
   emit('clickClose', e)
+}
+
+function handleClick(e: MouseEvent) {
+  emit('click', e)
+
+  // 如果是可选择的，则切换选择状态
+  if (selectable) {
+    isSelected.value = !isSelected.value
+    emit('select', isSelected.value)
+  }
 }
 
 const _closeIcon = computed(() => {
@@ -36,67 +61,71 @@ const _closeIcon = computed(() => {
       return '$close'
   }
 })
+
+// 计算标签类名
+const tagClasses = computed(() => [
+  bem.b(),
+  bem.m(`type-${type}`),
+  bem.m(`variant-${variant}`),
+  bem.m(`size-${size}`),
+  bem.m(`shape-${shape}`),
+  bem.is('closable', closable),
+  bem.is('selectable', selectable),
+  bem.is('selected', isSelected.value && selectable),
+  theme.themeClasses.value,
+])
+
+// 判断是否显示前置图标
+const showPrepend = computed(() => prependIcon || !!slots.prepend)
 </script>
 
 <template>
   <span
-    v-show="visible"
-    :class="[
-      bem.b(),
-      bem.m(`type-${type}`),
-      bem.m(`variant-${variant}`),
-      bem.m(`size-${size}`),
-      bem.m(`shape-${shape}`),
-      bem.is('closable', closable)
-    ]"
-    role="tag"
-    tabindex="0"
-    @click="emit('click', $event)"
+    v-show="visible" :class="tagClasses" :role="selectable ? 'option' : 'status'" tabindex="0"
+    @click="handleClick"
   >
-    <span :class="bem.e('prepend')">
+    <span :class="bem.e('overlay')" />
+    <span v-if="showPrepend" :class="bem.e('prepend')">
       <slot name="prepend">
-        <JvIcon :name="prependIcon" :size="size" />
+        <JvIcon v-if="prependIcon" :name="prependIcon" :size="size" />
       </slot>
     </span>
-    <span :class="bem.e('content')">
+    <span :class="bem.e('label')">
       <slot>{{ label }}</slot>
     </span>
-    <JvIcon
-      v-if="closable"
-      :name="_closeIcon"
-      :class="bem.e('close')"
-      size="small"
-      @click="handleClose"
-    />
+    <span v-if="closable" :class="bem.e('close')">
+      <JvIcon :name="_closeIcon" size="small" @click="handleClose" />
+    </span>
   </span>
 </template>
 
 <style lang="scss" scoped>
 @use 'sass:map';
+@use 'sass:color';
 @use '@/theme/styles/border-radius' as *;
 
 $jv-tag-size-map: (
   'small': (
     'padding': (
-      2px 8px
+      0 8px,
     ),
     'font-size': 10px,
-    'max-height': 22px
+    'height': 22px,
   ),
   'medium': (
     'padding': (
-      4px 10px
+      0 10px,
     ),
     'font-size': 12px,
-    'max-height': 26px
+    'height': 26px,
   ),
   'large': (
     'padding': (
-      6px 14px
+      0 14px,
     ),
     'font-size': 14px,
-    'max-height': 34px
-  )
+    'height': 34px,
+  ),
 );
 $jv-tag-type-map: (primary, success, warning, error, info);
 
@@ -111,53 +140,87 @@ $jv-tag-type-map: (primary, success, warning, error, info);
   --jv-tag-box-shadow: var(--jv-elevation-1);
   position: relative;
   display: inline-grid;
-  grid-template-areas: 'content close';
+  overflow: hidden;
+  align-content: stretch;
   box-sizing: border-box;
   padding: var(--jv-tag-padding);
+  border-width: thin;
+  border-style: solid;
   border-color: var(--jv-tag-border-color);
   border-radius: var(--jv-tag-border-radius);
   background-color: var(--jv-tag-background-color);
   color: var(--jv-tag-color);
   font-size: var(--jv-tag-font-size);
-  line-height: 1.5;
-  grid-template-columns: 1fr auto;
-  transition: grid-template-columns 0.2s;
+  font-weight: 500;
+  text-shadow: 0 0 0.8px currentcolor;
+  transition: all 0.2s;
+  place-items: center center;
+  grid-template-areas: 'prepend content badge close';
+  grid-template-columns: auto 1fr auto auto;
 
-  @include e(content) {
-    grid-area: content;
+  @include e(overlay) {
+    position: absolute;
+    z-index: 1;
+    border-radius: inherit;
+    background-color: currentcolor;
+    opacity: 0;
+    transition: opacity 0.1s ease-in-out;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  @include e(prepend) {
+    grid-area: prepend;
+    display: inline-flex;
+    align-items: center;
+    margin-right: 4px;
+  }
+
+  @include e(label) {
     display: inline-flex;
     overflow: hidden;
     flex: 1;
-    vertical-align: middle;
-    align-items: start;
+    align-items: center;
 
     // 单行文本不溢出
     white-space: nowrap;
+    cursor: text;
+    grid-area: content;
+    vertical-align: middle;
+    user-select: text;
     text-overflow: ellipsis;
+
+    // 可选择时，文本颜色为白色
+    &.jv-tag--selectable {
+      color: var(--jv-theme-primary);
+    }
   }
 
   @include e(close) {
-    grid-area: close;
-    margin-left: 4px;
+    display: inline-flex;
+    align-items: center;
+    height: 100%;
+    margin-left: 8px;
     color: currentcolor;
     cursor: pointer;
     opacity: 0.6;
     transition:
       opacity 0.2s,
       visibility 0.2s;
+    grid-area: close;
 
     &:hover {
       opacity: 1;
     }
 
     &:active {
-      opacity: 0.5;
+      opacity: 0.8;
     }
   }
 
   @each $size, $value in $jv-tag-size-map {
     &--size-#{$size} {
-      max-height: map.get($value, 'max-height');
+      height: map.get($value, 'height');
       padding: map.get($value, 'padding');
       font-size: map.get($value, 'font-size');
     }
@@ -170,44 +233,38 @@ $jv-tag-type-map: (primary, success, warning, error, info);
       --jv-tag-background-color: var(--jv-theme-#{$type});
       --jv-tag-background-color-rgb: var(--jv-theme-#{$type}-rgb);
       --jv-tag-border-color: var(--jv-theme-#{$type});
+      --jv-tag-high-contrast-color: var(--jv-theme-on-surface);
     }
   }
 
   //   变体
   @include m(variant-filled) {
-    border-color: var(--jv-tag-border-color);
-    box-shadow: var(--jv-tag-box-shadow);
     background-color: var(--jv-tag-background-color);
     color: var(--jv-tag-color);
   }
 
   @include m(variant-outlined) {
+    border-width: thin;
+    border-style: solid;
+    border-color: currentcolor;
+    border-radius: inherit;
     box-shadow: none;
     background-color: transparent;
-    color: var(--jv-tag-background-color);
 
-    // 使用before伪元素绘制边框
-    &::before {
-      position: absolute;
-      top: 0;
-      left: 0;
-      box-sizing: border-box;
-      width: 100%;
-      height: 100%;
-      border-width: 2px;
-      border-style: solid;
-      border-color: var(--jv-tag-background-color);
-      border-radius: inherit;
-      content: '';
+    // 不存在type-default时的
+    &:not(.jv-tag--type-default) {
+      border-color: var(--jv-tag-border-color);
+      color: var(--jv-tag-background-color);
     }
   }
 
+  // 背景颜色变浅
   @include m(variant-tonal) {
-    background-color: color-mix(
-      in srgb,
-      var(--jv-tag-background-color) 40%,
-      var(--jv-tag-color)
-    );
+    --jv-tag-tonal-color: color-mix(in srgb, var(--jv-tag-background-color) 12%, var(--jv-tag-color));
+    border-color: var(--jv-tag-tonal-color);
+    background-color: var(--jv-tag-tonal-color);
+
+    // 文字颜色为背景颜色 并提升对比度
     color: var(--jv-tag-background-color);
   }
 
@@ -219,18 +276,28 @@ $jv-tag-type-map: (primary, success, warning, error, info);
   @include m(shape-pill) {
     border-radius: var(--jv-rounded-pill);
   }
-}
 
-@supports (
-  color: color-mix(
-      in srgb,
-      var(--jv-tag-background-color) 40%,
-      var(--jv-tag-color)
-    )
-) {
-  .jv-tag--variant-tonal {
-    background-color: rgba(var(--jv-tag-background-color-rgb), 0.4);
-    color: rgba(var(--jv-tag-background-color-rgb), 0.4);
+  // 可选择状态
+  @include when(selectable) {
+    cursor: pointer;
+  }
+
+  @include when(selected) {
+    box-shadow: 0 0 0 2px var(--jv-tag-background-color);
+
+    &.jv-tag--variant-outlined {
+      background-color: rgba(var(--jv-tag-background-color-rgb), 0.1);
+    }
+  }
+
+  &:active {
+    .jv-tag__overlay {
+      opacity: 0.12;
+    }
+  }
+
+  &:focus {
+    outline: none;
   }
 }
 </style>

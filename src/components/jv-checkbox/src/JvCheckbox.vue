@@ -10,7 +10,7 @@ const {
   label,
   disabled = false,
   indeterminate = false,
-  size = 'medium'
+  size = 'medium',
 } = defineProps<JvCheckboxProps>()
 
 const emit = defineEmits<{
@@ -19,7 +19,7 @@ const emit = defineEmits<{
 }>()
 
 const internalValue = defineModel<boolean | Array<string | number>>(
-  'modelValue'
+  'modelValue',
 )
 
 const innerIcon = computed(() => {
@@ -39,7 +39,8 @@ const isChecked = computed(() => {
 })
 
 function handleClick(e: MouseEvent) {
-  if (disabled) return
+  if (disabled)
+    return
 
   emit('click', e)
 
@@ -48,7 +49,8 @@ function handleClick(e: MouseEvent) {
     newValue = [...internalValue.value]
     const index = newValue.indexOf(label!)
     index === -1 ? newValue.push(label!) : newValue.splice(index, 1)
-  } else {
+  }
+  else {
     newValue = !isChecked.value
   }
 
@@ -62,7 +64,7 @@ function handleClick(e: MouseEvent) {
       bem.b(),
       bem.is('checked', isChecked),
       bem.is('disabled', disabled),
-      bem.is('indeterminate', indeterminate)
+      bem.is('indeterminate', indeterminate),
     ]"
     @click="handleClick"
   >
@@ -74,7 +76,7 @@ function handleClick(e: MouseEvent) {
         :disabled="disabled"
         :checked="isChecked"
         hidden
-      />
+      >
       <JvButton
         :icon="innerIcon"
         :size="size"
@@ -89,7 +91,30 @@ function handleClick(e: MouseEvent) {
 </template>
 
 <style lang="scss">
-.jv-checkbox {
+$checkbox-size-map: (
+  'xs': (
+    height: 12px,
+    width: 12px,
+  ),
+  'small': (
+    height: 16px,
+    width: 16px,
+  ),
+  'medium': (
+    height: 20px,
+    width: 20px,
+  ),
+  'large': (
+    height: 24px,
+    width: 24px,
+  ),
+  'xlarge': (
+    height: 32px,
+    width: 32px,
+  ),
+);
+
+@include b(checkbox) {
   display: inline-flex;
   align-items: center;
   cursor: pointer;

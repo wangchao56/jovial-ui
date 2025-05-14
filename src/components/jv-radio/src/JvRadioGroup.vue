@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { JvRadioGroupEmits, JvRadioGroupExpose } from './group'
-import { provide, ref, toRef, watch } from 'vue'
+import { provide, toRef, watch } from 'vue'
 import {
   bem,
   JVRADIOGROUP_NAME,
   JvRadioGroupContextKey,
-  jvRadioGroupProps
+  jvRadioGroupProps,
 } from './group'
 
 defineOptions({ name: JVRADIOGROUP_NAME, inheritAttrs: false })
@@ -15,7 +15,7 @@ const props = defineProps(jvRadioGroupProps)
 const emit = defineEmits<JvRadioGroupEmits>()
 
 // 组件内部值，初始化为props中的modelValue
-const radioGroupValue = ref(props.modelValue)
+const radioGroupValue = defineModel('modelValue', { required: false })
 
 // 当props.modelValue变化时更新内部值
 watch(
@@ -24,19 +24,20 @@ watch(
     if (value !== radioGroupValue.value) {
       radioGroupValue.value = value
     }
-  }
+  },
 )
 
 // 更新值的方法
 function dispatch(
   event: 'change' | 'update:modelValue',
   value: any,
-  _valueType: string
+  _valueType: string,
 ) {
   radioGroupValue.value = value
   if (event === 'update:modelValue') {
     emit('update:modelValue', value)
-  } else if (event === 'change') {
+  }
+  else if (event === 'change') {
     emit('change', value)
   }
 }
@@ -48,7 +49,12 @@ function reset() {
 }
 
 // 获取当前值
-const getValue = () => radioGroupValue.value
+const getValue = () => radioGroupValue.value as string | number | boolean | undefined
+
+// 设置当前值
+function setValue(value: any) {
+  radioGroupValue.value = value
+}
 
 // 向子组件提供上下文
 provide(JvRadioGroupContextKey, {
@@ -57,13 +63,14 @@ provide(JvRadioGroupContextKey, {
   disabled: props.disabled,
   color: props.color,
   animated: props.animated,
-  dispatch
+  dispatch,
+  setValue,
 })
 
 // 向外部暴露的方法
 defineExpose<JvRadioGroupExpose>({
   reset,
-  getValue
+  getValue,
 })
 </script>
 
@@ -71,18 +78,17 @@ defineExpose<JvRadioGroupExpose>({
   <fieldset
     :class="[
       bem.b(),
-      bem.is('column', props.column),
-      bem.is('inline', props.inline),
-      bem.is('bordered', props.bordered),
-      bem.is('compact', props.compact),
-      bem.is('disabled', props.disabled)
-    ]"
-    :aria-disabled="props.disabled"
+      bem.is('column', column),
+      bem.is('inline', inline),
+      bem.is('bordered', bordered),
+      bem.is('compact', compact),
+      bem.is('disabled', disabled),
+    ]" :aria-disabled="disabled"
   >
-    <legend v-if="props.label || $slots.legend || $slots.label">
+    <legend v-if="label || $slots.legend || $slots.label">
       <slot name="legend">
         <slot name="label">
-          {{ props.label }}
+          {{ label }}
         </slot>
       </slot>
     </legend>
@@ -93,37 +99,44 @@ defineExpose<JvRadioGroupExpose>({
 </template>
 
 <style lang="scss">
-.jv-radio-group {
+@include b(radio-group) {
   position: relative;
   display: inline-block;
+  min-width: fit-content;
   margin: 0;
   padding: 0;
   border: none;
 
-  &__wrapper {
+  @include e(wrapper) {
     display: flex;
     align-items: flex-start;
     flex-wrap: wrap;
     gap: 12px;
+    min-width: fit-content;
+    place-content: flex-start flex-start;
   }
 
-  legend {
+  @include e(legend) {
     margin-bottom: 8px;
     color: #606266;
     font-size: 14px;
     font-weight: 500;
   }
 
-  &.is-column &__wrapper {
-    flex-direction: column;
-    align-items: flex-start;
+  @include when(column) {
+    @include e(wrapper) {
+      flex-direction: column;
+      align-items: flex-start;
+    }
   }
 
-  &.is-inline &__wrapper {
-    display: inline-flex;
+  @include when(inline) {
+    @include e(wrapper) {
+      display: inline-flex;
+    }
   }
 
-  &.is-bordered {
+  @include when(bordered) {
     padding: 16px;
     border: 1px solid #dcdfe6;
     border-radius: 4px;
@@ -133,32 +146,34 @@ defineExpose<JvRadioGroupExpose>({
     }
   }
 
-  &.is-compact &__wrapper {
-    gap: 0;
+  @include when(compact) {
+    @include e(wrapper) {
+      gap: 0;
 
-    .jv-radio {
-      margin-right: 0;
-      margin-left: 0;
+      .jv-radio {
+        margin-right: 0;
+        margin-left: 0;
 
-      &.is-bordered {
-        margin-right: -1px;
-        border-radius: 0;
+        &.is-bordered {
+          margin-right: -1px;
+          border-radius: 0;
 
-        &:first-child {
-          border-top-left-radius: 4px;
-          border-bottom-left-radius: 4px;
-        }
+          &:first-child {
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+          }
 
-        &:last-child {
-          border-top-right-radius: 4px;
-          border-bottom-right-radius: 4px;
-          margin-right: 0;
+          &:last-child {
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px;
+            margin-right: 0;
+          }
         }
       }
     }
   }
 
-  &.is-disabled {
+  @include when(disabled) {
     cursor: not-allowed;
     opacity: 0.6;
 

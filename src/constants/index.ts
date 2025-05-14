@@ -11,7 +11,7 @@ export const placementOptions = [
   'left-start',
   'left-end',
   'right-start',
-  'right-end'
+  'right-end',
 ]
 export enum Placement {
   TOP = 'top',
@@ -26,10 +26,10 @@ export enum Placement {
   LEFT_END = 'left-end',
   RIGHT_START = 'right-start',
   RIGHT_END = 'right-end',
-  CENTER = 'center'
+  CENTER = 'center',
 }
 
-export const sizeOptions = ['small', 'medium', 'large', 'xlarge', 'tiny']
+export const sizeOptions = ['tiny', 'small', 'medium', 'large', 'xlarge']
 
 export enum Type {
   PRIMARY = 'primary',
@@ -37,7 +37,7 @@ export enum Type {
   SUCCESS = 'success',
   WARNING = 'warning',
   ERROR = 'error',
-  INFO = 'info'
+  INFO = 'info',
 }
 
 export const typeOptions = [
@@ -46,7 +46,7 @@ export const typeOptions = [
   Type.SUCCESS,
   Type.WARNING,
   Type.ERROR,
-  Type.INFO
+  Type.INFO,
 ]
 export enum ColorType {
   DEFAULT = 'default',
@@ -55,7 +55,7 @@ export enum ColorType {
   SUCCESS = 'success',
   WARNING = 'warning',
   ERROR = 'error',
-  INFO = 'info'
+  INFO = 'info',
 }
 export const colorTypeOptions = [
   ColorType.DEFAULT,
@@ -64,7 +64,7 @@ export const colorTypeOptions = [
   ColorType.SUCCESS,
   ColorType.WARNING,
   ColorType.ERROR,
-  ColorType.INFO
+  ColorType.INFO,
 ]
 export enum Variant {
   ELEVATED = 'elevated',
@@ -74,7 +74,7 @@ export enum Variant {
   TEXT = 'text',
   LINK = 'link',
   PLAIN = 'plain',
-  OUTLINED = 'outlined'
+  OUTLINED = 'outlined',
 }
 export const variantOptions = [
   Variant.ELEVATED,
@@ -84,18 +84,18 @@ export const variantOptions = [
   Variant.TEXT,
   Variant.LINK,
   Variant.PLAIN,
-  Variant.OUTLINED
+  Variant.OUTLINED,
 ]
 export enum Shape {
   SQUARE = 'square',
-  PILL = 'pill'
+  PILL = 'pill',
 }
 export const shapeOptions = [Shape.SQUARE, Shape.PILL]
 export enum Justify {
   START = 'start',
   END = 'end',
   CENTER = 'center',
-  BETWEEN = 'between'
+  BETWEEN = 'between',
 }
 
 export const optionsMap = {
@@ -104,13 +104,15 @@ export const optionsMap = {
   type: typeOptions,
   colorType: colorTypeOptions,
   variant: variantOptions,
-  shape: shapeOptions
+  shape: shapeOptions,
 }
 
 export function getOptions(
   name: keyof typeof optionsMap,
-  exclude: string[] = []
+  exclude: string[] = [],
 ) {
   const options = optionsMap[name] || []
-  return options.filter((option) => !exclude.includes(option))
+  return options.filter(option => !exclude.includes(option))
 }
+
+export const imageExample = 'https://fastly.picsum.photos/id/65/4912/3264.jpg?hmac=uq0IxYtPIqRKinGruj45KcPPzxDjQvErcxyS1tn7bG0'

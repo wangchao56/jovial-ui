@@ -19,7 +19,7 @@ const {
   defaultTagType = 'primary',
   defaultTagSize = 'small',
   defaultTagVariant = 'outlined',
-  defaultTagShape = 'square'
+  defaultTagShape = 'square',
 } = defineProps<JvTagGroupProps>()
 
 const emit = defineEmits<{
@@ -43,15 +43,15 @@ watch(
   (newTags) => {
     localTags.value = [...newTags]
   },
-  { deep: true }
+  { deep: true },
 )
 
 const filteredTags = computed(() => {
   if (!searchKeyword.value || !searchable) {
     return localTags.value
   }
-  return localTags.value.filter((tag) =>
-    tag.props?.label?.toLowerCase().includes(searchKeyword.value.toLowerCase())
+  return localTags.value.filter(tag =>
+    tag.props?.label?.toLowerCase().includes(searchKeyword.value.toLowerCase()),
   )
 })
 
@@ -74,7 +74,7 @@ function handleClose(event: MouseEvent, tag: JvTagItemProps, index: number) {
   emit('close', tag, index)
   const newTags = [...localTags.value]
   // 找到原始数组中的实际索引
-  const actualIndex = localTags.value.findIndex((t) => t.id === tag.id)
+  const actualIndex = localTags.value.findIndex(t => t.id === tag.id)
   if (actualIndex !== -1) {
     newTags.splice(actualIndex, 1)
     localTags.value = newTags
@@ -88,7 +88,8 @@ function handleAdd() {
     setTimeout(() => {
       inputRef.value?.focus()
     }, 10)
-  } else {
+  }
+  else {
     emit('add')
   }
 }
@@ -96,13 +97,14 @@ function handleAdd() {
 function handleSelect(
   selected: boolean,
   tag: JvTagItemProps,
-  _index: number
+  _index: number,
 ): void {
   const newTags = [...localTags.value]
   // 找到原始数组中的实际索引
-  const actualIndex = localTags.value.findIndex((t) => t.id === tag.id)
+  const actualIndex = localTags.value.findIndex(t => t.id === tag.id)
 
-  if (actualIndex === -1) return
+  if (actualIndex === -1)
+    return
 
   if (!multiple) {
     // 单选模式：取消其他所有选中
@@ -135,8 +137,8 @@ function handleInputConfirm() {
         size: defaultTagSize,
         shape: defaultTagShape,
         variant: defaultTagVariant,
-        label: inputValue.value
-      }
+        label: inputValue.value,
+      },
     }
     const newTags = [...localTags.value, newTag]
     localTags.value = newTags
@@ -147,9 +149,9 @@ function handleInputConfirm() {
 }
 
 function clearSelected() {
-  const newTags = localTags.value.map((tag) => ({
+  const newTags = localTags.value.map(tag => ({
     ...tag,
-    selected: false
+    selected: false,
   }))
   localTags.value = newTags
   emit('update:tags', newTags)
@@ -165,7 +167,7 @@ function clearSelected() {
         :class="bem.e('search-input')"
         placeholder="搜索标签"
         @input="handleSearch"
-      />
+      >
       <JvIcon
         v-if="searchKeyword"
         name="$close"
@@ -186,11 +188,12 @@ function clearSelected() {
         :shape="tag.props?.shape"
         :variant="tag.props?.variant"
         :label="tag.props?.label"
+        :prepend-icon="tag.props?.prependIcon"
         :closable="closable"
         :selectable="selectable"
         :selected="tag.selected"
         :class="bem.e('item')"
-        @close="(e: MouseEvent) => handleClose(e, tag, index)"
+        @click-close="(e: MouseEvent) => handleClose(e, tag, index)"
         @select="(selected: boolean) => handleSelect(selected, tag, index)"
       >
         <slot name="tag" :tag="tag">
@@ -216,7 +219,7 @@ function clearSelected() {
           placeholder="请输入标签内容"
           @blur="handleInputConfirm"
           @keyup.enter="handleInputConfirm"
-        />
+        >
       </div>
 
       <JvTag
@@ -263,7 +266,7 @@ function clearSelected() {
       width: 100%;
       height: 32px;
       padding: 0 30px 0 12px;
-      border: 1px solid rgba(0, 0, 0, 0.1);
+      border: 1px solid rgb(0 0 0 / 0.1);
       border-radius: var(--jv-rounded-md);
       font-size: 14px;
       transition: all 0.2s;
@@ -278,11 +281,11 @@ function clearSelected() {
     &-clear {
       position: absolute;
       right: 8px;
-      color: rgba(0, 0, 0, 0.45);
+      color: rgb(0 0 0 / 0.45);
       cursor: pointer;
 
       &:hover {
-        color: rgba(0, 0, 0, 0.85);
+        color: rgb(0 0 0 / 0.85);
       }
     }
   }
@@ -312,7 +315,7 @@ function clearSelected() {
     width: 100%;
     height: 100%;
     padding: 0 8px;
-    border: 1px solid rgba(0, 0, 0, 0.15);
+    border: 1px solid rgb(0 0 0 / 0.15);
     border-radius: var(--jv-rounded-md);
     font-size: 12px;
 
@@ -333,15 +336,15 @@ function clearSelected() {
     padding: 4px 8px;
     border: none;
     border-radius: var(--jv-rounded-sm);
-    background-color: rgba(0, 0, 0, 0.06);
-    color: rgba(0, 0, 0, 0.65);
+    background-color: rgb(0 0 0 / 0.06);
+    color: rgb(0 0 0 / 0.65);
     font-size: 12px;
     cursor: pointer;
     transition: all 0.2s;
 
     &:hover {
-      background-color: rgba(0, 0, 0, 0.1);
-      color: rgba(0, 0, 0, 0.85);
+      background-color: rgb(0 0 0 / 0.1);
+      color: rgb(0 0 0 / 0.85);
     }
   }
 }

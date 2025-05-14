@@ -13,15 +13,16 @@ import { bem, JVMESSAGE_NAME } from './types'
 
 defineOptions({ name: JVMESSAGE_NAME, inheritAttrs: false })
 
-const {
-  type = 'info',
-  closable = false,
-  showIcon = true,
-  duration = 3000,
-  center = false,
-  variant = '',
-  autoClose = false,
-} = defineProps<JvMessageProps>()
+const props = withDefaults(defineProps<JvMessageProps>(), {
+  type: 'info',
+  closable: false,
+  showIcon: true,
+  duration: 3000,
+  center: false,
+  variant: 'outlined',
+  autoClose: true,
+  content: '',
+})
 
 const emit = defineEmits<JvMessageEmits>()
 
@@ -33,10 +34,10 @@ const { currentZIndex, nextZindex } = useZindex(1000)
 let timer: NodeJS.Timeout | null = null
 // 创建定时器
 function createTimer() {
-  if (autoClose && duration > 0) {
+  if (props.autoClose && props.duration > 0) {
     timer = setTimeout(() => {
       close()
-    }, duration)
+    }, props.duration)
   }
 }
 // 清除定时器
@@ -72,7 +73,7 @@ const iconName = computed(() => {
     warning: 'mdi:alert',
     error: 'mdi:close-circle',
   }
-  return iconMap[type as MessageType]
+  return iconMap[props.type as MessageType]
 })
 
 defineExpose<JvMessageExpose>({
@@ -81,39 +82,30 @@ defineExpose<JvMessageExpose>({
 </script>
 
 <template>
-  <Transition name="jv-message-fade">
-    <div
-      v-if="visible"
-      :class="[
-        bem.b(),
-        bem.m(`type-${type}`),
-        bem.is('center', center),
-        variant ? bem.m(`variant-${variant}`) : '',
-      ]"
-      :style="{ zIndex: currentZIndex }"
-      role="alert"
-      @mouseenter="clearTimer"
-      @mouseleave="createTimer"
-      @touchstart="clearTimer"
-      @touchend="createTimer"
-    >
-      <div :class="bem.e('content')">
-        <JvIcon v-if="showIcon" :name="iconName" :class="bem.e('icon')" />
-        <span :class="bem.e('text')">
-          <slot />
-        </span>
+  <Teleport to="body">
+    <Transition name="jv-message-fade">
+      <div
+        v-if="visible" :class="[
+          bem.b(),
+          bem.m(`type-${props.type}`),
+          bem.is('center', props.center),
+          props.variant ? bem.m(`variant-${props.variant}`) : '',
+        ]" :style="{ zIndex: currentZIndex }" role="alert" @mouseenter="clearTimer" @mouseleave="createTimer"
+        @touchstart="clearTimer" @touchend="createTimer"
+      >
+        <JvIcon v-if="props.showIcon" :name="iconName" :class="bem.e('icon')" />
+        <div :class="bem.e('content')">
+          <span :class="bem.e('text')">
+            <slot>{{ props.content }}</slot>
+          </span>
+        </div>
+        <JvButton
+          v-if="props.closable" icon="$close" variant="plain" size="small" :class="bem.e('close')"
+          @click="close"
+        />
       </div>
-
-      <JvButton
-        v-if="closable"
-        icon="$close"
-        variant="plain"
-        size="small"
-        :class="bem.e('close')"
-        @click="close"
-      />
-    </div>
-  </Transition>
+    </Transition>
+  </Teleport>
 </template>
 
 <style lang="scss">
@@ -178,12 +170,8 @@ $message-type-options: (info, success, warning, error);
 
   @each $type in $message-type-options {
     @include m(type-#{$type}) {
-      --jv-message-background-color: rgb(var(--jv-theme-#{$type}-rgb));
-      --jv-message-color: var(--jv-theme-on-#{$type});
-
-      .jv-message__icon {
-        color: var(--jv-theme-on-#{$type});
-      }
+      --jv-message-background-color: var(--jv-theme-on-#{$type});
+      --jv-message-color: var(--jv-theme-#{$type});
     }
   }
 
@@ -203,6 +191,15 @@ $message-type-options: (info, success, warning, error);
   @include m(variant-filled) {
     background-color: var(--jv-message-background-color);
     color: var(--jv-message-color);
+  }
+
+  @include m(variant-tonal) {
+    background-color: color-mix(in srgb, var(--jv-message-background-color) 20%, white);
+    color: var(--jv-message-background-color);
+
+    .jv-message__icon {
+      color: var(--jv-message-background-color);
+    }
   }
 }
 

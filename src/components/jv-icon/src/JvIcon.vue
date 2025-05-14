@@ -1,58 +1,34 @@
 <script setup lang="ts">
-import type { CSSProperties } from 'vue'
 import type { InternalIconName, JvIconProps } from './types'
 import { _internalIcons } from '@/components/internal-icon'
-import { getOptions } from '@/constants'
-import { convertToUnit, isString } from '@/utils'
-import { computed } from 'vue'
+import { useSize } from '@/hooks/useSize'
+import { computed, shallowRef, useCssVars } from 'vue'
+import JvIconify from './JvIconify.vue'
 import { bem as _bem, JVICON_NAME } from './types'
 
 defineOptions({ name: JVICON_NAME, inheritAttrs: true })
 
 const {
   color = 'primary',
-  size,
+  size = 'medium',
   name,
-  colorType = 'default',
   rotate = 0,
   flip = false,
   spin = false,
-  disabled = false
+  disabled = false,
 } = defineProps<JvIconProps>()
-
-const options = getOptions('size')
 // 判断是否是内部图标
-const hasInnerIcon = computed(() => name && String(name).startsWith('$'))
-
+const hasInnerIcon = shallowRef(name && String(name).startsWith('$'))
 // 判断是否显示外部图标
-const showExternalIcon = computed(() => name && !hasInnerIcon.value)
+const showExternalIcon = shallowRef(name && !hasInnerIcon.value)
 
-const innerSize = computed(() =>
-  isString(size) && options.includes(size) ? size : false
-)
-// 计算图标样式
-const iconStyle = computed<CSSProperties>(() => {
-  const result: CSSProperties = {}
-  // 处理尺寸
-  if (!Number.isNaN(size) && innerSize.value === false) {
-    const sizeValue = convertToUnit(size)
-    result.fontSize = sizeValue
-    result.width = sizeValue
-    result.height = sizeValue
-  }
-
-  // 处理自定义颜色
-  if (color) {
-    result.color = color
-  }
-
-  // 处理旋转
-  if (rotate && !showExternalIcon.value) {
-    result.transform = `rotate(${rotate}deg)`
-  }
-
-  return result
-})
+const { sizeWithUnit, isInnerSize } = useSize(size, {
+  tiny: 16,
+  small: 20,
+  medium: 24,
+  large: 32,
+  xlarge: 40,
+}, 24)
 
 // 处理内部图标
 const internalIconVnode = computed(() => {
@@ -62,108 +38,89 @@ const internalIconVnode = computed(() => {
   return null
 })
 
-// 计算组件类名
-const iconClasses = computed(() => [
-  _bem.b(),
-  innerSize.value && _bem.m(`size-${innerSize.value}`),
-  colorType && _bem.m(`type-${colorType}`),
-  flip && _bem.m('flip'),
-  spin && _bem.m('spin'),
-  disabled && _bem.m('disabled')
-])
+useCssVars(() => {
+  return {
+    'jv-icon-size': sizeWithUnit.value,
+  }
+})
 </script>
 
 <template>
   <i
-    :class="iconClasses"
-    :style="iconStyle"
+    :class="[
+      _bem.b(),
+      isInnerSize && _bem.m(`size-${size}`),
+      flip && _bem.m('flip'),
+      spin && _bem.m('spin'),
+      disabled && _bem.m('disabled'),
+      color && !color.startsWith('#') && _bem.m(`color-${color}`),
+    ]"
     tabindex="0"
     :aria-disabled="disabled"
+    :style="color.startsWith('#') ? { color } : undefined"
+    role="img"
+    :aria-hidden="false"
   >
     <slot v-if="$slots.default" />
     <JvIconify
-      v-else-if="showExternalIcon"
-      :icon="name"
-      :color="color"
-      :rotate="rotate"
-      :flip="flip ? 'horizontal' : undefined"
-      :spin="spin"
+      v-else-if="showExternalIcon" :icon="name as string" :color="color" :rotate="rotate"
+      :flip="flip ? 'horizontal' : undefined" :spin="spin"
     />
     <component :is="internalIconVnode" v-else-if="internalIconVnode" />
   </i>
 </template>
 
-<style lang="scss">
-@include b(icon) {
+<style lang="scss" scoped>
+@use 'sass:map';
+
+$icon-size-map: (
+  'tiny': 12px,
+  'small': 16px,
+  'medium': 20px,
+  'large': 24px,
+  'xlarge': 32px,
+);
+$icon-color-map: ('primary', 'secondary', 'success', 'warning', 'error', 'info');
+
+.jv-icon {
   --jv-icon-size: 24px;
-  --jv-icon-color: var(--jv-theme-primary);
+  --jv-icon-color: var(--jv-theme-on-surface);
 
   //   ==== 通用样式 ====
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  color: var(--jv-icon-color);
+  width: 1em;
+  height: 1em;
   font-size: var(--jv-icon-size);
-  line-height: 1;
-  vertical-align: middle;
-  user-select: none;
+  transition: color 0.2s ease-in-out;
 
-  // 预设尺寸
-  @include m(size-tiny) {
-    --jv-icon-size: 12px;
+  svg {
+    fill: currentcolor;
+    stroke: currentcolor;
   }
 
-  @include m(size-small) {
-    --jv-icon-size: 16px;
+  @each $key, $value in $icon-size-map {
+    &--size-#{$key} {
+      --jv-icon-size: #{$value};
+    }
   }
 
-  @include m(size-medium) {
-    --jv-icon-size: 24px;
+  @each $key, $value in $icon-color-map {
+    &--color-#{$key} {
+      --jv-icon-color: var(--jv-theme-#{$value});
+    }
   }
 
-  @include m(size-large) {
-    --jv-icon-size: 32px;
+  &--spin {
+    animation: jv-icon-spin 1s infinite linear;
   }
 
-  @include m(size-xlarge) {
-    --jv-icon-size: 40px;
-  }
-
-  // 颜色类型
-  @include m(type-primary) {
-    --jv-icon-color: var(--jv-theme-primary);
-  }
-
-  @include m(type-secondary) {
-    --jv-icon-color: var(--jv-theme-secondary);
-  }
-
-  @include m(type-success) {
-    --jv-icon-color: var(--jv-theme-success);
-  }
-
-  @include m(type-warning) {
-    --jv-icon-color: var(--jv-theme-warning);
-  }
-
-  @include m(type-error) {
-    --jv-icon-color: var(--jv-theme-error);
-  }
-
-  @include m(type-info) {
-    --jv-icon-color: var(--jv-theme-info);
-  }
-
-  // 动画效果
-  @include m(spin) {
-    animation: jv-icon-spin 2s infinite linear;
-  }
-
-  @include m(flip) {
+  &--flip {
     transform: scaleX(-1);
   }
 
-  @include m(disabled) {
+  &--disabled {
     cursor: not-allowed;
     opacity: 0.6;
   }

@@ -10,7 +10,7 @@ import Schema from 'async-validator'
  */
 export function getNestedValue(
   obj: Record<string, any>,
-  path: string
+  path: string,
 ): FormItemValue {
   if (!obj || !path) {
     return undefined
@@ -46,7 +46,7 @@ export function setNestedValue(
   obj: Record<string, any>,
   path: string,
   value: FormItemValue,
-  autoCreate = false
+  autoCreate = false,
 ): boolean {
   if (!obj || !path) {
     return false
@@ -62,7 +62,8 @@ export function setNestedValue(
     if (!(prop in current)) {
       if (autoCreate) {
         current[prop] = {}
-      } else {
+      }
+      else {
         return false
       }
     }
@@ -71,7 +72,8 @@ export function setNestedValue(
     if (current === null || typeof current !== 'object') {
       if (autoCreate) {
         current = {}
-      } else {
+      }
+      else {
         return false
       }
     }
@@ -91,7 +93,7 @@ export function setNestedValue(
  */
 export function mergeRules(
   propRules: FormValidateRule | FormValidateRule[] | undefined,
-  formRules: FormValidateRule | FormValidateRule[] | undefined
+  formRules: FormValidateRule | FormValidateRule[] | undefined,
 ): FormValidateRule[] {
   const rules: FormValidateRule[] = []
 
@@ -116,12 +118,14 @@ export function mergeRules(
  */
 export function filterRulesByTrigger(
   rules: FormValidateRule[],
-  trigger?: string
+  trigger?: string,
 ): FormValidateRule[] {
-  if (!trigger) return rules
+  if (!trigger)
+    return rules
 
   return rules.filter((rule) => {
-    if (!rule.trigger) return false
+    if (!rule.trigger)
+      return false
     if (isArray(rule.trigger)) {
       return rule.trigger.includes(trigger as any)
     }
@@ -139,7 +143,7 @@ export function filterRulesByTrigger(
 export async function validateField(
   prop: string,
   value: FormItemValue,
-  rules: FormValidateRule[]
+  rules: FormValidateRule[],
 ) {
   const validator = new Schema({ [prop]: rules })
   const data = { [prop]: value }
@@ -150,9 +154,10 @@ export async function validateField(
       valid: true,
       errors: [],
       fields: {},
-      message: ''
+      message: '',
     }
-  } catch (errors: any) {
+  }
+  catch (errors: any) {
     const validationErrors = errors.errors || []
     const fields = errors.fields || {}
     const message = validationErrors[0]?.message || ''
@@ -160,14 +165,14 @@ export async function validateField(
     const formErrors = validationErrors.map((err: any) => ({
       message: err.message,
       field: err.field,
-      rule: err.rule || {}
+      rule: err.rule || {},
     }))
 
     return {
       valid: false,
       errors: formErrors,
       fields,
-      message
+      message,
     }
   }
 }
@@ -180,13 +185,13 @@ export async function validateField(
  */
 export function isRequiredField(
   required: boolean | undefined,
-  rules: FormValidateRule[]
+  rules: FormValidateRule[],
 ): boolean {
   if (required !== undefined) {
     return required
   }
 
-  return rules.some((rule) => rule.required)
+  return rules.some(rule => rule.required)
 }
 
 /**
@@ -197,7 +202,7 @@ export function isRequiredField(
  */
 export function computeLabelWidthStyle(
   width: string | number | undefined,
-  position: string | undefined
+  position: string | undefined,
 ): Record<string, string> {
   if (!width || position === 'top') {
     return {}

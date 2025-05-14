@@ -9,7 +9,7 @@ export interface JvPaginationProps {
   modelValue?: number
   /** 总条数 */
   total: number
-  /** 每页条数 */
+  /** 每页条数，支持 v-model:pageSize */
   pageSize?: number
   /** 可选的每页条数 */
   pageSizes?: number[]

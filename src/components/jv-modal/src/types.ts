@@ -1,3 +1,5 @@
+import type { JvCardHeaderProps } from '@/components/jv-card'
+import type { JvIconProps } from '@/components/jv-icon/src/types'
 import type { Slot } from 'vue'
 import { createNamespace } from '@/utils'
 
@@ -9,19 +11,35 @@ export const bem = createNamespace(JVMODAL_NAME)
  */
 export interface JvModalProps {
   /**
+   * 标题
+   */
+  title?: JvCardHeaderProps['title']
+  /**
+   * 描述
+   */
+  description?: string
+  /**
+   * 图标
+   */
+  icon?: JvIconProps['name'] | JvIconProps
+  /**
    * 是否显示
+   * @default false
    */
   modelValue?: boolean
   /**
    * 是否可关闭
+   * @default true
    */
   closeable?: boolean
   /**
    * 关闭图标
+   * @default '$close'
    */
   closeIcon?: string
   /**
    * 是否点击遮罩关闭
+   * @default true
    */
   maskClosable?: boolean
   /**
@@ -33,7 +51,6 @@ export interface JvModalProps {
    */
   confirmText?: string
 }
-
 /**
  * 弹窗组件事件
  */

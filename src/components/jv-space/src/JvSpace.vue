@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { JvSpaceProps } from './types'
 import { convertToUnit } from '@/utils'
-import { computed } from 'vue'
+import { computed, useCssVars } from 'vue'
 import { bem, JVSPACE_NAME } from './types'
 
 defineOptions({ name: JVSPACE_NAME, inheritAttrs: false })
@@ -10,7 +10,7 @@ defineOptions({ name: JVSPACE_NAME, inheritAttrs: false })
 const {
   gap = 8,
   direction = 'horizontal',
-  align,
+  align = 'start',
   justify,
   wrap = false,
   fill = false,
@@ -21,30 +21,17 @@ const {
   ariaDescribedby,
 } = defineProps<JvSpaceProps>()
 
-defineEmits<{
-  (e: 'click', event: MouseEvent): void
-}>()
-
-// 计算样式
-const spaceStyle = computed(() => {
-  const style: Record<string, any> = {
-    columnGap: 0,
-    rowGap: 0,
-  }
-  const [horizontalGap, verticalGap] = Array.isArray(gap) ? gap : [gap, gap]
-  style.columnGap
-    = typeof horizontalGap === 'number'
-      ? convertToUnit(horizontalGap)
-      : horizontalGap
-  style.rowGap
-    = typeof verticalGap === 'number' ? convertToUnit(verticalGap) : verticalGap
-  return style
-})
-
 // 获取ARIA角色
 const computedRole = computed(() => {
   // 如果设置了role="none"，则不使用role属性
   return role === 'none' ? undefined : role
+})
+useCssVars(() => {
+  const innerGap = Array.isArray(gap) ? gap : [gap, gap]
+  return {
+    'jv-space-column-gap': convertToUnit(innerGap[0]),
+    'jv-space-row-gap': convertToUnit(innerGap[1]),
+  }
 })
 </script>
 
@@ -53,7 +40,7 @@ const computedRole = computed(() => {
     :class="[
       bem.b(),
       bem.m(direction),
-      align && bem.m(`align-${align}`),
+      { [bem.m(`align-${align}`)]: align },
       justify && bem.m(`justify-${justify}`),
       fill && bem.m('fill'),
       wrap && bem.m('wrap'),
@@ -69,61 +56,64 @@ const computedRole = computed(() => {
 </template>
 
 <style lang="scss">
-.jv-space {
+@include b(space) {
+  --jv-space-column-gap: 8px;
+  --jv-space-row-gap: 8px;
   display: flex;
   flex: 1 0 0;
-  gap: v-bind('spaceStyle.rowGap') v-bind('spaceStyle.columnGap');
+  align-items: flex-start;
+  gap: var(--jv-space-row-gap) var(--jv-space-column-gap);
 
-  &--horizontal {
+  @include m(horizontal) {
     flex-direction: row;
   }
 
-  &--vertical {
+  @include m(vertical) {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  &--wrap {
+  @include m(wrap) {
     flex-wrap: wrap;
   }
 
-  &--fill {
+  @include m(fill) {
     width: 100%;
   }
 
-  &--align-start {
+  @include m(align-start) {
     align-items: flex-start;
   }
 
-  &--align-end {
+  @include m(align-end) {
     align-items: flex-end;
   }
 
-  &--align-center {
+  @include m(align-center) {
     align-items: center;
   }
 
-  &--align-baseline {
+  @include m(align-baseline) {
     align-items: baseline;
   }
 
-  &--justify-start {
+  @include m(justify-start) {
     justify-content: flex-start;
   }
 
-  &--justify-end {
+  @include m(justify-end) {
     justify-content: flex-end;
   }
 
-  &--justify-center {
+  @include m(justify-center) {
     justify-content: center;
   }
 
-  &--justify-space-around {
+  @include m(justify-space-around) {
     justify-content: space-around;
   }
 
-  &--justify-space-between {
+  @include m(justify-space-between) {
     justify-content: space-between;
   }
 }

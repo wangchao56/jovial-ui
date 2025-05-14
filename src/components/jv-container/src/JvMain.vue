@@ -1,28 +1,44 @@
+<!-- src/components/layout/Main.vue -->
 <script setup lang="ts">
 import type { JvMainProps } from './types'
-import { JVMAN_NAME } from './types'
+import { createNamespace } from '@/utils'
+import { computed } from 'vue'
 
-defineOptions({ name: JVMAN_NAME, inheritAttrs: false })
+defineOptions({ name: 'JvMain', inheritAttrs: false })
 
-// 未使用的props，添加下划线前缀
-const _props = withDefaults(defineProps<JvMainProps>(), {
-  // 默认属性值
+const props = withDefaults(defineProps<JvMainProps>(), {
+  tag: 'main',
+  padding: true,
 })
 
-defineEmits<{
-  // 定义事件
-  (e: 'click', event: MouseEvent): void
-}>()
+const bem = createNamespace('JvMain')
+
+const mainClass = computed(() => [
+  bem.b(),
+  bem.is('padding', props.padding),
+])
 </script>
 
 <template>
-  <div class="jv-container">
+  <component
+    :is="tag"
+    :class="mainClass"
+    v-bind="$attrs"
+  >
     <slot />
-  </div>
+  </component>
 </template>
 
-<style lang="scss">
-.jv-container {
-  // 组件样式
+<style lang="scss" scoped>
+.jv-main {
+  overflow: auto;
+  flex: 1;
+  box-sizing: border-box;
+  background-color: var(--jv-theme-background);
+  color: var(--jv-theme-on-background);
+
+  &.is-padding {
+    padding: var(--jv-spacing-lg);
+  }
 }
 </style>

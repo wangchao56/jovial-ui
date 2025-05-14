@@ -1,27 +1,12 @@
 import type { Preview } from '@storybook/vue3'
-import { provide } from 'vue'
-import {
-  createJovialAdapter,
-  LocaleSymbol,
-} from '../src/locale/adapters/jovial'
+import { setup } from '@storybook/vue3'
+import JovialUI from '../src/config/index'
 import '../src/theme/styles/index.scss'
-
-// 创建 Jovial 国际化适配器实例
-const localeInstance = createJovialAdapter({
-  locale: 'zh-Hans',
-  fallback: 'en',
-})
-
+import './style.css'
 // 创建全局装饰器，为所有故事提供国际化
-function withLocale(_story: any) {
-  return {
-    setup() {
-      provide(LocaleSymbol, localeInstance)
-      return {}
-    },
-    template: '<story />',
-  }
-}
+setup((app) => {
+  app.use(JovialUI)
+})
 
 const preview: Preview = {
   parameters: {
@@ -33,19 +18,28 @@ const preview: Preview = {
     },
     // 全局可访问性配置
     a11y: {
-      // 可访问性检查默认配置
+      // Optional selector to inspect
+      element: 'body',
       config: {
         rules: [
-          // 默认开启色彩对比度检查
-          { id: 'color-contrast', enabled: true },
+          {
+            // The autocomplete rule will not run based on the CSS selector provided
+            id: 'autocomplete-valid',
+            selector: '*:not([autocomplete="nope"])',
+          },
+          {
+            // Setting the enabled option to false will disable checks for this particular rule on all stories.
+            id: 'image-alt',
+            enabled: false,
+          },
         ],
       },
-      // 默认启用可访问性检查
-      disable: false,
-      // 默认根元素
-      element: '#storybook-root',
-      // 在控制台输出违规信息
-      manual: true,
+      /*
+             * Axe's options parameter
+             * See https://github.com/dequelabs/axe-core/blob/develop/doc/API.md#options-parameter
+             * to learn more about the available options.
+             */
+      options: {},
     },
     // 组件文档参数
     docs: {
@@ -53,7 +47,7 @@ const preview: Preview = {
       description: {
         // 组件库整体描述
         component:
-          'JovialUI - 一个现代化的Vue 3组件库，注重用户体验和可访问性。',
+                    'JovialUI - 一个现代化的Vue 3组件库，注重用户体验和可访问性。',
       },
       // 文档默认配置
       source: {
@@ -68,7 +62,6 @@ const preview: Preview = {
     },
   },
   // 添加全局装饰器
-  decorators: [withLocale],
 }
 
 export default preview

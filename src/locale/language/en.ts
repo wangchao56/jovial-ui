@@ -62,7 +62,7 @@ export default {
   },
   calendar: {
     title: 'Calendar',
-    moreEvents: '还有 {0} 项',
+    moreEvents: '{0} more events',
     today: 'Today',
     year: 'Year',
     month: 'Month',

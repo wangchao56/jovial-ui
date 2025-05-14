@@ -56,7 +56,7 @@ export interface JvTagProps {
 export interface JvTagEmits {
   (e: 'click', event: MouseEvent): void
   (e: 'clickClose', event: MouseEvent): void
-  (e: 'groupSelect', selected: boolean): void
+  (e: 'select', selected: boolean): void
 }
 
 export interface JvTagSlots {

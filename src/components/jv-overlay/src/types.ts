@@ -7,15 +7,14 @@ export const bem = createNamespace(JVOVERLAY_NAME)
 export interface JvOverlayProps {
   // 定义组件属性
   target: 'viewport' | 'parent'
-  modelValue?: boolean
-  /**
-   * 遮罩层z-index
-   */
-  maskZIndex?: number
   /**
    * 是否显示遮罩层
    */
   showMask?: boolean
+  /**
+   * 遮罩层z-index
+   */
+  maskZIndex?: number
   /**
    * 默认z-index
    */

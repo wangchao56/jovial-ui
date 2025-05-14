@@ -43,16 +43,16 @@ JvIcon 组件提供多种样式定制选项：
 
 - **尺寸 (size)**：
 
-  - tiny：12px
-  - small：16px
-  - medium (默认)：24px
-  - large：32px
-  - xlarge：40px
+  - tiny：15px
+  - small：18px
+  - medium (默认)：21x
+  - large：24px
+  - xlarge：27px
   - 自定义数值：直接指定像素值
 
 - **颜色类型 (colorType)**：
 
-  - default (默认)：使用默认主题色
+  - default (默认)：使用on-surface主题色
   - primary：使用主要主题色
   - secondary：使用次要主题色
   - success：使用成功色
@@ -95,7 +95,7 @@ JvIcon 组件提供多种样式定制选项：
 
 JvIcon 组件提供了以下交互特性：
 
-- **鼠标交互**：图标可以接收点击事件
+- **鼠标交互**：图标一般不具备交互能力但是与button组件组合实现交互能力
 - **键盘交互**：图标可通过 tabindex 获取焦点，支持键盘操作
 - **动画效果**：
   - spin 属性启用旋转动画
@@ -135,11 +135,6 @@ JvIcon 组件的可访问性设计包括：
 | spin      | boolean                                   | false     | 是否应用旋转动画                    |
 | disabled  | boolean                                   | false     | 是否禁用图标                        |
 
-### 事件 (Emits)
-
-| 事件名 | 参数                | 说明           |
-| ------ | ------------------- | -------------- |
-| click  | (event: MouseEvent) | 点击图标时触发 |
 
 ### 插槽 (Slots)
 

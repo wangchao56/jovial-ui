@@ -22,14 +22,13 @@ $theme-colors: (
   'light': (
     'primary': #067d75,
     'secondary': #015751,
-    'accent': #ffcc29,
     'neutral': #f0f0f0,
-    'error': #b20d05,
-    'warning': #c44201,
-    'success': #008127,
-    'info': #0069e1,
-    'background': #fff,
-    'surface': #ededed,
+    'error': #b50c00,
+    'warning': #b84214,
+    'success': #005617,
+    'info': #0056b8,
+    'background': #f5f5f5,
+    'surface': #fff,
     'on-primary': #fff,
     'on-secondary': #fff,
     'on-accent': #fff,
@@ -39,19 +38,18 @@ $theme-colors: (
     'on-success': #fff,
     'on-info': #fff,
     'on-background': #282828,
-    'on-surface': #32343a,
+    'on-surface': #121212,
   ),
   'dark': (
     'primary': #4cada4,
     'secondary': #00b2a6,
-    'accent': #ffcc29,
     'neutral': #f0f0f0,
     'error': #ff564c,
     'warning': #ec6e33,
     'success': #0cd748,
     'info': #07f,
     'background': #282828,
-    'surface': #32343a,
+    'surface': #121212,
     'on-primary': #fff,
     'on-secondary': #fff,
     'on-accent': #fff,
@@ -61,7 +59,7 @@ $theme-colors: (
     'on-success': #fff,
     'on-info': #fff,
     'on-background': #fff,
-    'on-surface': #ededed,
+    'on-surface': #fff,
   ),
 );
 $light-colors: map.get($theme-colors, 'light');
@@ -73,25 +71,21 @@ $dark-colors: map.get($theme-colors, 'dark');
 
 // 循环生成css变量
 @each $theme, $colors in $theme-colors {
-  [data-theme='#{$theme}'] {
-    @each $color, $value in $colors {
-      --jv-theme-#{$color}: #{$value};
-      --jv-theme-#{$color}-rgb: #{create-rgb($value)};
+  @if $theme == 'dark' {
+    [data-theme='#{$theme}'] {
+      color-scheme: #{$theme};
+
+      @each $color, $value in $colors {
+        --jv-theme-#{$color}: #{$value};
+      }
     }
   }
 
   @if $theme == 'light' {
     :root {
-      color-scheme: #{$theme};
-
       @each $color, $value in $colors {
         --jv-theme-#{$color}: #{$value};
-        --jv-theme-#{$color}-rgb: #{create-rgb($value)};
       }
     }
   }
-}
-
-:root {
-  --jv-border-color: #{$color-gray-300};
 }

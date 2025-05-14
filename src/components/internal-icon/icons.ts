@@ -1,3 +1,4 @@
+export { default as MdiAccount } from './MdiAccount.vue'
 export { default as MdiAlarmCheck } from './MdiAlarmCheck.vue'
 export { default as MdiAlertCircle } from './MdiAlertCircle.vue'
 export { default as MdiAlertCircleOutline } from './MdiAlertCircleOutline.vue'

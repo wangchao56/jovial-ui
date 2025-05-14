@@ -1,28 +1,48 @@
+<!-- src/components/layout/Footer.vue -->
 <script setup lang="ts">
 import type { JvFooterProps } from './types'
-import { JVFOOTER_NAME } from './types'
+import { convertToUnit, createNamespace } from '@/utils'
+import { useCssVars } from 'vue'
 
-defineOptions({ name: JVFOOTER_NAME, inheritAttrs: false })
+defineOptions({ name: 'JvFooter', inheritAttrs: false })
 
-// 未使用的props，添加下划线前缀
-withDefaults(defineProps<JvFooterProps>(), {
-  // 默认属性值
+const props = withDefaults(defineProps<JvFooterProps>(), {
+  height: 60,
+  tag: 'footer',
+  fixed: false,
 })
 
-defineEmits<{
-  // 定义事件
-  (e: 'click', event: MouseEvent): void
-}>()
+const bem = createNamespace('JvFooter')
+
+useCssVars(() => {
+  return {
+    'jv-footer-height': convertToUnit(props.height) as string,
+  }
+})
 </script>
 
 <template>
-  <div class="jv-footer">
+  <component :is="tag" :class="[bem.b(), bem.is('fixed', fixed)]" v-bind="$attrs">
     <slot />
-  </div>
+  </component>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .jv-footer {
-  // 组件样式
+  --jv-footer-height: 60px;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  min-height: var(--jv-footer-height);
+  background-color: var(--jv-theme-surface);
+  color: var(--jv-theme-on-surface);
+  transition: all 0.3s;
+
+  &.is-fixed {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+  }
 }
 </style>

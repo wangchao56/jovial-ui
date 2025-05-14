@@ -9,12 +9,12 @@ vi.mock('@/locale/adapters/jovial', () => ({
     current: { value: 'zh-Hans' },
     t: (key: string, value?: any) => {
       const messages: Record<string, string> = {
-        '$jv.pagination.prev': '上一页',
-        '$jv.pagination.next': '下一页',
-        '$jv.pagination.total': `共 ${value} 条`,
-        '$jv.pagination.itemsPerPage': '条/页',
-        '$jv.pagination.jumpTo': '前往',
-        '$jv.pagination.page': `第${value}页`,
+        'pagination.prev': '上一页',
+        'pagination.next': '下一页',
+        'pagination.total': `共 ${value} 条`,
+        'pagination.itemsPerPage': '条/页',
+        'pagination.jumpTo': '前往',
+        'pagination.page': `第${value}页`,
       }
       return messages[key] || key
     },
@@ -89,6 +89,28 @@ describe('jvPagination', () => {
     expect(wrapper.emitted('change')).toBeTruthy()
     expect(wrapper.emitted('change')?.[0][0]).toBe(1) // 页码
     expect(wrapper.emitted('change')?.[0][1]).toBe(20) // 每页条数
+  })
+
+  // 测试国际化显示
+  it('正确显示国际化文本', () => {
+    const wrapper = mount(JvPagination, {
+      props: {
+        modelValue: 1,
+        total: 100,
+        pageSize: 10,
+      },
+    })
+
+    // 检查上一页和下一页按钮的文本
+    const buttons = wrapper.findAll('.jv-pagination__btn')
+    expect(buttons[0].text()).toContain('上一页')
+    expect(buttons[buttons.length - 1].text()).toContain('下一页')
+
+    // 检查总数显示
+    expect(wrapper.find('.jv-pagination__total').text()).toBe('共 100 条')
+
+    // 检查跳转文本
+    expect(wrapper.find('.jv-pagination__jump').text()).toContain('前往')
   })
 
   // 测试简洁模式

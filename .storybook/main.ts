@@ -8,15 +8,7 @@ const config: StorybookConfig = {
     '@chromatic-com/storybook',
     '@storybook/experimental-addon-test',
     '@storybook/addon-docs',
-    {
-      name: '@storybook/addon-a11y',
-      options: {
-        // 将a11y面板设置为默认打开
-        enableShortcuts: true,
-        // 将检查结果自动显示在控制台
-        check: 'onFirstRender',
-      },
-    },
+    '@storybook/addon-a11y',
   ],
   framework: {
     name: '@storybook/vue3-vite',
@@ -31,7 +23,22 @@ const config: StorybookConfig = {
       alias: {
         '@': '/src',
         '@components': '/src/components',
+        '@utils': '/src/utils',
+        '@theme': '/src/theme',
       },
+    }
+    config.css = {
+      preprocessorOptions: {
+        scss: {
+          additionalData: `
+              @use "@/theme/styles/_bem.scss" as *;
+              @use "@/theme/styles/_variables.scss" as *;
+              @use "@/theme/styles/_colors.scss" as *;
+              @use "@/theme/styles/_border-radius.scss" as *;
+            `,
+        },
+      },
+      postcss: '../postcss.config.js',
     }
     return config
   },

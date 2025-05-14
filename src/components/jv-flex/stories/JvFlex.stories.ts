@@ -11,7 +11,7 @@ const meta: Meta<typeof JvFlex> = {
       control: 'select',
       options: ['row', 'column'],
       description: '布局方向',
-      defaultValue: 'row'
+      defaultValue: 'row',
     },
     justify: {
       control: 'select',
@@ -23,36 +23,36 @@ const meta: Meta<typeof JvFlex> = {
         'around',
         'evenly',
         'left',
-        'right'
+        'right',
       ],
       description: '主轴对齐方式',
-      defaultValue: 'start'
+      defaultValue: 'start',
     },
     align: {
       control: 'select',
       options: ['start', 'end', 'center', 'baseline', 'stretch'],
       description: '交叉轴对齐方式',
-      defaultValue: 'start'
+      defaultValue: 'start',
     },
     wrap: {
       control: 'boolean',
       description: '是否换行',
-      defaultValue: false
+      defaultValue: false,
     },
     gap: {
       control: 'number',
       description: '元素间距',
-      defaultValue: 0
+      defaultValue: 0,
     },
     inline: {
       control: 'boolean',
       description: '是否为行内布局',
-      defaultValue: false
+      defaultValue: false,
     },
     reverse: {
       control: 'boolean',
       description: '是否翻转布局方向',
-      defaultValue: false
+      defaultValue: false,
     },
     contentAlign: {
       control: 'select',
@@ -62,17 +62,17 @@ const meta: Meta<typeof JvFlex> = {
         'center',
         'space-between',
         'space-around',
-        'stretch'
+        'stretch',
       ],
       description: '元素间对齐方式（flex-wrap为wrap时的cross-axis对齐）',
-      defaultValue: 'start'
-    }
+      defaultValue: 'start',
+    },
   },
   args: {
-    direction: 'row',
+    direction: 'row' as DirectionType,
     wrap: false,
-    gap: 8
-  }
+    gap: 8,
+  },
 }
 
 export default meta
@@ -86,12 +86,12 @@ const boxStyle = {
   color: 'var(--jv-theme-on-primary)',
   borderRadius: 'var(--jv-rounded)',
   fontWeight: 'bold',
-  minWidth: '80px'
+  minWidth: '80px',
 }
 
 // 基础用法
 export const 基础用法: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { JvFlex },
     setup() {
       return { args, boxStyle }
@@ -100,8 +100,8 @@ export const 基础用法: Story = {
       <JvFlex v-bind="args">
         <div v-for="i in 3" :key="i" :style="boxStyle">盒子 {{ i }}</div>
       </JvFlex>
-    `
-  })
+    `,
+  }),
 }
 
 // 主轴对齐方式
@@ -117,7 +117,7 @@ export const 主轴对齐方式: Story = {
         'right',
         'space-between',
         'space-around',
-        'space-evenly'
+        'space-evenly',
       ]
       return { justifyOptions, boxStyle }
     },
@@ -130,13 +130,13 @@ export const 主轴对齐方式: Story = {
           </JvFlex>
         </div>
       </div>
-    `
-  })
+    `,
+  }),
 }
 
 // 交叉轴对齐方式
 export const 交叉轴对齐方式: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { JvFlex },
     setup() {
       const alignOptions = ['start', 'end', 'center', 'baseline', 'stretch']
@@ -153,8 +153,8 @@ export const 交叉轴对齐方式: Story = {
           </JvFlex>
         </div>
       </div>
-    `
-  })
+    `,
+  }),
 }
 
 // 换行与间距
@@ -179,8 +179,8 @@ export const 换行与间距: Story = {
           </JvFlex>
         </div>
       </div>
-    `
-  })
+    `,
+  }),
 }
 
 // 方向
@@ -205,8 +205,8 @@ export const 方向: Story = {
           </JvFlex>
         </div>
       </div>
-    `
-  })
+    `,
+  }),
 }
 
 // 翻转
@@ -256,6 +256,6 @@ export const 翻转方向: Story = {
           </JvFlex>
         </div>
       </div>
-    `
-  })
+    `,
+  }),
 }

@@ -1,9 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
-import { provide, ref } from 'vue'
-import {
-  createJovialAdapter,
-  LocaleSymbol
-} from '../../../locale/adapters/jovial'
+import { ref } from 'vue'
 import JvPagination from '../src/JvPagination.vue'
 
 /**
@@ -24,78 +20,59 @@ import JvPagination from '../src/JvPagination.vue'
  * - 当需要快速跳转到指定页码时
  */
 
-// 创建国际化适配器
-const localeAdapter = createJovialAdapter({
-  locale: 'zh-Hans',
-  fallback: 'en'
-})
-
-// 创建一个装饰器，为所有故事提供国际化
-function withLocale(story: any) {
-  return {
-    components: { story },
-    setup() {
-      provide(LocaleSymbol, localeAdapter)
-      return {}
-    },
-    template: '<story />'
-  }
-}
-
 const meta: Meta<typeof JvPagination> = {
   title: '导航组件/Pagination 分页',
   component: JvPagination,
   tags: ['autodocs'],
-  decorators: [withLocale], // 应用国际化装饰器
   argTypes: {
     modelValue: {
       control: { type: 'number' },
       description: '当前页码',
       table: {
         type: { summary: '1' },
-        defaultValue: { summary: '1' }
-      }
+        defaultValue: { summary: '1' },
+      },
     },
     total: {
       control: { type: 'number' },
       description: '总条目数',
       table: {
         type: { summary: '0' },
-        defaultValue: { summary: '0' }
-      }
+        defaultValue: { summary: '0' },
+      },
     },
     pageSize: {
       control: { type: 'number' },
       description: '每页条数',
       table: {
         type: { summary: '10' },
-        defaultValue: { summary: '10' }
-      }
+        defaultValue: { summary: '10' },
+      },
     },
     pageSizes: {
       control: 'object',
       description: '可选的每页条数',
       table: {
         type: { summary: 'number[]' },
-        defaultValue: { summary: '[10, 20, 50, 100]' }
-      }
+        defaultValue: { summary: '[10, 20, 50, 100]' },
+      },
     },
     simple: {
       control: { type: 'boolean' },
       description: '是否使用简洁模式',
       table: {
         type: { summary: 'false' },
-        defaultValue: { summary: 'false' }
-      }
-    }
+        defaultValue: { summary: 'false' },
+      },
+    },
   },
   args: {
     modelValue: 1,
     total: 100,
     pageSize: 10,
     pageSizes: [10, 20, 50, 100],
-    simple: false
-  }
+    simple: false,
+  },
 }
 
 export default meta
@@ -103,7 +80,7 @@ type Story = StoryObj<typeof JvPagination>
 
 // 基础用法
 export const 基础用法: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { JvPagination },
     setup() {
       const currentPage = ref(args.modelValue)
@@ -120,13 +97,13 @@ export const 基础用法: Story = {
         />
         <div style="margin-top: 10px">当前页码: {{ currentPage }}</div>
       </div>
-    `
-  })
+    `,
+  }),
 }
 
 // 简洁模式
 export const 简洁模式: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { JvPagination },
     setup() {
       const currentPage = ref(args.modelValue)
@@ -142,8 +119,8 @@ export const 简洁模式: Story = {
         />
         <div style="margin-top: 10px">当前页码: {{ currentPage }}</div>
       </div>
-    `
-  })
+    `,
+  }),
 }
 
 // 自定义每页显示条数
@@ -166,15 +143,15 @@ export const 自定义每页显示条数: Story = {
         />
         <div style="margin-top: 10px">当前页码: {{ currentPage }}, 每页条数: {{ pageSize }}</div>
       </div>
-    `
+    `,
   }),
   parameters: {
     docs: {
       description: {
-        story: '使用JvSelect组件来选择每页显示条数，更加美观和一致。'
-      }
-    }
-  }
+        story: '使用JvSelect组件来选择每页显示条数，更加美观和一致。',
+      },
+    },
+  },
 }
 
 // 不同页面总数的分页显示
@@ -199,8 +176,8 @@ export const 不同数量分页显示: Story = {
           <JvPagination :total="1000" :page-size="10" />
         </div>
       </div>
-    `
-  })
+    `,
+  }),
 }
 
 // RTL模式 (需要在容器上添加 is-rtl 类或设置 dir="rtl")
@@ -214,6 +191,6 @@ export const RTL模式: Story = {
       <div dir="rtl">
         <JvPagination :total="100" :page-size="10" />
       </div>
-    `
-  })
+    `,
+  }),
 }

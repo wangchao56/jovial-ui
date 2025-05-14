@@ -38,6 +38,8 @@ const triggerEl = ref<HTMLElement | null>(null)
 const localReferenceRect = ref<DOMRect | null>(null)
 const tooltipContentEl = ref<HTMLElement | null>(null)
 const tooltipSize = ref<{ width?: number, height?: number }>({})
+// 为tooltip创建一个专门的容器
+const tooltipContainer = ref<HTMLElement | null>(null)
 
 // 接收实际放置位置的方法
 function handleActualPlacementChange(newPlacement: string) {
@@ -165,6 +167,13 @@ onMounted(() => {
   }
   // 初始计算tooltip尺寸
   updateTooltipSize()
+
+  // 创建tooltip容器并添加到文档中
+  if (!tooltipContainer.value) {
+    tooltipContainer.value = document.createElement('div')
+    tooltipContainer.value.className = 'jv-tooltip-container'
+    document.body.appendChild(tooltipContainer.value)
+  }
 })
 
 const popoverReferenceRect = computed(() => {
@@ -174,6 +183,11 @@ const popoverReferenceRect = computed(() => {
 // 组件卸载时清理事件监听器
 onBeforeUnmount(() => {
   cleanupEventListeners()
+
+  // 移除tooltip容器
+  if (tooltipContainer.value && document.body.contains(tooltipContainer.value)) {
+    document.body.removeChild(tooltipContainer.value)
+  }
 })
 </script>
 
@@ -181,7 +195,7 @@ onBeforeUnmount(() => {
   <JvFragmentWrapper v-if="!referenceRect" :set-ref="setRef" :only-child="true">
     <slot />
   </JvFragmentWrapper>
-  <div class="jv-tooltip-container">
+  <Teleport :to="tooltipContainer">
     <JvPopover
       v-model:show="visible"
       :offset="offset"
@@ -204,7 +218,7 @@ onBeforeUnmount(() => {
         </slot>
       </div>
     </JvPopover>
-  </div>
+  </Teleport>
 </template>
 
 <style lang="scss">
@@ -223,8 +237,8 @@ onBeforeUnmount(() => {
   &__content {
     padding: 8px 12px;
     border-radius: 4px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
-    background: rgba(0, 0, 0, 0.8);
+    box-shadow: 0 2px 12px rgb(0 0 0 / 0.15);
+    background: rgb(0 0 0 / 0.8);
     color: white;
     font-size: 14px;
     line-height: 1.4;
@@ -234,7 +248,7 @@ onBeforeUnmount(() => {
 
   .jv-popover__arrow {
     box-shadow: none !important;
-    background-color: rgba(0, 0, 0, 0.8) !important;
+    background-color: rgb(0 0 0 / 0.8) !important;
   }
 }
 </style>

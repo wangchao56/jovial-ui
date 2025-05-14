@@ -7,8 +7,10 @@ import {
 import viteConfig from './vite.config'
 
 export default defineConfig(
-  mergeConfig(viteConfig, {
+  mergeConfig(viteConfig({ command: 'serve', mode: 'development' }), {
     test: {
+      environment: 'jsdom',
+      globals: true,
       coverage: {
         provider: 'v8',
         reporter: ['text', 'json', 'html'], // 报告类型

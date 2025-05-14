@@ -1,31 +1,60 @@
 <script setup lang="ts">
 import type { JvAsideProps } from './types'
-import { JVASIDE_NAME } from './types'
+import { convertToUnit, createNamespace } from '@/utils'
+import { computed, useCssVars } from 'vue'
 
-defineOptions({ name: JVASIDE_NAME, inheritAttrs: false })
+defineOptions({ name: 'JvAside', inheritAttrs: false })
 
-// 未使用的props，添加下划线前缀
-const _props = withDefaults(defineProps<JvAsideProps>(), {
-  // 默认属性值
+const props = withDefaults(defineProps<JvAsideProps>(), {
+  width: 200,
+  tag: 'aside',
+  fixed: false,
+  breakpoint: 'md',
 })
 
-defineEmits<{
-  // 定义事件
-  (e: 'click', event: MouseEvent): void
-}>()
+const bem = createNamespace('JvAside')
 
-// 如需解构props，请按需添加
-// const propsRefs = toRefs(props)
+const asideClass = computed(() => [
+  bem.b(),
+  bem.is('fixed', props.fixed),
+])
+
+const asideStyle = computed(() => ({
+  width: typeof props.width === 'number' ? `${props.width}px` : props.width,
+}))
+useCssVars(() => {
+  return {
+    'jv-aside-width': convertToUnit(props.width) as string,
+  }
+})
 </script>
 
 <template>
-  <div class="jv-aside">
+  <component
+    :is="tag"
+    :class="asideClass"
+    :style="asideStyle"
+    v-bind="$attrs"
+  >
     <slot />
-  </div>
+  </component>
 </template>
 
-<style lang="scss">
-.jv-container {
-  // 组件样式
+<style lang="scss" scoped>
+.jv-aside {
+  --jv-aside-width: 200px;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  background-color: var(--jv-theme-surface);
+  color: var(--jv-theme-on-surface);
+  transition: all 0.3s;
+
+  &.is-fixed {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 99;
+  }
 }
 </style>

@@ -999,3 +999,12 @@ export function checkPrintable(e: KeyboardEvent) {
   const noModifier = !e.ctrlKey && !e.metaKey && !e.altKey
   return isPrintableChar && noModifier
 }
+// 大驼峰转短横线
+export function pascalToKebab(str: string) {
+    return str.replace(/([A-Z])/g, '-$1').replace(/^-/, '').toLowerCase()
+  }
+
+// 驼峰转短横线
+export function camelToKebab(str: string) {
+  return str.replace(/[A-Z]/g, m => `-${m.toLowerCase()}`)
+}

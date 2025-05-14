@@ -1,0 +1,24 @@
+// 全局样式变量
+:root {
+  // 过渡动画
+  --jv-transition-duration: 0.3s;
+  --jv-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  --jv-transition-standard: all var(--jv-transition-duration) var(--jv-transition-timing-function);
+
+  // 交互反馈
+  --jv-hover-overlay-opacity: 0.08;
+  --jv-focus-overlay-opacity: 0.12;
+  --jv-active-overlay-opacity: 0.16;
+  --jv-selected-overlay-opacity: 0.14;
+  --jv-disabled-opacity: 0.6;
+}
+
+// 全局交互状态类
+.jv-interactive {
+  @include component-state-interactive;
+}
+
+// 波纹效果类
+.jv-ripple {
+  @include component-ripple;
+}

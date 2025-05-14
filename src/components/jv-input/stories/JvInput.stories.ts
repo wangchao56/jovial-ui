@@ -10,59 +10,59 @@ const meta = {
   argTypes: {
     modelValue: {
       control: 'text',
-      description: '输入框的值'
+      description: '输入框的值',
     },
     placeholder: {
       control: 'text',
-      description: '占位符文本'
+      description: '占位符文本',
     },
     type: {
       control: { type: 'select' },
       options: ['text', 'password', 'email'],
-      description: '输入框类型'
+      description: '输入框类型',
     },
     disabled: {
       control: 'boolean',
-      description: '是否禁用'
+      description: '是否禁用',
     },
     readonly: {
       control: 'boolean',
-      description: '是否只读'
+      description: '是否只读',
     },
     clearable: {
       control: 'boolean',
-      description: '是否可清空'
+      description: '是否可清空',
     },
     showPassword: {
       control: 'boolean',
-      description: '是否显示密码切换按钮'
+      description: '是否显示密码切换按钮',
     },
     size: {
       control: { type: 'select' },
       options: ['xlarge', 'large', 'medium', 'small', 'tiny'],
-      description: '输入框大小'
+      description: '输入框大小',
     },
     variant: {
       control: { type: 'select' },
       options: ['outlined', 'card'],
-      description: '输入框变体风格'
+      description: '输入框变体风格',
     },
     prefixIcon: {
       control: 'text',
-      description: '前缀图标'
+      description: '前缀图标',
     },
     suffixIcon: {
       control: 'text',
-      description: '后缀图标'
+      description: '后缀图标',
     },
     maxLength: {
       control: 'number',
-      description: '最大输入长度'
+      description: '最大输入长度',
     },
     showCount: {
       control: 'boolean',
-      description: '是否显示计数'
-    }
+      description: '是否显示计数',
+    },
   },
   args: {
     // 默认参数
@@ -78,8 +78,8 @@ const meta = {
     prefixIcon: '',
     suffixIcon: '',
     maxLength: undefined,
-    showCount: false
-  }
+    showCount: false,
+  },
 } satisfies Meta<typeof JvInput>
 
 export default meta
@@ -87,7 +87,7 @@ type Story = StoryObj<typeof meta>
 
 // 基础用法
 export const Basic: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { JvInput },
     setup() {
       const value = ref(args.modelValue || '')
@@ -98,8 +98,8 @@ export const Basic: Story = {
         <JvInput v-model="value" v-bind="args" />
         <div style="margin-top: 10px">当前值: {{ value }}</div>
       </div>
-    `
-  })
+    `,
+  }),
 }
 
 // 不同尺寸
@@ -117,8 +117,8 @@ export const Sizes: Story = {
         <JvInput v-model="value" size="medium" placeholder="中等尺寸 (默认)" />
         <JvInput v-model="value" size="small" placeholder="小尺寸" />
       </div>
-    `
-  })
+    `,
+  }),
 }
 
 // // 不同变体
@@ -150,8 +150,8 @@ export const DisabledAndReadonly: Story = {
         <JvInput value="禁用状态的输入框" disabled />
         <JvInput value="只读状态的输入框" readonly />
       </div>
-    `
-  })
+    `,
+  }),
 }
 
 // 可清除和密码输入
@@ -169,8 +169,8 @@ export const ClearableAndPassword: Story = {
         <JvInput v-model="passwordValue" type="password" showPassword placeholder="密码输入框" />
         <JvInput v-model="passwordValue" type="password" showPassword clearable placeholder="可清除的密码输入框" />
       </div>
-    `
-  })
+    `,
+  }),
 }
 
 // 前缀和后缀
@@ -190,8 +190,8 @@ export const PrefixAndSuffix: Story = {
           <template #suffix>.00</template>
         </JvInput>
       </div>
-    `
-  })
+    `,
+  }),
 }
 
 // 显示计数
@@ -207,8 +207,8 @@ export const ShowCount: Story = {
         <JvInput v-model="value" showCount placeholder="显示字符计数" />
         <JvInput v-model="value" maxLength="20" showCount placeholder="最大输入20个字符" />
       </div>
-    `
-  })
+    `,
+  }),
 }
 
 // 前置/后置元素
@@ -234,6 +234,6 @@ export const PrependAndAppend: Story = {
           </template>
         </JvInput>
       </div>
-    `
-  })
+    `,
+  }),
 }

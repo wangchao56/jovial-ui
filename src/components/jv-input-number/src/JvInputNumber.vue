@@ -204,7 +204,7 @@ defineExpose({ getInputValue, setInputValue, clearInputValue })
 
   &.is-focused .jv-input-number__wrapper {
     border-color: var(--jv-theme-primary, #409eff);
-    box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.12);
+    box-shadow: 0 0 0 2px rgb(64 158 255 / 0.12);
   }
 
   &.is-disabled .jv-input-number__wrapper {

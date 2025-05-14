@@ -1,8 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
-import type { MessageType } from '../src/types'
 import JvMessage from '../src/JvMessage.vue'
 
+const variantOptions = ['outlined', 'filled', 'tonal']
+const typeOptions = ['info', 'success', 'warning', 'error']
+
 // 更多信息: https://storybook.js.org/docs/vue/writing-stories/introduction
+
 const meta = {
   title: '反馈组件/Message 消息',
   component: JvMessage,
@@ -11,8 +14,14 @@ const meta = {
     type: {
       description: '消息类型',
       control: 'select',
-      options: ['info', 'success', 'warning', 'danger'],
+      options: typeOptions,
       defaultValue: 'info',
+    },
+    variant: {
+      description: '消息变体',
+      control: 'select',
+      options: variantOptions,
+      defaultValue: 'outlined',
     },
     closable: {
       description: '是否可关闭',
@@ -39,7 +48,7 @@ const meta = {
       control: 'boolean',
       defaultValue: false,
     },
-    default: {
+    content: {
       description: '消息内容',
       control: 'text',
     },
@@ -65,31 +74,35 @@ type Story = StoryObj<typeof meta>
 // 基础使用
 export const Default: Story = {
   args: {
-    default: '这是一条消息提示',
+    content: '这是一条消息提示',
   },
-}
-
-// 不同类型
-function createTypeStory(type: MessageType) {
-  return {
-    args: {
-      type,
-      default: `这是一条${type}类型的消息`,
+  render: args => ({
+    components: { JvMessage },
+    setup() {
+      return { args, variantOptions, typeOptions }
     },
-  }
+    template: '<JvMessage v-bind="args"/>',
+  }),
 }
-
-export const Info: Story = createTypeStory('info')
-export const Success: Story = createTypeStory('success')
-export const Warning: Story = createTypeStory('warning')
-export const Error: Story = createTypeStory('error')
-
+export const Variants: Story = {
+  args: {
+    variant: 'tonal',
+    content: '这是一条消息提示',
+  },
+  render: args => ({
+    components: { JvMessage },
+    setup() {
+      return { args, variantOptions, typeOptions }
+    },
+    template: '<JvMessage v-bind="args"/>',
+  }),
+}
 // 可关闭的消息
 export const Closable: Story = {
   args: {
     closable: true,
     duration: 0,
-    default: '点击右侧关闭按钮可以关闭此消息',
+    content: '点击右侧关闭按钮可以关闭此消息',
   },
 }
 
@@ -97,7 +110,7 @@ export const Closable: Story = {
 export const WithoutIcon: Story = {
   args: {
     showIcon: false,
-    default: '这是一条不带图标的消息',
+    content: '这是一条不带图标的消息',
   },
 }
 
@@ -105,6 +118,6 @@ export const WithoutIcon: Story = {
 export const Centered: Story = {
   args: {
     center: true,
-    default: '这是一条居中显示的消息',
+    content: '这是一条居中显示的消息',
   },
 }

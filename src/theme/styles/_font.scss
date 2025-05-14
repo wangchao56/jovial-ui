@@ -1,12 +1,31 @@
-// 字体规范 - 中英文字体设置
+// 字体规范 - 中英文字体设置 (基于Material Design规范)
+@font-face {
+  font-family: OPPOSans;
+  src: url('../fonts/OPPOSans-VF.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-stretch: 75% 125%;
+}
+
+@font-face {
+  font-family: RobotoFlex;
+  src: url('../fonts/Roboto_Flex/RobotoFlex-VF.ttf') format('woff2-variations');
+  font-weight: 100 900;
+}
+
+@font-face {
+  font-family: Roboto;
+  src: url('../fonts/Roboto/Roboto-Regular.ttf') format('woff2-variations');
+  font-weight: 100 900;
+}
 
 :root {
   // 中文字体变量
   --jv-font-family-cn:
-    -apple-system, 'PingFang SC', 'Microsoft YaHei', '微软雅黑', 'Hiragino Sans GB', 'WenQuanYi Micro Hei', sans-serif;
+    'OPPOSans', -apple-system, 'PingFang SC', 'Microsoft YaHei', '微软雅黑', 'Hiragino Sans GB', 'WenQuanYi Micro Hei',
+    sans-serif;
 
   // 英文字体变量
-  --jv-font-family-en: -apple-system, blinkmacsystemfont, 'Segoe UI', roboto, 'Helvetica Neue', arial, sans-serif;
+  --jv-font-family-en: 'RobotoFlex', 'Roboto', blinkmacsystemfont, 'Segoe UI', sans-serif;
 
   // 代码字体变量
   --jv-font-family-code: 'SFMono-Regular', consolas, 'Liberation Mono', menlo, courier, monospace;
@@ -18,18 +37,31 @@
   --jv-font-weight-semibold: 600;
   --jv-font-weight-bold: 700;
 
-  // 字号变量（按照 8 的倍数设计）
-  --jv-font-size-tiny: 10px; // 小号文字
-  --jv-font-size-small: 12px; // 正文（小）
-  --jv-font-size-medium: 14px; // 正文
-  --jv-font-size-large: 16px; // 大号文字
-  --jv-font-size-xlarge: 18px; // 小标题
-  --jv-font-size-h1: 20px; // 标题
-  --jv-font-size-h2: 24px; // 大标题
-  --jv-font-size-h3: 28px; // 超大标题
-  --jv-font-size-h4: 32px; // 超大标题
-  --jv-font-size-h5: 36px; // 超大标题
-  --jv-font-size-h6: 40px; // 超大标题
+  // 标题类字体大小 (Material Design规范)
+  --jv-font-size-h1: 96px; // 特大标题，仅限特殊场景
+  --jv-font-size-h2: 60px; // 大标题
+  --jv-font-size-h3: 48px; // 中等标题
+  --jv-font-size-h4: 34px; // 较小标题
+  --jv-font-size-h5: 24px; // 常规标题
+  --jv-font-size-h6: 20px; // 较小标题
+
+  // 正文类字体大小
+  --jv-font-size-subtitle1: 16px; // 副标题，中等粗细
+  --jv-font-size-subtitle2: 14px; // 副标题，加粗
+  --jv-font-size-body1: 16px; // 常规正文
+  --jv-font-size-body2: 14px; // 辅助正文
+
+  // 按钮与标签字体大小
+  --jv-font-size-button: 14px; // 按钮文本
+  --jv-font-size-caption: 12px; // 小字说明
+  --jv-font-size-overline: 10px; // 标签或分类标识
+
+  // 兼容旧版变量名
+  --jv-font-size-tiny: var(--jv-font-size-overline); // 10px
+  --jv-font-size-small: var(--jv-font-size-caption); // 12px
+  --jv-font-size-medium: var(--jv-font-size-body2); // 14px
+  --jv-font-size-large: var(--jv-font-size-body1); // 16px
+  --jv-font-size-xlarge: var(--jv-font-size-h6); // 20px
 
   // 行高变量
   --jv-line-height-none: 1; // 无行高
@@ -38,118 +70,59 @@
   --jv-line-height-normal: 1.5; // 正常
   --jv-line-height-relaxed: 1.625; // 宽松
   --jv-line-height-loose: 2; // 很宽松
+
+  // 字间距变量
+  --jv-letter-spacing-none: 0; // 无字间距
+  --jv-letter-spacing-tight: -0.0125em; // 紧凑
+  --jv-letter-spacing-snug: -0.025em; // 较紧凑
+  --jv-letter-spacing-normal: 0; // 正常
+  --jv-letter-spacing-relaxed: 0.0125em; // 宽松
+  --jv-letter-spacing-loose: 0.025em; // 很宽松
 }
 
 // 全局字体混入
-@mixin font-cn {
+@mixin font-family-cn {
   font-family: var(--jv-font-family-cn);
 }
 
-@mixin font-en {
+@mixin font-family-en {
   font-family: var(--jv-font-family-en);
 }
 
-@mixin font-code {
+@mixin font-family-code {
   font-family: var(--jv-font-family-code);
 }
 
-// 字体工具类
-.font-cn {
+// 使用规范说明 (基于Material Design)
+// 1. 标题类（H1-H6）：用于页面和内容的标题层级
+//    - H1: 特大标题，仅限特殊场景，如页面主标题、重要标语
+//    - H2: 大标题，用于次级标题、重要模块标题
+//    - H3: 中等标题，用于部分标题、关键信息标题
+//    - H4: 较小标题，用于模块标题、分段标题
+//    - H5: 常规标题，用于文章标题、列表标题
+//    - H6: 较小标题，用于辅助标题、次要信息标题
+// 2. 正文类：
+//    - Subtitle1: 副标题，中等粗细，用于文章副标题、重要说明
+//    - Subtitle2: 副标题，加粗，用于强调副标题、重要提示
+//    - Body1: 常规正文，用于主要内容、段落文本
+//    - Body2: 辅助正文，用于辅助说明、次要内容
+// 3. 按钮与标签：
+//    - Button: 按钮文本，全大写，加粗
+//    - Caption: 小字说明，用于辅助说明、注释
+//    - Overline: 标签或分类标识，用于标签、分类标识
+
+/* 智能语言检测 */
+:lang(zh) {
   font-family: var(--jv-font-family-cn);
 }
 
-.font-en {
+:lang(en) {
   font-family: var(--jv-font-family-en);
 }
 
-.font-code {
-  font-family: var(--jv-font-family-code);
+/* 混合排版优化 */
+.multilingual {
+  font-synthesis: style weight;
+  text-spacing: trim-start allow-end;
+  hanging-punctuation: allow-end;
 }
-
-// 字重工具类
-.font-light {
-  font-weight: var(--jv-font-weight-light);
-}
-
-.font-regular {
-  font-weight: var(--jv-font-weight-regular);
-}
-
-.font-medium {
-  font-weight: var(--jv-font-weight-medium);
-}
-
-.font-semibold {
-  font-weight: var(--jv-font-weight-semibold);
-}
-
-.font-bold {
-  font-weight: var(--jv-font-weight-bold);
-}
-
-// 字号工具类
-.text-xs {
-  font-size: var(--jv-font-size-xs);
-}
-
-.text-sm {
-  font-size: var(--jv-font-size-sm);
-}
-
-.text-base {
-  font-size: var(--jv-font-size-base);
-}
-
-.text-lg {
-  font-size: var(--jv-font-size-lg);
-}
-
-.text-xl {
-  font-size: var(--jv-font-size-xl);
-}
-
-.text-2xl {
-  font-size: var(--jv-font-size-2xl);
-}
-
-.text-3xl {
-  font-size: var(--jv-font-size-3xl);
-}
-
-.text-4xl {
-  font-size: var(--jv-font-size-4xl);
-}
-
-// 行高工具类
-.leading-none {
-  line-height: var(--jv-line-height-none);
-}
-
-.leading-tight {
-  line-height: var(--jv-line-height-tight);
-}
-
-.leading-snug {
-  line-height: var(--jv-line-height-snug);
-}
-
-.leading-normal {
-  line-height: var(--jv-line-height-normal);
-}
-
-.leading-relaxed {
-  line-height: var(--jv-line-height-relaxed);
-}
-
-.leading-loose {
-  line-height: var(--jv-line-height-loose);
-}
-
-// 使用规范说明
-// 1. 中文内容使用 font-cn
-// 2. 英文内容使用 font-en
-// 3. 代码内容使用 font-code
-// 4. 正文推荐使用 text-base (16px) 和 leading-normal (1.5)
-// 5. 标题使用 text-xl 到 text-4xl，搭配适当的行高
-// 6. 小字号文本使用 text-sm 或 text-xs
-// 7. 重要文字可以使用 font-medium 或 font-semibold 加强

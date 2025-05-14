@@ -1,22 +1,298 @@
-// 字体排版规范
+@use 'font' as *;
+
+// 单行文本溢出省略
+@mixin text-overflow-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-break: normal;
+  word-wrap: break-all;
+  hyphens: auto;
+}
+
+// 多行文本溢出省略
+@mixin text-overflow-ellipsis-multi($lines: 2) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: normal;
+}
+
+// 字体排版规范 (基于Material Design)
 // 标题h1~h6
 $title-sizes: (
-  'h1': 40px,
-  'h2': 32px,
-  'h3': 24px,
-  'h4': 20px,
-  'h5': 18px,
-  'h6': 16px,
+  'h1': 96px,
+  'h2': 60px,
+  'h3': 48px,
+  'h4': 34px,
+  'h5': 24px,
+  'h6': 20px,
 );
 
 // 字体大小
 $text-sizes: (
-  'xs': 12px,
-  'sm': 14px,
-  'base': 16px,
-  'lg': 18px,
-  'xl': 20px,
-  '2xl': 24px,
-  '3xl': 32px,
-  '4xl': 40px,
+  'overline': 10px,
+  'caption': 12px,
+  'button': 14px,
+  'body2': 14px,
+  'subtitle2': 14px,
+  'body1': 16px,
+  'subtitle1': 16px,
+  'h6': 20px,
+  'h5': 24px,
+  'h4': 34px,
+  'h3': 48px,
+  'h2': 60px,
+  'h1': 96px,
 );
+
+// 行高
+$line-heights: (
+  'none': 1,
+  'tight': 1.25,
+  'snug': 1.375,
+  'normal': 1.5,
+  'relaxed': 1.625,
+  'loose': 2,
+);
+
+// 基础文本样式
+.text-base {
+  // 文本对齐方式
+  text-align: left;
+  text-decoration: none;
+  text-shadow: none;
+  white-space: normal;
+  text-transform: none;
+  word-break: normal;
+  word-wrap: normal;
+  overflow-wrap: normal;
+  font-style: normal;
+  font-variant: normal;
+  text-indent: 0;
+  text-overflow: clip;
+  text-wrap: balance;
+
+  //   排版方向
+  writing-mode: horizontal-tb;
+
+  // 文本方向
+  direction: ltr;
+}
+
+// 消除标题标签的margin
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+}
+
+// Material Design 标题类混入
+@mixin typography-h1 {
+  color: var(--jv-color-text-primary, #000);
+  font-family: var(--jv-font-family-cn, 'PingFang SC', 'Microsoft YaHei', sans-serif);
+  font-size: var(--jv-font-size-h1, 96px);
+  font-weight: var(--jv-font-weight-light, 300);
+  line-height: var(--jv-line-height-tight, 1.25);
+  letter-spacing: var(--jv-letter-spacing-tight, -0.0125em);
+}
+
+@mixin typography-h2 {
+  color: var(--jv-color-text-primary, #000);
+  font-family: var(--jv-font-family-cn, 'PingFang SC', 'Microsoft YaHei', sans-serif);
+  font-size: var(--jv-font-size-h2, 60px);
+  font-weight: var(--jv-font-weight-light, 300);
+  line-height: var(--jv-line-height-tight, 1.25);
+  letter-spacing: var(--jv-letter-spacing-tight, -0.0125em);
+}
+
+@mixin typography-h3 {
+  color: var(--jv-color-text-primary, #000);
+  font-family: var(--jv-font-family-cn, 'PingFang SC', 'Microsoft YaHei', sans-serif);
+  font-size: var(--jv-font-size-h3, 48px);
+  font-weight: var(--jv-font-weight-regular, 400);
+  line-height: var(--jv-line-height-tight, 1.25);
+  letter-spacing: var(--jv-letter-spacing-normal, 0);
+}
+
+@mixin typography-h4 {
+  color: var(--jv-color-text-primary, #000);
+  font-family: var(--jv-font-family-cn, 'PingFang SC', 'Microsoft YaHei', sans-serif);
+  font-size: var(--jv-font-size-h4, 34px);
+  font-weight: var(--jv-font-weight-regular, 400);
+  line-height: var(--jv-line-height-tight, 1.25);
+  letter-spacing: var(--jv-letter-spacing-normal, 0);
+}
+
+@mixin typography-h5 {
+  color: var(--jv-color-text-primary, #000);
+  font-family: var(--jv-font-family-cn, 'PingFang SC', 'Microsoft YaHei', sans-serif);
+  font-size: var(--jv-font-size-h5, 24px);
+  font-weight: var(--jv-font-weight-regular, 400);
+  line-height: var(--jv-line-height-snug, 1.375);
+  letter-spacing: var(--jv-letter-spacing-normal, 0);
+}
+
+@mixin typography-h6 {
+  color: var(--jv-color-text-primary, #000);
+  font-family: var(--jv-font-family-cn, 'PingFang SC', 'Microsoft YaHei', sans-serif);
+  font-size: var(--jv-font-size-h6, 20px);
+  font-weight: var(--jv-font-weight-medium, 500);
+  line-height: var(--jv-line-height-snug, 1.375);
+  letter-spacing: var(--jv-letter-spacing-normal, 0);
+}
+
+// Material Design 正文类混入
+@mixin typography-subtitle1 {
+  color: var(--jv-color-text-primary, #000);
+  font-family: var(--jv-font-family-cn, 'PingFang SC', 'Microsoft YaHei', sans-serif);
+  font-size: var(--jv-font-size-subtitle1, 16px);
+  font-weight: var(--jv-font-weight-regular, 400);
+  line-height: var(--jv-line-height-normal, 1.5);
+  letter-spacing: var(--jv-letter-spacing-normal, 0);
+
+  @include text-overflow-ellipsis;
+}
+
+@mixin typography-subtitle2 {
+  color: var(--jv-color-text-primary, #000);
+  font-family: var(--jv-font-family-cn, 'PingFang SC', 'Microsoft YaHei', sans-serif);
+  font-size: var(--jv-font-size-subtitle2, 14px);
+  font-weight: var(--jv-font-weight-medium, 500);
+  line-height: var(--jv-line-height-normal, 1.5);
+  letter-spacing: var(--jv-letter-spacing-normal, 0);
+
+  @include text-overflow-ellipsis;
+}
+
+@mixin typography-body1 {
+  color: var(--jv-color-text-primary, #000);
+  font-family: var(--jv-font-family-cn, 'PingFang SC', 'Microsoft YaHei', sans-serif);
+  font-size: var(--jv-font-size-body1, 16px);
+  font-weight: var(--jv-font-weight-regular, 400);
+  line-height: var(--jv-line-height-normal, 1.5);
+  letter-spacing: var(--jv-letter-spacing-normal, 0);
+
+  @include text-overflow-ellipsis;
+}
+
+@mixin typography-body2 {
+  color: var(--jv-color-text-primary, #000);
+  font-family: var(--jv-font-family-cn, 'PingFang SC', 'Microsoft YaHei', sans-serif);
+  font-size: var(--jv-font-size-body2, 14px);
+  font-weight: var(--jv-font-weight-regular, 400);
+  line-height: var(--jv-line-height-normal, 1.5);
+  letter-spacing: var(--jv-letter-spacing-normal, 0);
+
+  @include text-overflow-ellipsis;
+}
+
+// Material Design 按钮与标签混入
+@mixin typography-button {
+  color: var(--jv-color-text-primary, #000);
+  font-family: var(--jv-font-family-cn, 'PingFang SC', 'Microsoft YaHei', sans-serif);
+  font-size: var(--jv-font-size-button, 14px);
+  font-weight: var(--jv-font-weight-medium, 500);
+  line-height: var(--jv-line-height-normal, 1.5);
+  letter-spacing: var(--jv-letter-spacing-relaxed, 0.0125em);
+  text-transform: uppercase;
+
+  @include text-overflow-ellipsis;
+}
+
+@mixin typography-caption {
+  color: var(--jv-color-text-secondary, #666);
+  font-family: var(--jv-font-family-cn, 'PingFang SC', 'Microsoft YaHei', sans-serif);
+  font-size: var(--jv-font-size-caption, 12px);
+  font-weight: var(--jv-font-weight-regular, 400);
+  line-height: var(--jv-line-height-normal, 1.5);
+  letter-spacing: var(--jv-letter-spacing-normal, 0);
+
+  @include text-overflow-ellipsis;
+}
+
+@mixin typography-overline {
+  color: var(--jv-color-text-secondary, #666);
+  font-family: var(--jv-font-family-cn, 'PingFang SC', 'Microsoft YaHei', sans-serif);
+  font-size: var(--jv-font-size-overline, 10px);
+  font-weight: var(--jv-font-weight-regular, 400);
+  line-height: var(--jv-line-height-normal, 1.5);
+  letter-spacing: var(--jv-letter-spacing-loose, 0.025em);
+  text-transform: uppercase;
+
+  @include text-overflow-ellipsis;
+}
+
+// 段落文本混入 (基于body1但支持多行溢出)
+@mixin paragraph-text($lines: 0) {
+  color: var(--jv-color-text-primary, #000);
+  font-family: var(--jv-font-family-cn, 'PingFang SC', 'Microsoft YaHei', sans-serif);
+  font-size: var(--jv-font-size-body1, 16px);
+  font-weight: var(--jv-font-weight-regular, 400);
+  line-height: var(--jv-line-height-normal, 1.5);
+
+  // 文本对齐方式
+  text-align: left;
+
+  //   排版方向
+  writing-mode: horizontal-tb;
+
+  // 文本方向
+  direction: ltr;
+
+  @if $lines > 0 {
+    @include text-overflow-ellipsis-multi($lines);
+  }
+}
+
+// 为兼容性保留的旧版混入
+@mixin text-small {
+  @include typography-caption;
+}
+
+@mixin text-medium {
+  @include typography-body2;
+}
+
+@mixin text-large {
+  @include typography-body1;
+}
+
+@mixin text-xlarge {
+  @include typography-h6;
+}
+
+// 文本方向从左到右
+.text-ltr {
+  direction: ltr;
+}
+
+// 文本方向从右到左
+.text-rtl {
+  direction: rtl;
+}
+
+// 文本对齐方式
+.text-left {
+  text-align: left;
+}
+
+// 文本对齐方式
+.text-right {
+  text-align: right;
+}
+
+// 文本对齐方式
+.text-center {
+  text-align: center;
+}
+
+// 文本对齐方式
+.text-justify {
+  text-align: justify;
+}
