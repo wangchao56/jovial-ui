@@ -6,11 +6,3 @@
   padding: 1rem;
   place-items: center;
 }
-
-.jovial-theme {
-  display: grid;
-  box-sizing: border-box;
-  width: 100%;
-  height: 100%;
-  place-items: center;
-}
