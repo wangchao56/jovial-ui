@@ -1,0 +1,48 @@
+# 开发环境文件
+.vscode/
+.idea/
+.cz-config.cjs
+.editorconfig
+.eslintignore
+.eslintrc.cjs
+.gitignore
+.husky/
+.npmrc
+.prettierrc.json
+.stylelintignore
+.stylelintrc.json
+commitlint.config.cjs
+vite.config.ts
+vite.lib.config.ts
+vite.components.config.ts
+tsconfig.app.json
+tsconfig.build.json
+tsconfig.json
+tsconfig.node.json
+postcss.config.js
+*.lock
+*.log
+
+# 源码和测试文件
+src/
+scripts/
+test/
+docs/
+public/
+stats.html
+
+# 构建和缓存目录
+node_modules/
+coverage/
+.scannerwork/
+.tmp/
+dist/
+dist-blog/
+.storybook/
+
+# 忽略特定类型文件
+**/*.test.ts
+**/*.spec.ts
+**/*.stories.ts
+**/*.md
+**/*.stories.mdx 

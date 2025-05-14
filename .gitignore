@@ -11,6 +11,8 @@ blog
 node_modules
 dist
 dist-ssr
+dist-lib
+dist-components
 *.local
 examples
 

@@ -3,8 +3,8 @@
     "commitMessage": "chore: release v${version}",
     "tagName": "v${version}",
     "pushRepo": "origin",
-    "requireCleanWorkingDir": true,
-    "requireBranch": "main"
+    "requireCleanWorkingDir": false,
+    "requireBranch": false
   },
   "github": {
     "release": true,
@@ -12,12 +12,12 @@
   },
   "npm": {
     "publish": true,
-    "publishPath": "./dist"
+    "publishPath": "."
   },
   "hooks": {
     "before:init": "pnpm lint",
-    "before:build": "pnpm build:all",
-    "after:release": "echo Successfully released ${name} v${version} to ${repo.repository}."
+    "before:build": "pnpm build:lib:skip-types",
+    "after:release": "echo Successfully released ${name} v${version}."
   },
   "plugins": {
     "@release-it/conventional-changelog": {

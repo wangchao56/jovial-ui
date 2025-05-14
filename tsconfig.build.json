@@ -1,0 +1,37 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.build.tsbuildinfo",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@components/*": ["./src/components/*"]
+    },
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "outDir": "dist-lib",
+    "declaration": true,
+    "declarationDir": "dist-lib/types",
+    /* Linting */
+    "strict": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "dist-lib",
+    "dist-components",
+    "dist-blog",
+    "scripts/template",
+    "**/*.stories.ts",
+    "**/*.test.ts",
+    "**/*.spec.ts"
+  ]
+} 
