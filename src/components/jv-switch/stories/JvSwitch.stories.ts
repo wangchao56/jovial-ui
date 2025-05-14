@@ -4,7 +4,7 @@ import readme from './README.md?raw'
 
 // 更多信息: https://storybook.js.org/docs/vue/writing-stories/introduction
 const meta = {
-  title: '数据录入组件/JvSwitch',
+  title: '数据输入组件/Switch 开关',
   component: JvSwitch,
   tags: ['autodocs'],
   argTypes: {

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
-import JvCheckbox from '@/components/jv-checkbox/src/JvCheckbox.vue'
 import { ref } from 'vue'
+import JvCheckbox from '@/components/jv-checkbox/src/JvCheckbox.vue'
 
 /**
  * # JvCheckbox 复选框组件
@@ -16,7 +16,7 @@ JvCheckbox 组件的布局结构主要包含两部分：
 - 标签区域 (label)：显示复选框的说明文本
  */
 const meta: Meta<typeof JvCheckbox> = {
-  title: '数据录入组件/Checkbox',
+  title: '数据输入组件/Checkbox 复选框',
   component: JvCheckbox,
   tags: ['autodocs'],
   argTypes: {

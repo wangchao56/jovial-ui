@@ -5,7 +5,7 @@ import readme from './README.md?raw'
 
 // 更多信息: https://storybook.js.org/docs/vue/writing-stories/introduction
 const meta = {
-  title: '数据输入组件/JvTextfield',
+  title: '数据输入组件/Textfield 单行文本框',
   component: JvTextfield,
   tags: ['autodocs'],
   argTypes: {

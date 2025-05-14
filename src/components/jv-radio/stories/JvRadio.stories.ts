@@ -4,7 +4,7 @@ import JvRadio from '../src/JvRadio.vue'
 import JvRadioGroup from '../src/JvRadioGroup.vue'
 
 const meta: Meta<typeof JvRadio> = {
-  title: '数据录入组件/Radio',
+  title: '数据输入组件/Radio 单选框',
   component: JvRadio,
   subcomponents: { JvRadioGroup },
   tags: ['autodocs'],

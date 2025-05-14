@@ -24,7 +24,7 @@ type Story = StoryObj<typeof JvSelect>
  */
 
 const meta: Meta<typeof JvSelect> = {
-  title: '数据录入组件/Select 选择器',
+  title: '数据输入组件/Select 选择器',
   component: JvSelect,
   tags: ['autodocs'],
   argTypes: {

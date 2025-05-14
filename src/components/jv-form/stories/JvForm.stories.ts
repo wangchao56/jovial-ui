@@ -12,7 +12,7 @@ import { reactive, ref } from 'vue'
 import { JvForm, JvFormItem } from '../index'
 
 const meta: Meta<typeof JvForm> = {
-  title: '数据录入组件/Form 表单',
+  title: '数据输入组件/Form 表单',
   component: JvForm,
   tags: ['autodocs'],
   argTypes: {

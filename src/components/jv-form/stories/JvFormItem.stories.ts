@@ -9,7 +9,7 @@ type Story = StoryObj<typeof JvFormItem>
 
 // 组件元数据
 const meta: Meta<typeof JvFormItem> = {
-  title: '数据录入组件/FormItem 表单项',
+  title: '数据输入组件/FormItem 表单项',
   component: JvFormItem,
   tags: ['autodocs'],
   argTypes: {

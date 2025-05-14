@@ -4,7 +4,7 @@ import JvTextarea from '..'
 
 // 更多信息：https://storybook.js.org/docs/vue/writing-stories/introduction
 const meta = {
-  title: '数据录入组件/Textarea 文本域',
+  title: '数据输入组件/Textarea 文本域',
   component: JvTextarea,
   tags: ['autodocs'],
   argTypes: {
