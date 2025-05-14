@@ -3,20 +3,20 @@
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.build.tsbuildinfo",
     "baseUrl": ".",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "paths": {
       "@/*": ["./src/*"],
       "@components/*": ["./src/components/*"]
     },
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "outDir": "dist-lib",
-    "declaration": true,
-    "declarationDir": "dist-lib/types",
     /* Linting */
     "strict": true,
     "noFallthroughCasesInSwitch": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true
+    "noUnusedParameters": true,
+    "declaration": true,
+    "declarationDir": "dist-lib/types",
+    "outDir": "dist-lib"
   },
   "include": [
     "src/**/*.ts",
@@ -34,4 +34,4 @@
     "**/*.test.ts",
     "**/*.spec.ts"
   ]
-} 
+}
