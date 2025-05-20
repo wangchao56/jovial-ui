@@ -4,12 +4,12 @@ export type Breakpoint = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'
 
 // 断点配置，与_breakpoints.scss保持一致
 export const breakpoints: Record<Breakpoint, number> = {
-  'xs': 480,
-  'sm': 640,
-  'md': 768,
-  'lg': 1024,
-  'xl': 1280,
-  '2xl': 1536,
+  'xs': 444,
+  'sm': 600,
+  'md': 900,
+  'lg': 1200,
+  'xl': 1536,
+  '2xl': 1920,
 }
 
 /**

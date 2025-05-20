@@ -63,7 +63,7 @@ function createBEM(prefixName: string): BEMRecord {
   /** 元素 */
   const e = (element: string) => _bem(prefixName, '', element, '')
   /** 修改器 */
-  const m = (modifier: string) => {
+  const m = (modifier?: string) => {
     return modifier ? _bem(prefixName, '', '', modifier) : ''
   }
   /** 块级元素和元素 */

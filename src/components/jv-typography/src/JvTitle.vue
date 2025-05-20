@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { JvTitleProps } from './types'
-import { createNamespace } from '@/utils'
 import { computed } from 'vue'
+import { createNamespace } from '@/utils'
 
 defineOptions({
   name: 'JvTitle',

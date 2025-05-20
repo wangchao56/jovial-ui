@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import type { JvTagEmits, JvTagProps } from './types'
+import { useCssVar } from '@vueuse/core'
+import { computed, ref, useSlots } from 'vue'
 import JvIcon from '@/components/jv-icon/src/JvIcon.vue'
 import { useTheme } from '@/theme'
-import { computed, ref, useSlots, watch } from 'vue'
 import { bem, JVTAG_NAME } from './types'
 
 defineOptions({ name: JVTAG_NAME, inheritAttrs: false })
@@ -15,37 +16,17 @@ const {
   variant = 'tonal',
   closeIcon = '',
   prependIcon = '',
-  selectable = false,
-  selected = false,
 } = defineProps<JvTagProps>()
 
 const emit = defineEmits<JvTagEmits>()
 const visible = ref(true)
-const isSelected = ref(selected)
 const slots = useSlots()
 const theme = useTheme()
-// 监听selected属性变化
-watch(
-  () => selected,
-  (val) => {
-    isSelected.value = val
-  },
-)
 
 function handleClose(e: MouseEvent) {
   e.stopPropagation()
   visible.value = false
   emit('clickClose', e)
-}
-
-function handleClick(e: MouseEvent) {
-  emit('click', e)
-
-  // 如果是可选择的，则切换选择状态
-  if (selectable) {
-    isSelected.value = !isSelected.value
-    emit('select', isSelected.value)
-  }
 }
 
 const _closeIcon = computed(() => {
@@ -70,31 +51,42 @@ const tagClasses = computed(() => [
   bem.m(`size-${size}`),
   bem.m(`shape-${shape}`),
   bem.is('closable', closable),
-  bem.is('selectable', selectable),
-  bem.is('selected', isSelected.value && selectable),
   theme.themeClasses.value,
 ])
 
+function handleClick(e: MouseEvent) {
+  emit('click', e)
+}
+
+const tagRef = ref<HTMLElement>()
+const iconSize = useCssVar('--jv-icon-size', tagRef, {
+  initialValue: '12px',
+})
 // 判断是否显示前置图标
 const showPrepend = computed(() => prependIcon || !!slots.prepend)
 </script>
 
 <template>
   <span
-    v-show="visible" :class="tagClasses" :role="selectable ? 'option' : 'status'" tabindex="0"
+    v-show="visible"
+    ref="tagRef"
+    :class="tagClasses"
+    role="status"
+    tabindex="0"
+    :aria-label="label"
     @click="handleClick"
   >
     <span :class="bem.e('overlay')" />
     <span v-if="showPrepend" :class="bem.e('prepend')">
       <slot name="prepend">
-        <JvIcon v-if="prependIcon" :name="prependIcon" :size="size" />
+        <JvIcon v-if="prependIcon" :name="prependIcon" :size="iconSize" />
       </slot>
     </span>
     <span :class="bem.e('label')">
       <slot>{{ label }}</slot>
     </span>
-    <span v-if="closable" :class="bem.e('close')">
-      <JvIcon :name="_closeIcon" size="small" @click="handleClose" />
+    <span v-if="closable" :class="bem.e('close')" @click="handleClose">
+      <JvIcon :name="_closeIcon" :size="iconSize" />
     </span>
   </span>
 </template>
@@ -124,7 +116,7 @@ $jv-tag-size-map: (
       0 14px,
     ),
     'font-size': 14px,
-    'height': 34px,
+    'height': 32px,
   ),
 );
 $jv-tag-type-map: (primary, success, warning, error, info);
@@ -155,8 +147,16 @@ $jv-tag-type-map: (primary, success, warning, error, info);
   text-shadow: 0 0 0.8px currentcolor;
   transition: all 0.2s;
   place-items: center center;
-  grid-template-areas: 'prepend content badge close';
+  grid-template-areas: 'prepend content  close';
   grid-template-columns: auto 1fr auto auto;
+
+  :deep(svg),
+  :deep(i) {
+    color: currentcolor;
+    fill: currentcolor;
+    stroke: currentcolor;
+    font-size: var(--jv-tag-font-size);
+  }
 
   @include e(overlay) {
     position: absolute;

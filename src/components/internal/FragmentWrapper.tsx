@@ -1,6 +1,6 @@
 import type { PropType, Slot, SlotsType, VNodeArrayChildren } from 'vue'
-import { ensureOnlyChild, isSlotNode } from '@/utils'
 import { defineComponent, Fragment, ref } from 'vue'
+import { ensureOnlyChild, isSlotNode } from '@/utils'
 
 export default defineComponent({
   name: 'JvFragmentWrapper',

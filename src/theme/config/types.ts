@@ -34,6 +34,8 @@ interface OnColors {
   'on-surface': string
   /** 主色 */
   'on-primary': string
+  /** 中性色 */
+  'on-neutral': string
   /** 次色 */
   'on-secondary': string
   /** 成功色 */
@@ -112,6 +114,7 @@ export interface InternalThemeOptions {
 /**
  * 将颜色配置转换为CSS规则
  * @param colors 颜色配置
+ * @param selector 选择器
  * @returns CSS规则
  * @example
  *
@@ -122,12 +125,15 @@ export interface InternalThemeOptions {
  *  const cssRules = convertColorsToCssRules(colors)
  *  console.log(cssRules) // .theme-color: --jv-theme-primary: #000000; --jv-theme-secondary: #000000;
  */
-export function convertColorsToCssRules(colors: Colors, className: string): string {
+export function convertColorsToCssRules(colors: Colors, selector: string, darkMode: boolean): string {
   const variables = Object.entries(colors).reduce((acc, [key, value]) => {
-    acc += `--jv-theme-${key}: ${value};`
+    acc += `--jv-theme-${key}: ${value};\n`
     return acc
-  }, '\n')
-  return `.${className}{${variables}}`
+  }, '')
+  return `${selector}{
+    color-scheme: ${darkMode ? 'dark' : 'light'};
+    ${variables}
+  }`
 }
 
 /**

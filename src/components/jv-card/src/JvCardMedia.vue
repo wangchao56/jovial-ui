@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { JvCardMediaProps } from './types'
+import { computed } from 'vue'
 import JvImage from '@/components/jv-image/src/JvImage.vue'
 import { convertToUnit, isString } from '@/utils'
-import { computed } from 'vue'
 import { bem, JVCARDMEDIA_NAME } from './types'
 
 defineOptions({ name: JVCARDMEDIA_NAME, inheritAttrs: false })
@@ -82,18 +82,6 @@ defineExpose({
   width: 100%;
   height: auto;
   grid-area: media;
-
-  // 设置宽高比
-  &::before {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 0;
-    display: block;
-    width: 100%;
-    padding-top: calc(1 / (var(--jv-card-media-aspect-ratio)) * 100%);
-    content: '';
-  }
 
   img,
   video,

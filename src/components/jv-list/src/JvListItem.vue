@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { JvListItemProps, JvListItemSlots } from './item'
-import JvCardHeader from '@/components/jv-card/src/JvCardHeader.vue'
 import { h } from 'vue'
+import JvCardHeader from '@/components/jv-card/src/JvCardHeader.vue'
 import { JVLISTITEM_NAME } from './item'
 import { bem } from './types'
 

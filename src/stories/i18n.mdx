@@ -1,0 +1,57 @@
+## 国际化与本地化
+
+组件库内置多语言支持，目前包含中文和英文两种语言包、也可使用Vue-i18n进行自定义语言包。
+
+### 基础配置
+```javascript
+createJovialUI({
+  locale: {
+    locale: 'zh-CN', // 默认语言
+    fallbackLocale: 'en' // 备用语言
+  }
+})
+```
+
+### 切换语言
+```vue
+<template>
+  <jv-locale-provider :locale="currentLocale">
+    <!-- 应用内容 -->
+  </jv-locale-provider>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+import { zhCN, enUS } from 'jovial-ui'
+
+const currentLocale = ref(zhCN)
+</script>
+```
+
+### 自定义语言包
+```javascript
+const customLocale = {
+  button: {
+    loading: '加载中...'
+  },
+  // ... 其他组件翻译
+}
+
+createJovialUI({
+  locale: {
+    locale: customLocale
+  }
+})
+```
+
+### 日期与货币格式
+组件库使用 Day.js 处理日期国际化：
+```javascript
+import 'dayjs/locale/zh-cn'
+import updateLocale from 'dayjs/plugin/updateLocale'
+
+dayjs.extend(updateLocale)
+dayjs.locale('zh-cn')
+```
+
+// ... 后续原有章节编号顺延调整为8. 贡献指南 和9. 版本计划...

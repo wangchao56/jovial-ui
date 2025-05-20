@@ -129,7 +129,7 @@ export const Basic: Story = {
     template: `
       <div style="padding: 100px; display: flex; justify-content: center;">
         <JvMenu v-bind="args">
-          <template #default>
+          <template #header>
             <JvButton>基础菜单</JvButton>
           </template>
           

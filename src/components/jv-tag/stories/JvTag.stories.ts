@@ -3,13 +3,13 @@ import type { JvTagItemProps } from '../src/group'
 import JvFlex from '@components/jv-flex/src/JvFlex.vue'
 import JvTag from '@components/jv-tag/src/JvTag.vue'
 import JvTagGroup from '@components/jv-tag/src/JvTagGroup.vue'
-import { fn } from '@storybook/test'
 import { ref } from 'vue'
 
 const colorTypeOptions = ['primary', 'success', 'warning', 'error', 'info']
 const variantOptions = ['filled', 'outlined', 'tonal']
 const sizeOptions = ['small', 'medium', 'large']
 const shapeOptions = ['square', 'rounded', 'pill']
+
 const meta: Meta<typeof JvTag> = {
   title: '数据展示组件/Tag 标签',
   component: JvTag,
@@ -46,9 +46,26 @@ export const Basic: Story = {
   args: {
     label: 'Tag Label',
   },
+  render: args => ({
+    components: { JvTag },
+    setup() {
+      return { args }
+    },
+    template: `
+    <JvFlex :gap="12">
+    <JvTag label="基础标签" />
+<JvTag type="primary" label="主要标签" />
+<JvTag type="success" label="成功标签" />
+<JvTag type="warning" label="警告标签" />
+<JvTag type="error" label="错误标签" />
+</JvFlex>
+ 
+    </JvFlex>
+  `,
+  }),
 }
 
-export const 可关闭: Story = {
+export const Closable: Story = {
   args: {
     closable: true,
   },
@@ -65,7 +82,7 @@ export const 可关闭: Story = {
   }),
 }
 
-export const 变体: Story = {
+export const Variants: Story = {
   render: args => ({
     components: { JvTag, JvFlex },
     setup() {
@@ -79,7 +96,7 @@ export const 变体: Story = {
   }),
 }
 
-export const 不同类型: Story = {
+export const DifferentTypes: Story = {
   args: {
     variant: 'filled',
   },
@@ -96,7 +113,7 @@ export const 不同类型: Story = {
   }),
 }
 
-export const 形状: Story = {
+export const Shape: Story = {
   render: args => ({
     components: { JvTag, JvFlex },
     setup() {
@@ -110,9 +127,9 @@ export const 形状: Story = {
   }),
 }
 
-export const 大小: Story = {
+export const Size: Story = {
   args: {
-    closable: true,
+    closable: false,
   },
   render: args => ({
     components: { JvTag, JvFlex },
@@ -121,13 +138,36 @@ export const 大小: Story = {
     },
     template: `
         <JvFlex :gap="12"> 
-          <JvTag  v-for="size in sizeOptions"  v-bind="args" :size="size"  >{{size}}</JvTag>
+     <JvTag size="small" label="小型标签" />
+<JvTag size="medium" label="中型标签" />
+<JvTag size="large" label="大型标签" />
         </JvFlex>
     `,
   }),
 }
 
-export const 组合使用: Story = {
+/**
+ * 使用前置图标
+ */
+
+export const PrependIcon: Story = {
+  args: {
+    prependIcon: 'mdi:bookmark-plus',
+    label: '标签',
+    type: 'info',
+  },
+  render: args => ({
+    components: { JvTag },
+    setup() {
+      return { args }
+    },
+    template: `
+       <JvTag v-bind="args" ></JvTag>
+    `,
+  }),
+}
+
+export const GroupUsage: Story = {
   render: args => ({
     components: { JvTagGroup },
     setup() {
@@ -145,13 +185,10 @@ export const 组合使用: Story = {
         <JvTagGroup v-bind="args" :tags="tags" />
       `,
   }),
+  storyName: '组合使用',
 }
 
 export const Collapsible: Story = {
-  args: {
-    collapsible: true,
-    maxCollapse: 3,
-  },
   render: args => ({
     components: { JvTagGroup },
     setup() {
@@ -173,41 +210,9 @@ export const Collapsible: Story = {
   }),
 }
 
-export const Closable: Story = {
-  args: {
-    closable: true,
-  },
-  render: args => ({
-    components: { JvTagGroup },
-    setup() {
-      const tags = ref<JvTagItemProps[]>([
-        { id: 1, props: { label: '标签1', type: 'primary' } },
-        { id: 2, props: { label: '标签2', type: 'success' } },
-        { id: 3, props: { label: '标签3', type: 'warning' } },
-      ])
-
-      function handleClose() {
-        // console.warn('关闭标签', tag, index)
-        // 在实际应用中可以添加标签关闭逻辑
-        fn()
-      }
-
-      return { args, tags, handleClose }
-    },
-    template: `
-        <JvTagGroup 
-          v-bind="args" 
-          :tags="tags"
-          @close="handleClose" 
-        />
-      `,
-  }),
-}
-
 export const Addable: Story = {
   args: {
     closable: true,
-    addable: true,
   },
   render: args => ({
     components: { JvTagGroup },
@@ -234,5 +239,22 @@ export const Addable: Story = {
           @add="handleAdd"
         />
       `,
+  }),
+}
+
+export const Test: Story = {
+  render: args => ({
+    components: { JvTag },
+    setup() {
+      return { args }
+    },
+    template: `   <JvFlex :gap="12">
+   <JvTag prependIcon="$info" label="带图标标签" />
+<JvTag>
+  <template #prepend>
+    <JvIcon name="$star" />
+  </template>
+  自定义图标标签
+</JvTag>`,
   }),
 }

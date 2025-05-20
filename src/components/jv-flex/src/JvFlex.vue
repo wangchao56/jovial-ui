@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { JvFlexProps } from './types'
-import { convertToUnit } from '@/utils'
 import { computed } from 'vue'
+import { convertToUnit } from '@/utils'
 import { bem, JVFLEX_NAME } from './types'
 
 defineOptions({ name: JVFLEX_NAME, inheritAttrs: true })
@@ -48,7 +48,6 @@ const gap = computed(() => {
   align-items: baseline;
   gap: v-bind(gap);
   box-sizing: border-box;
-  width: 100%;
   min-width: fit-content;
 
   // 动画过渡

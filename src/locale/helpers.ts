@@ -1,3 +1,6 @@
+import type { InjectionKey } from 'vue'
+import type { LocaleInstance } from './types'
+
 // 替换字符串中的参数，如：'Hello {0}' -> 'Hello World'
 export function replaceParams(text: string, params: unknown[]): string {
   return text.replace(/\{(\d+)\}/g, (_, index) => {
@@ -16,3 +19,6 @@ export function isRTLLanguage(locale: string): boolean {
   const rtlLanguages = ['ar', 'he', 'fa', 'ur']
   return rtlLanguages.some(lang => locale.startsWith(lang))
 }
+
+export const LocaleSymbol: InjectionKey<LocaleInstance>
+  = Symbol.for('jovial-ui-locale')

@@ -6,8 +6,6 @@ import type {
   TableColumn,
   TableRowData,
 } from './types'
-import JvIcon from '@/components/jv-icon/src/JvIcon.vue'
-import { convertToUnit } from '@/utils'
 import {
   computed,
   nextTick,
@@ -17,6 +15,8 @@ import {
   ref,
   watch,
 } from 'vue'
+import JvIcon from '@/components/jv-icon/src/JvIcon.vue'
+import { convertToUnit } from '@/utils'
 import { exportToCSV as _exportToCSV, useTableClassAndStyle } from './helper'
 import JvTableHeader from './JvTableHeader.vue'
 import { bem, JVTABLE_NAME, JvTableContextKey, TableEventNames } from './types'

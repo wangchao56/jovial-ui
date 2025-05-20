@@ -2,24 +2,8 @@ import type { Slot } from 'vue'
 import { createNamespace } from '@/utils'
 
 export const JVDROPDOWN_NAME = 'JvDropdown'
+export const JVDROPDOWNITEM_NAME = 'JvDropdownItem'
 export const bem = createNamespace(JVDROPDOWN_NAME)
-
-/**
- * 下拉菜单放置位置类型
- */
-export type PlacementType =
-  | 'top'
-  | 'top-start'
-  | 'top-end'
-  | 'bottom'
-  | 'bottom-start'
-  | 'bottom-end'
-  | 'left'
-  | 'left-start'
-  | 'left-end'
-  | 'right'
-  | 'right-start'
-  | 'right-end'
 
 /**
  * 放置策略类型
@@ -91,4 +75,34 @@ export interface JvDropdownExpose {
   show: () => void
   /** 隐藏下拉菜单 */
   hide: () => void
+}
+
+/**
+ * dropdown-item 属性
+ */
+export interface JvDropdownItemProps {
+  /** 是否禁用 */
+  disabled?: boolean
+  /** 是否为当前激活项 */
+  active?: boolean
+  /** 选项值 */
+  value?: any
+  /** 是否为分隔线 */
+  divider?: boolean
+}
+
+/**
+ * dropdown-item 事件
+ */
+export interface JvDropdownItemEmits {
+  /** 点击事件 */
+  (e: 'click', value?: any): void
+}
+
+/**
+ * dropdown-item 插槽
+ */
+export interface JvDropdownItemSlots {
+  /** 默认插槽 */
+  default: Slot
 }

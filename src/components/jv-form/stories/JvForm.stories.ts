@@ -313,7 +313,7 @@ export const 复杂表单: Story = {
           { required: true, message: '请输入年龄', trigger: 'blur' },
           { type: 'number', message: '年龄必须为数字值', trigger: 'blur' },
           {
-            validator: (rule: any, value: any, callback: any) => {
+            validator: (_rule: any, value: any, callback: any) => {
               if (value && (value < 18 || value > 100)) {
                 callback(new Error('年龄必须在18-100之间'))
               }
@@ -612,7 +612,7 @@ export const 自定义验证规则: Story = {
         age: '',
       })
 
-      const checkAge = (rule: any, value: any, callback: any) => {
+      const checkAge = (_rule: any, value: any, callback: any) => {
         if (!value) {
           return callback(new Error('年龄不能为空'))
         }
@@ -630,7 +630,7 @@ export const 自定义验证规则: Story = {
       }
       const formRef = ref()
 
-      const validatePass = (rule: any, value: any, callback: any) => {
+      const validatePass = (_rule: any, value: any, callback: any) => {
         if (value === '') {
           callback(new Error('请输入密码'))
         }
@@ -642,7 +642,7 @@ export const 自定义验证规则: Story = {
         }
       }
 
-      const validatePass2 = (rule: any, value: any, callback: any) => {
+      const validatePass2 = (_rule: any, value: any, callback: any) => {
         if (value === '') {
           callback(new Error('请再次输入密码'))
         }

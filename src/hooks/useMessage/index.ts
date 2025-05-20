@@ -1,7 +1,7 @@
-import type { JvMessageProps, MessageType } from '@/components/jv-message'
 import type { VNode } from 'vue'
-import JvMessage from '@/components/jv-message'
+import type { JvMessageProps, MessageType } from '@/components/jv-message'
 import { createVNode, render } from 'vue'
+import JvMessage from '@/components/jv-message'
 import './style.scss'
 
 // 管理所有Message实例

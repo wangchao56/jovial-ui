@@ -96,7 +96,7 @@ export interface JvProgressProps {
   /**
    * 进度
    */
-  progress: number
+  progress?: number
   /**
    * 进度条颜色
    */

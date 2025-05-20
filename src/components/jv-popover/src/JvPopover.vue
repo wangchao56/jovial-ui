@@ -6,7 +6,6 @@ import type {
   JvPopoverProps,
   JvPopoverSlots,
 } from './types'
-import { useZindex } from '@/hooks'
 import { createPopper } from '@popperjs/core'
 import {
   computed,
@@ -21,6 +20,7 @@ import {
   watch,
   watchEffect,
 } from 'vue'
+import { useZindex } from '@/hooks'
 import { bem, JVPOPOVER_NAME } from './types'
 
 defineOptions({ name: JVPOPOVER_NAME, inheritAttrs: false })

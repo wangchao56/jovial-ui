@@ -25,7 +25,7 @@ const finalPlacement = ref(placement)
 function updatePosition() {
   if (!referenceRect || !popperRect.value || !popperRef.value)
     return
-  finalPlacement.value = getFinalPlacement(referenceRect, popperRef.value, placement)
+  finalPlacement.value = getFinalPlacement(referenceRect, popperRef.value, placement) as PlacementType
   offsetValue.value = calculatePosition(referenceRect, popperRect.value, {
     placement: unref(finalPlacement),
     modifiers: {

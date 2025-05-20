@@ -19,7 +19,8 @@
     "src/**/*.tsx",
     "src/**/*.vue",
     "src/**/*.stories.ts",
-    "src/**/*.md"
+    "src/**/*.md",
+    "src/stories/Introduction.mdx"
   ],
   "exclude": [
     "node_modules",

@@ -1,175 +1,395 @@
 <script setup lang="ts">
 import type { JvRadioGroupContext } from './group'
-import type { JvRadioEmits, JvRadioProps } from './types'
-import JvButton from '@components/jv-button/src/JvButton.vue'
-import { computed, inject, useId } from 'vue'
+import type { JvRadioEmits, JvRadioExpose, JvRadioProps } from './types'
+import { useEventListener, useParentElement } from '@vueuse/core'
+import { computed, inject, nextTick, onMounted, ref, unref, useId } from 'vue'
 import { JvRadioGroupContextKey } from './group'
 import { bem, JVRADIO_NAME } from './types'
 
 defineOptions({ name: JVRADIO_NAME, inheritAttrs: false })
 
-const {
-  label = '',
-  disabled = false,
-  name,
-  size = 'medium',
-  bordered = false,
-  animated = true,
-  color,
-} = defineProps<JvRadioProps>()
+const props = withDefaults(defineProps<JvRadioProps>(), {
+  size: 'medium',
+  bordered: false,
+  animated: true,
+  labelPosition: 'right',
+  gap: '8px',
+  focusVisible: true,
+})
 
 const emit = defineEmits<JvRadioEmits>()
 const radioValue = defineModel('modelValue', { required: false })
+
 // 获取RadioGroup上下文
 const radioGroup = inject(
   JvRadioGroupContextKey,
   null,
 ) as JvRadioGroupContext | null
 
+// DOM引用
+const radioRef = ref<HTMLInputElement | null>(null)
+const radioWrapperRef = ref<HTMLElement | null>(null)
+
 // 计算是否被选中
 const isChecked = computed(() => {
   if (radioGroup && radioGroup.modelValue) {
-    return radioGroup.modelValue.value === label
+    return radioGroup.modelValue.value === props.label
   }
-  return radioValue.value === label
+  return radioValue.value === props.label
 })
 
 // 计算是否禁用
 const isDisabled = computed(
-  () => disabled || !!(radioGroup && radioGroup.disabled),
+  () => props.disabled || !!(radioGroup && radioGroup.disabled),
 )
 
 // 获取name属性
-const radioName = computed(() => name || (radioGroup && radioGroup.name) || `radio-${useId()}`)
+const radioName = computed(() => props.name || (radioGroup && radioGroup.name) || `radio-${useId()}`)
 
 // 获取动画属性
 const hasAnimation = computed(() =>
-  animated === undefined
+  props.animated === undefined
     ? radioGroup && radioGroup.animated !== undefined
       ? radioGroup.animated
       : true
-    : animated,
+    : props.animated,
 )
+
+// 获取颜色
+const radioColor = computed(() => props.color || (radioGroup && radioGroup.color) || 'var(--jv-theme-primary)')
+
+// 焦点状态
+const isFocused = ref(false)
+const isHovered = ref(false)
 
 // 点击处理
 function handleClick(e: MouseEvent) {
   if (isDisabled.value)
     return
-  radioGroup?.setValue(label)
-  emit('click', e)
-
-  const newValue = label
-
+  // 发送值更新
+  const newValue = props.label
+  // 更新选项数据
   if (radioGroup) {
-    radioGroup.dispatch('update:modelValue', newValue, 'value')
-    radioGroup.dispatch('change', newValue, 'value')
+    radioGroup.setValue(newValue)
   }
   else {
+    radioValue.value = newValue
+    emit('update:modelValue', newValue)
     emit('change', newValue)
+  }
+
+  emit('click', e)
+
+  // 聚焦元素
+  nextTick(() => {
+    radioRef.value?.focus()
+  })
+}
+
+// 处理键盘事件
+function handleKeyDown(e: KeyboardEvent) {
+  if (isDisabled.value)
+    return
+
+  // 空格键或回车键触发选择
+  if (e.key === ' ' || e.key === 'Enter') {
+    e.preventDefault()
+    handleClick(e as unknown as MouseEvent)
   }
 }
 
-const radioIcon = computed(() => {
-  if (isChecked.value) {
-    return '$radioBoxMarked'
+// 处理焦点事件
+function handleFocus(e: FocusEvent) {
+  isFocused.value = true
+  emit('focus', e)
+}
+
+// 处理失焦事件
+function handleBlur(e: FocusEvent) {
+  isFocused.value = false
+  emit('blur', e)
+}
+
+// 处理鼠标悬停
+function handleMouseEnter() {
+  isHovered.value = true
+}
+
+function handleMouseLeave() {
+  isHovered.value = false
+}
+
+// 暴露给父组件的方法
+function check() {
+  if (!isDisabled.value && !isChecked.value) {
+    handleClick(new MouseEvent('click'))
   }
-  return '$radioBoxBlank'
+}
+
+function focus() {
+  radioRef.value?.focus()
+}
+
+function blur() {
+  radioRef.value?.blur()
+}
+// 点击事件
+useEventListener(radioRef, 'click', handleClick)
+const parant = useParentElement(radioWrapperRef)
+// 挂载时
+onMounted(() => {
+  // 装填选项数据
+  if (unref(parant.value)?.classList.contains('jv-radio-group') && radioGroup) {
+    radioGroup.updateOption({ label: props.label, value: props.label })
+  }
+})
+
+defineExpose<JvRadioExpose>({
+  check,
+  isChecked: () => isChecked.value,
+  focus,
+  blur,
 })
 </script>
 
 <template>
-  <label
-    :class="[
+  <span
+    ref="radioWrapperRef" :class="[
       bem.b(),
       bem.is('checked', isChecked),
       bem.is('disabled', isDisabled),
-      size && bem.m(`size-${size}`),
       bem.is('bordered', bordered),
       bem.is('animated', hasAnimation),
-    ]"
-    @click="handleClick"
+      bem.is('focused', isFocused && focusVisible),
+      bem.is('hovered', isHovered),
+      bem.m(`size-${size}`),
+      bem.m(`label-${labelPosition}`),
+      radioClass,
+    ]" :style="{ '--jv-radio-gap': gap }" :data-size="size" :data-testid="JVRADIO_NAME" @mouseenter="handleMouseEnter"
+    @mouseleave="handleMouseLeave"
   >
-    <span :class="bem.e('input')">
+    <span
+      :class="[
+        bem.e('input'),
+        bem.is('checked', isChecked),
+      ]"
+    >
       <input
-        type="radio"
-        :name="radioName"
-        :disabled="isDisabled"
-        :checked="isChecked"
-        hidden
+        ref="radioRef" :name="radioName" type="radio" :disabled="isDisabled" :checked="isChecked"
+        :aria-checked="isChecked" :aria-disabled="isDisabled" :aria-label="ariaLabel" role="radio"
+        :tabindex="isDisabled ? -1 : 0" class="sr-only" @focus="handleFocus" @blur="handleBlur"
+        @keydown="handleKeyDown" @click.stop
       >
-      <span :class="bem.e('inner')">
-        <JvButton variant="text" :icon="radioIcon" :color="color" :size="size" />
+      <span
+        :class="bem.e('inner')" :style="{ borderColor: isChecked ? radioColor : undefined }"
+        @click.stop="handleClick"
+      >
+        <span v-if="isChecked" :class="bem.e('dot')" :style="{ backgroundColor: radioColor }" />
       </span>
     </span>
-    <span :class="bem.e('label')">
+
+    <label v-if="$slots.default || label" :class="[bem.e('label'), labelClass]" :for="radioName">
       <slot>{{ label }}</slot>
-    </span>
-  </label>
+    </label>
+  </span>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
+@use 'sass:map';
+
+$jv-radio-sizes: (
+  small: (
+    height: 16px,
+  ),
+  medium: (
+    height: 20px,
+  ),
+  large: (
+    height: 24px,
+  ),
+);
+
 @include b(radio) {
+  --jv-radio-size-small: 16px;
+  --jv-radio-size-medium: 20px;
+  --jv-radio-size-large: 24px;
+  --jv-radio-color: var(--jv-theme-primary);
+  --jv-radio-border: 1px solid #dcdfe6;
+  --jv-radio-gap: 8px;
+  --jv-radio-error-color: var(--jv-theme-error);
+  position: relative;
   display: inline-flex;
-  justify-content: flex-start;
   align-items: center;
   margin-right: 20px;
-  padding-right: 16px;
   cursor: pointer;
   user-select: none;
+  transition: all 0.3s;
 
-  @include m(size-tiny) {
-    font-size: 10px;
+  // 尺寸变体
+
+  @each $size, $value in $jv-radio-sizes {
+    --jv-radio-size-#{$size}: #{map.get($value, height)};
+
+    @include m(size-#{$size}) {
+      font-size: 12px;
+
+      .jv-radio__inner {
+        width: var(--jv-radio-size-#{$size});
+        height: var(--jv-radio-size-#{$size});
+      }
+    }
   }
 
-  @include m(size-small) {
-    font-size: 12px;
+  // 标签位置
+  @include m(label-left) {
+    flex-direction: row-reverse;
+
+    .jv-radio__label {
+      margin-right: var(--jv-radio-gap);
+      margin-left: 0;
+    }
   }
 
-  @include m(size-medium) {
-    font-size: 14px;
-  }
+  @include m(label-right) {
+    flex-direction: row;
 
-  @include m(size-large) {
-    font-size: 16px;
-  }
-
-  @include m(size-xlarge) {
-    font-size: 20px;
-  }
-
-  @include m(size-huge) {
-    font-size: 24px;
+    .jv-radio__label {
+      margin-right: 0;
+      margin-left: var(--jv-radio-gap);
+    }
   }
 
   @include e(input) {
     position: relative;
-    margin-right: 8px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
   }
 
   @include e(inner) {
     position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    width: var(--jv-radio-size-md);
+    height: var(--jv-radio-size-md);
+    border: var(--jv-radio-border);
+    border-radius: 50%;
+    background-color: #fff;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+
+    &:hover {
+      border-color: var(--jv-radio-color);
+    }
+  }
+
+  @include e(dot) {
+    display: block;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background-color: var(--jv-radio-color);
+    transform: scale(0);
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    transform-origin: center;
+
+    .is-checked & {
+      width: 50%;
+      height: 50%;
+      transform: scale(1);
+    }
   }
 
   @include e(label) {
-    font-size: 14px;
+    line-height: 1.5;
+    transition: color 0.3s;
+  }
+
+  @include e(error) {
+    margin-top: 4px;
+    color: var(--jv-radio-error-color);
+    font-size: 12px;
   }
 
   @include when(checked) {
-    border-color: #409eff;
-
-    &::after {
-      transform: scale(1);
+    .jv-radio__inner {
+      border-color: var(--jv-radio-color);
     }
   }
 
   @include when(disabled) {
     cursor: not-allowed;
     opacity: 0.6;
+
+    .jv-radio__inner {
+      border-color: #dcdfe6;
+      background-color: #f5f7fa;
+
+      &:hover {
+        border-color: #dcdfe6;
+      }
+    }
+
+    .jv-radio__label {
+      color: #c0c4cc;
+    }
   }
 
   @include when(bordered) {
-    border: 1px solid #409eff;
-    border-radius: var(--jv-rounded-md);
+    padding: 8px 16px;
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
+    transition: border-color 0.3s;
+
+    &.is-checked {
+      border-color: var(--jv-radio-color);
+    }
   }
+
+  @include when(focused) {
+    .jv-radio__inner {
+      box-shadow: 0 0 0 2px rgba(var(--jv-radio-color-rgb, 24, 144, 255), 0.2);
+    }
+  }
+
+  @include when(error) {
+    .jv-radio__inner {
+      border-color: var(--jv-radio-error-color);
+    }
+  }
+
+  @include when(hovered) {
+    &:not(.is-disabled) {
+      .jv-radio__inner {
+        border-color: var(--jv-radio-color);
+      }
+    }
+  }
+}
+
+// 过渡动画
+.jv-fade-enter-active,
+.jv-fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.jv-fade-enter-from,
+.jv-fade-leave-to {
+  opacity: 0;
+}
+
+// 无障碍优化: 隐藏原生input但保持可访问性
+.sr-only {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border-width: 0;
+  white-space: nowrap;
 }
 </style>

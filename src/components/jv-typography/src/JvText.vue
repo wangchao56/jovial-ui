@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { JvTextProps } from './types'
+import { computed, useCssVars } from 'vue'
 import { getOptions } from '@/constants'
 import { createNamespace, isCssFontSize, isString } from '@/utils'
 import { isCssColor } from '@/utils/color/colorUtils'
-import { computed, useCssVars } from 'vue'
 
 defineOptions({
   name: 'JvText',
@@ -125,6 +125,9 @@ $text-aligns: ('left', 'center', 'right', 'justify');
   font-weight: var(--jv-text-weight);
   line-height: var(--jv-text-line-height);
   text-align: var(--jv-text-align);
+  white-space: nowrap;
+
+  @include text-overflow-ellipsis;
 
   // 文本溢出省略 - 单行
   &.ellipsis,

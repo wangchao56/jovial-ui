@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type { JvButtonEmits, JvButtonProps, JvButtonSlots } from './types'
+import { computed, ref, shallowRef, useCssVars } from 'vue'
 import JvIcon from '@/components/jv-icon/src/JvIcon.vue'
 import { useStyle } from '@/hooks'
 import { useRoundedClass } from '@/hooks/useStyle/useRoundedClass'
 import { useTheme } from '@/theme'
-import { computed, ref, shallowRef, useCssVars } from 'vue'
 import { bem, JVBUTTON_NAME } from './types'
 
 defineOptions({ name: JVBUTTON_NAME, inheritAttrs: true })
@@ -18,14 +18,13 @@ const {
   icon = '',
   prependIcon = '',
   appendIcon = '',
-  content = 'Button',
+  label = '',
   autofocus = false,
   color = 'default',
   stacked = false,
   loading = false,
   block = false,
   rounded,
-  shape,
 } = defineProps<JvButtonProps>()
 
 const emit = defineEmits<JvButtonEmits>()
@@ -36,7 +35,7 @@ const theme = useTheme()
 
 // 使用shallowRef减少深层响应式转换
 const isIconOnly = shallowRef(!!icon || !!slots.icon)
-const hasUnderlay = shallowRef(['outlined', 'dashed', 'tonal'].includes(variant))
+const hasUnderlay = shallowRef(['outlined', 'dashed', 'tonal'].includes(variant) && !disabled)
 const showPrepend = computed(() => !!slots.prepend || !!prependIcon)
 const showAppend = computed(() => !stacked && (!!slots.append || !!appendIcon))
 
@@ -88,42 +87,6 @@ function getButtonTextColor() {
   return `var(--jv-theme-${color})`
 }
 
-// 获取按钮高度
-function getButtonHeight() {
-  const sizeMap = {
-    tiny: '20px',
-    small: '28px',
-    medium: '36px',
-    large: '44px',
-    xlarge: '52px',
-  }
-  return stacked ? `calc(${sizeMap[size] || '36px'} * 2)` : (sizeMap[size] || '36px')
-}
-
-// 获取按钮内边距
-function getButtonPadding() {
-  if (isIconOnly.value)
-    return '0'
-
-  const sizeMap = {
-    tiny: '0 8px',
-    small: '0 12px',
-    medium: '0 16px',
-    large: '0 20px',
-    xlarge: '0 24px',
-  }
-  return sizeMap[size] || '0 16px'
-}
-
-// 获取按钮阴影
-function getButtonBoxShadow() {
-  if (disabled || loading)
-    return 'none'
-  if (variant !== 'elevated')
-    return 'none'
-  return 'var(--jv-elevation-4)'
-}
-
 const roundedClass = useRoundedClass(rounded)
 
 // 优化类名计算，减少不必要的类
@@ -131,7 +94,6 @@ const buttonClasses = computed(() => [
   theme.themeClasses.value,
   bem.b(),
   bem.m(`variant-${variant}`),
-  shape && bem.m(`shape-${shape}`),
   bem.m(`size-${size}`),
   bem.m(`color-${color}`),
   disabled && bem.m('state-disabled'),
@@ -162,14 +124,6 @@ function handleBlur(event: FocusEvent) {
 useCssVars(() => ({
   'jv-button-bg': getButtonBgColor(),
   'jv-button-color': getButtonTextColor(),
-  'jv-button-opacity': disabled || loading ? 'var(--jv-disabled-opacity, 0.6)' : '1',
-  'jv-button-pointer-events': disabled || loading ? 'none' : 'auto',
-  'jv-button-height': getButtonHeight(),
-  'jv-button-width': block ? '100%' : 'auto',
-  'jv-button-min-width': block ? '100%' : 'auto',
-  'jv-button-padding': getButtonPadding(),
-  'jv-button-box-shadow': getButtonBoxShadow(),
-  //   'jv-button-font-size': getButtonFontSize(),
 }))
 </script>
 
@@ -177,10 +131,10 @@ useCssVars(() => ({
   <button
     ref="buttonRef" :style="customStyles" :class="buttonClasses" :type="nativeType" :autofocus="autofocus"
     :tabindex="disabled ? -1 : 0" :disabled="disabled || loading" role="button" :aria-disabled="disabled || loading"
-    :aria-label="content" v-bind="$attrs" @click="handleClick" @focus="handleFocus" @blur="handleBlur"
+    :aria-label="label" v-bind="$attrs" @click="handleClick" @focus="handleFocus" @blur="handleBlur"
   >
-    <!-- 涟漪效果层 -->
-    <span class="jv-button__overlay" />
+    <!-- 遮罩层 -->
+    <span v-if="!disabled" :class="bem.e('overlay')" />
 
     <!-- 边框/背景层 -->
     <span v-if="hasUnderlay" :class="bem.e('underlay')" />
@@ -209,8 +163,8 @@ useCssVars(() => ({
       </span>
 
       <!-- 按钮内容 -->
-      <span :class="bem.e('content')" class="button-text">
-        <slot>{{ content }}</slot>
+      <span :class="bem.e('label')" class="button-text">
+        <slot>{{ label }}</slot>
       </span>
 
       <!-- 后置图标 -->
@@ -228,22 +182,59 @@ useCssVars(() => ({
 @use '@/theme/styles/border-radius' as *;
 @use '@/theme/styles/elevation' as *;
 
-// ================== 基础样式 ==================
+// 遮罩层的初始化样式
+.overlay {
+  position: absolute;
+  border-radius: inherit;
+  background-color: currentcolor;
+  opacity: 0;
+  transition: opacity var(--jv-transition-duration) var(--jv-transition-easing);
+  inset: 0;
+  pointer-events: none;
+}
+
+$button-size-map: (
+  'tiny': (
+    'font-size': 10px,
+    'height': 20px,
+    'padding': 0 8px,
+  ),
+  'small': (
+    'font-size': 12px,
+    'height': 28px,
+    'padding': 0 12px,
+  ),
+  'medium': (
+    'font-size': 14px,
+    'height': 36px,
+    'padding': 0 16px,
+  ),
+  'large': (
+    'font-size': 16px,
+    'height': 40px,
+    'padding': 0 20px,
+  ),
+  'xlarge': (
+    'font-size': 18px,
+    'height': 52px,
+    'padding': 0 24px,
+  ),
+);
+
+// 颜色
+$button-color-map: ('default', 'primary', 'success', 'info', 'warning', 'error');
+
 @include b(button) {
   // 性能优化：使用CSS变量定义所有可变样式
   --jv-button-bg: var(--jv-theme-surface);
   --jv-button-color: var(--jv-theme-on-surface);
   --jv-button-border-radius: var(--jv-rounded);
-  --jv-button-font-size: 14px;
-  --jv-button-height: 36px;
-  --jv-button-width: auto;
-  --jv-button-min-width: auto;
-  --jv-button-padding: 0 16px;
-  --jv-button-opacity: 1;
-  --jv-button-pointer-events: auto;
-  --jv-button-box-shadow: none;
+  --jv-button-font-size: 14px; // 默认字体大小
+  --jv-button-height: 36px; // 默认高度
+  --jv-button-padding: 0 16px; // 默认内边距
   --jv-button-border: none;
   --jv-button-transform: translateY(0);
+  --jv-button-box-shadow: none;
 
   // 统一的动画参数
   --jv-transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
@@ -259,14 +250,15 @@ useCssVars(() => ({
   justify-content: center;
   place-items: center center;
   box-sizing: border-box;
-  width: var(--jv-button-width);
-  min-width: var(--jv-button-min-width);
+  width: auto;
+  min-width: auto;
   height: var(--jv-button-height);
   padding: var(--jv-button-padding);
 
   // 视觉样式
   border: var(--jv-button-border);
-  border-radius: var(--jv-button-border-radius);
+
+  //   border-radius: var(--jv-button-border-radius);
   box-shadow: var(--jv-button-box-shadow);
   background: var(--jv-button-bg);
   color: var(--jv-button-color);
@@ -299,6 +291,21 @@ useCssVars(() => ({
   outline: none;
   text-wrap: nowrap;
 
+  // 颜色
+  @each $color in $button-color-map {
+    @if $color != 'default' {
+      @include m(color-#{$color}) {
+        --jv-button-bg: var(--jv-theme-surface);
+        --jv-button-color: var(--jv-theme-on-surface);
+      }
+    } @else {
+      @include m(color-#{$color}) {
+        --jv-button-bg: var(--jv-theme-surface);
+        --jv-button-color: var(--jv-theme-on-surface);
+      }
+    }
+  }
+
   // 两个装饰层的基础样式
   &__overlay,
   &__underlay {
@@ -325,11 +332,12 @@ useCssVars(() => ({
     grid-area: prepend;
   }
 
-  @include e(content) {
+  @include e(label) {
     position: relative;
     z-index: 2;
     display: flex;
     align-items: center;
+    height: 100%;
     text-align: center;
     grid-area: content;
   }
@@ -344,6 +352,7 @@ useCssVars(() => ({
   }
 
   @include e(icon) {
+    color: currentcolor;
     font-size: calc(var(--jv-button-font-size) * 1.5);
   }
 
@@ -358,11 +367,11 @@ useCssVars(() => ({
     inset: 0;
   }
 
-  // ================== 变体样式 ==================
   // Elevated变体
   @include m(variant-elevated) {
-    &:hover {
-      --jv-button-box-shadow: var(--jv-elevation-6);
+    --jv-button-box-shadow: var(--jv-elevation-2);
+
+    &:hover:not(.jv-button--state-disabled) {
       --jv-button-transform: translateY(-1px);
     }
 
@@ -375,6 +384,7 @@ useCssVars(() => ({
   // Outlined变体
   @include m(variant-outlined) {
     .jv-button__underlay {
+      z-index: -1;
       border: 2px solid currentcolor;
       opacity: 0.8;
       transition: opacity var(--jv-transition-duration) var(--jv-transition-easing);
@@ -426,12 +436,25 @@ useCssVars(() => ({
 
   // 通用交互效果
   &:hover {
+    &:not(.jv-button--state-disabled) {
+      --jv-button-transform: translateY(-1px);
+    }
+
+    .jv-button--variant-elevated {
+      --jv-button-box-shadow: var(--jv-elevation-4);
+    }
+
     .jv-button__overlay {
+      z-index: 5;
       opacity: var(--jv-overlay-opacity-hover);
     }
   }
 
   &:active {
+    .jv-button--variant-elevated {
+      --jv-button-box-shadow: var(--jv-elevation-2);
+    }
+
     .jv-button__overlay {
       opacity: var(--jv-overlay-opacity-active);
       transition-duration: var(--jv-transition-duration-fast);
@@ -451,24 +474,12 @@ useCssVars(() => ({
   }
 
   // ================== 尺寸变体 ==================
-  @include m(size-tiny) {
-    --jv-button-font-size: 0.625rem; // 10px
-  }
-
-  @include m(size-small) {
-    --jv-button-font-size: 0.75rem; // 12px
-  }
-
-  @include m(size-medium) {
-    --jv-button-font-size: 0.875rem; // 14px
-  }
-
-  @include m(size-large) {
-    --jv-button-font-size: 1rem; // 16px
-  }
-
-  @include m(size-xlarge) {
-    --jv-button-font-size: 1.125rem; // 18px
+  @each $size, $size-value in $button-size-map {
+    @include m(size-#{$size}) {
+      --jv-button-font-size: #{map.get($size-value, 'font-size')};
+      --jv-button-height: #{map.get($size-value, 'height')};
+      --jv-button-padding: #{map.get($size-value, 'padding')};
+    }
   }
 
   // 图标按钮样式
@@ -477,15 +488,21 @@ useCssVars(() => ({
     aspect-ratio: 1;
     place-items: center;
     padding: 0;
-    border-radius: var(--jv-rounded-pill);
+    border-radius: var(--jv-rounded-pill) !important;
 
-    .jv-button__content {
+    .jv-button__label {
       display: inline-flex;
       justify-content: center;
       align-items: center;
       width: 100%;
       height: 100%;
     }
+  }
+
+  // block模式
+  @include m(block) {
+    width: 100%;
+    min-width: 100%;
   }
 
   // 堆叠按钮样式
@@ -495,6 +512,8 @@ useCssVars(() => ({
     grid-template: 'prepend' auto 'content' auto / 1fr;
     place-items: center;
     place-content: center;
+    height: calc(var(--jv-button-height) * 2);
+    min-height: calc(var(--jv-button-height) * 2);
 
     .jv-button__prepend {
       display: flex;
@@ -506,7 +525,7 @@ useCssVars(() => ({
       align-self: center;
     }
 
-    .jv-button__content {
+    .jv-button__label {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -529,7 +548,15 @@ useCssVars(() => ({
 
   // 加载状态
   @include m(state-loading) {
-    .jv-button__content {
+    background-color: transparent;
+    cursor: not-allowed;
+    pointer-events: none;
+
+    .jv-button__overlay {
+      opacity: 0.12;
+    }
+
+    .jv-button__label {
       visibility: hidden;
     }
 

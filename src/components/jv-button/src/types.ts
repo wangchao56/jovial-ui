@@ -1,10 +1,13 @@
-import type { JvIconProps } from '@/components/jv-icon/src/types'
-import type { Shape } from '@/constants'
 import type { Slot } from 'vue'
+import type { JvIconProps } from '@/components/jv-icon/src/types'
 import { createNamespace } from '@/utils'
 
 export const JVBUTTON_NAME = 'JvButton' // 组件名称，用于注册组件，必须和文件名相同，否则会报错，并且组件名称必须是 PascalCase 形式，即首字母大写，例如：JvButton，JvButtonIte
 export const bem = createNamespace(JVBUTTON_NAME) // 创建组件的 bem 命名空间，用于生成组件的 class 名称，例如：jv-button，jv-button--primary，jv-button__icon，jv-button__text
+
+// 为ButtonGroup创建命名空间
+export const JVBUTTONGROUP_NAME = 'JvButtonGroup'
+export const bemGroup = createNamespace(JVBUTTONGROUP_NAME)
 
 // 提取Variant类型 中的一部分 作为新的类型
 export type JvButtonVariant = Extract<
@@ -17,7 +20,7 @@ export interface JvButtonProps {
    * 按钮颜色
    * @default 'default'
    */
-  color?: ColorType
+  color?: ColorType | string
   /**
    * 按钮尺寸
    * @default 'medium'
@@ -28,11 +31,6 @@ export interface JvButtonProps {
    * @default false
    */
   disabled?: boolean
-  /**
-   * 形状
-   * @default 'square'
-   */
-  shape?: Shape
   /**
    * 设置按钮的border-radius 优先级低于shape
    */
@@ -83,7 +81,7 @@ export interface JvButtonProps {
   /**
    * 按钮内容
    */
-  content?: string
+  label?: string
 }
 
 export interface JvButtonEmits {
@@ -122,4 +120,82 @@ export interface JvButtonSlots {
    * 按钮加载中插槽
    */
   loader: Slot
+}
+
+/**
+ * 按钮组属性接口
+ */
+export interface JvButtonGroupProps {
+  /**
+   * 按钮组方向
+   * @default 'horizontal'
+   */
+  direction?: 'horizontal' | 'vertical'
+
+  /**
+   * 按钮组中按钮的变体
+   * @default 'elevated'
+   */
+  variant?: JvButtonVariant
+
+  /**
+   * 按钮组中按钮的尺寸
+   * @default 'medium'
+   */
+  size?: SizeType
+
+  /**
+   * 按钮组中按钮的颜色
+   * @default 'default'
+   */
+  color?: ColorType | string
+
+  /**
+   * 按钮组中按钮是否禁用
+   * @default false
+   */
+  disabled?: boolean
+
+  /**
+   * 按钮组形状
+   * @default 'square'
+   */
+  shape?: ShapeType
+
+  /**
+   * 按钮组圆角
+   */
+  rounded?: RoundedType
+
+  /**
+   * 按钮间距
+   * @default 2
+   */
+  gap?: number | string
+
+  /**
+   * 是否使用紧凑模式，紧凑模式下按钮之间无间距，边框合并
+   * @default false
+   */
+  attached?: boolean
+
+  /**
+   * 自定义样式
+   */
+  customStyle?: Record<string, string>
+
+  /**
+   * 自定义类名
+   */
+  customClass?: string | string[] | Record<string, boolean>
+}
+
+/**
+ * 按钮组插槽接口
+ */
+export interface JvButtonGroupSlots {
+  /**
+   * 默认插槽，用于放置按钮
+   */
+  default: Slot
 }

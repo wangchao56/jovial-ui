@@ -43,12 +43,16 @@ export interface JvInputNumberProps {
   /**
    * 尺寸
    */
-  size?: 'small' | 'medium' | 'large'
+  size?: 'tiny' | 'small' | 'medium' | 'large' | 'xlarge'
 
   /**
    * 是否显示清除按钮
    */
   clearable?: boolean
+  /**
+   * 是否内联
+   */
+  inline?: boolean
 }
 
 export interface JvInputNumberEmits {

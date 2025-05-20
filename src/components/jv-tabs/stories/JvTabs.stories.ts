@@ -1,15 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
 import { ref } from 'vue'
-import JvTab from '../src/JvTab.vue'
 import JvTabNav from '../src/JvTabNav.vue'
 import JvTabPanel from '../src/JvTabPanel.vue'
 import JvTabs from '../src/JvTabs.vue'
 import readme from './README.md?raw'
 
 // 更多信息: https://storybook.js.org/docs/vue/writing-stories/introduction
-const meta = {
+const meta: Meta<typeof JvTabs> = {
   title: '导航组件/Tabs 标签页',
   component: JvTabs,
+  subcomponents: { JvTabNav, JvTabPanel },
   tags: ['autodocs'],
   argTypes: {
     modelValue: {
@@ -43,6 +43,14 @@ const meta = {
       control: 'boolean',
       description: '是否启用切换动画',
     },
+    items: {
+      control: 'object',
+      description: '标签数据项数组，用于自动生成标签和面板',
+    },
+    lazy: {
+      control: 'boolean',
+      description: '面板是否启用延迟加载',
+    },
   },
   args: {
     variant: 'default',
@@ -59,36 +67,82 @@ const meta = {
       },
     },
   },
-} satisfies Meta<typeof JvTabs>
+}
 
 export default meta
 
 type Story = StoryObj<typeof JvTabs>
 
 // 基本用法
-export const Basic: Story = {
+export const 默认标签页: Story = {
   render: args => ({
-    components: { JvTabs, JvTabNav, JvTab, JvTabPanel },
+    components: { JvTabs, JvTabPanel },
     setup() {
-      const activeTab = ref('home')
+      const activeTab = ref('tab1')
       return { args, activeTab }
     },
     template: `
       <JvTabs v-model="activeTab" v-bind="args">
-        <JvTabNav>
-          <JvTab value="home">首页</JvTab>
-          <JvTab value="profile">个人资料</JvTab>
-          <JvTab value="settings">设置</JvTab>
-        </JvTabNav>
-        
-        <JvTabPanel value="home">
-          这是首页内容
+        <JvTabPanel value="tab1" name="标签1">
+          <div class="p-4">这是标签1的内容</div>
         </JvTabPanel>
-        <JvTabPanel value="profile">
-          这是个人资料内容
+        <JvTabPanel value="tab2" name="标签2">
+          <div class="p-4">这是标签2的内容</div>
         </JvTabPanel>
-        <JvTabPanel value="settings">
-          这是设置内容
+        <JvTabPanel value="tab3" name="标签3">
+          <div class="p-4">这是标签3的内容</div>
+        </JvTabPanel>
+      </JvTabs>
+    `,
+  }),
+}
+
+// 数据驱动标签页
+export const 数据驱动标签页: Story = {
+  render: args => ({
+    components: { JvTabs },
+    setup() {
+      const activeTab = ref('tab1')
+      const items = [
+        { value: 'tab1', label: '标签1', content: '这是标签1的内容' },
+        { value: 'tab2', label: '标签2', content: '这是标签2的内容' },
+        { value: 'tab3', label: '标签3', content: '这是标签3的内容' },
+      ]
+      return { args, activeTab, items }
+    },
+    template: `
+      <JvTabs v-model="activeTab" :items="items" v-bind="args" />
+    `,
+  }),
+}
+
+// 垂直标签页
+export const 垂直标签页: Story = {
+  render: args => ({
+    components: { JvTabs, JvTabPanel },
+    setup() {
+      const activeTab = ref('general')
+      return { args, activeTab }
+    },
+    template: `
+      <JvTabs v-model="activeTab" vertical v-bind="args">
+        <JvTabPanel value="general" name="常规设置">
+          <div class="p-4">
+            <h3>常规设置</h3>
+            <p>这里是常规设置的选项表单</p>
+          </div>
+        </JvTabPanel>
+        <JvTabPanel value="security" name="安全设置">
+          <div class="p-4">
+            <h3>安全设置</h3>
+            <p>这里是安全设置的选项表单</p>
+          </div>
+        </JvTabPanel>
+        <JvTabPanel value="notifications" name="通知设置">
+          <div class="p-4">
+            <h3>通知设置</h3>
+            <p>这里是通知设置的选项表单</p>
+          </div>
         </JvTabPanel>
       </JvTabs>
     `,
@@ -96,155 +150,60 @@ export const Basic: Story = {
 }
 
 // 不同样式变体
-export const Variants: Story = {
-  render: () => ({
-    components: { JvTabs, JvTabNav, JvTab, JvTabPanel },
+export const 不同样式变体: Story = {
+  render: args => ({
+    components: { JvTabs, JvTabPanel },
     setup() {
-      const defaultTab = ref('tab1')
-      const segmentedTab = ref('tab1')
-      const pillsTab = ref('tab1')
-      const underlineTab = ref('tab1')
-      return { defaultTab, segmentedTab, pillsTab, underlineTab }
+      const tab1 = ref('tab1')
+      const tab2 = ref('tab1')
+      const tab3 = ref('tab1')
+      const tab4 = ref('tab1')
+
+      const items = [
+        { value: 'tab1', label: '标签1', content: '这是标签1的内容' },
+        { value: 'tab2', label: '标签2', content: '这是标签2的内容' },
+        { value: 'tab3', label: '标签3', content: '这是标签3的内容' },
+      ]
+
+      return { args, tab1, tab2, tab3, tab4, items }
     },
     template: `
-      <div class="tabs-variants">
-        <JvTabs v-model="defaultTab" variant="default">
-          <JvTabNav>
-            <JvTab value="tab1">默认风格</JvTab>
-            <JvTab value="tab2">标签二</JvTab>
-          </JvTabNav>
-          <JvTabPanel value="tab1">默认风格内容</JvTabPanel>
-          <JvTabPanel value="tab2">标签二内容</JvTabPanel>
+      <div>
+        <h3 class="mb-2">默认样式</h3>
+        <JvTabs v-model="tab1" variant="default" class="mb-8">
+          <JvTabPanel v-for="item in items" :key="item.value" :value="item.value" :name="item.label">
+            <div class="p-4">{{ item.content }}</div>
+          </JvTabPanel>
         </JvTabs>
         
-        <JvTabs v-model="segmentedTab" variant="segmented">
-          <JvTabNav>
-            <JvTab value="tab1">分段风格</JvTab>
-            <JvTab value="tab2">标签二</JvTab>
-          </JvTabNav>
-          <JvTabPanel value="tab1">分段风格内容</JvTabPanel>
-          <JvTabPanel value="tab2">标签二内容</JvTabPanel>
+        <h3 class="mb-2">分段式样式</h3>
+        <JvTabs v-model="tab2" variant="segmented" class="mb-8">
+          <JvTabPanel v-for="item in items" :key="item.value" :value="item.value" :name="item.label">
+            <div class="p-4">{{ item.content }}</div>
+          </JvTabPanel>
         </JvTabs>
         
-        <JvTabs v-model="pillsTab" variant="pills">
-          <JvTabNav>
-            <JvTab value="tab1">胶囊风格</JvTab>
-            <JvTab value="tab2">标签二</JvTab>
-          </JvTabNav>
-          <JvTabPanel value="tab1">胶囊风格内容</JvTabPanel>
-          <JvTabPanel value="tab2">标签二内容</JvTabPanel>
+        <h3 class="mb-2">胶囊式样式</h3>
+        <JvTabs v-model="tab3" variant="pills" class="mb-8">
+          <JvTabPanel v-for="item in items" :key="item.value" :value="item.value" :name="item.label">
+            <div class="p-4">{{ item.content }}</div>
+          </JvTabPanel>
         </JvTabs>
         
-        <JvTabs v-model="underlineTab" variant="underline">
-          <JvTabNav>
-            <JvTab value="tab1">下划线风格</JvTab>
-            <JvTab value="tab2">标签二</JvTab>
-          </JvTabNav>
-          <JvTabPanel value="tab1">下划线风格内容</JvTabPanel>
-          <JvTabPanel value="tab2">标签二内容</JvTabPanel>
+        <h3 class="mb-2">下划线式样式</h3>
+        <JvTabs v-model="tab4" variant="underline" class="mb-8">
+          <JvTabPanel v-for="item in items" :key="item.value" :value="item.value" :name="item.label">
+            <div class="p-4">{{ item.content }}</div>
+          </JvTabPanel>
         </JvTabs>
       </div>
     `,
-    styles: `
-      .tabs-variants {
-        display: flex;
-        flex-direction: column;
-        gap: 2rem;
-      }
-    `,
   }),
 }
 
-// 垂直布局
-export const Vertical: Story = {
-  render: () => ({
-    components: { JvTabs, JvTabNav, JvTab, JvTabPanel },
-    setup() {
-      const activeTab = ref('tab1')
-      return { activeTab }
-    },
-    template: `
-      <JvTabs v-model="activeTab" vertical>
-        <div style="display: flex; width: 100%;">
-          <JvTabNav>
-            <JvTab value="tab1">标签一</JvTab>
-            <JvTab value="tab2">标签二</JvTab>
-            <JvTab value="tab3">标签三</JvTab>
-          </JvTabNav>
-          
-          <div style="margin-left: 20px; flex: 1;">
-            <JvTabPanel value="tab1">标签一内容</JvTabPanel>
-            <JvTabPanel value="tab2">标签二内容</JvTabPanel>
-            <JvTabPanel value="tab3">标签三内容</JvTabPanel>
-          </div>
-        </div>
-      </JvTabs>
-    `,
-  }),
-}
-
-// 禁用标签
-export const DisabledTab: Story = {
-  render: () => ({
-    components: { JvTabs, JvTabNav, JvTab, JvTabPanel },
-    setup() {
-      const activeTab = ref('tab1')
-      return { activeTab }
-    },
-    template: `
-      <JvTabs v-model="activeTab">
-        <JvTabNav>
-          <JvTab value="tab1">标签一</JvTab>
-          <JvTab value="tab2" disabled>禁用标签</JvTab>
-          <JvTab value="tab3">标签三</JvTab>
-        </JvTabNav>
-        
-        <JvTabPanel value="tab1">标签一内容</JvTabPanel>
-        <JvTabPanel value="tab2">禁用标签内容</JvTabPanel>
-        <JvTabPanel value="tab3">标签三内容</JvTabPanel>
-      </JvTabs>
-    `,
-  }),
-}
-
-// 使用数据生成标签
-export const DataDriven: Story = {
-  render: () => ({
-    components: { JvTabs, JvTabNav, JvTabPanel },
-    setup() {
-      const activeTab = ref('home')
-      const tabItems = [
-        { value: 'home', label: '首页', icon: '$home' },
-        { value: 'profile', label: '个人资料', icon: '$user' },
-        { value: 'settings', label: '设置', icon: '$settings', disabled: true },
-        { value: 'messages', label: '消息', badge: 5 },
-      ]
-      return { activeTab, tabItems }
-    },
-    template: `
-      <JvTabs v-model="activeTab">
-        <JvTabNav :items="tabItems" />
-        
-        <JvTabPanel value="home">
-          这是首页内容
-        </JvTabPanel>
-        <JvTabPanel value="profile">
-          这是个人资料内容
-        </JvTabPanel>
-        <JvTabPanel value="settings">
-          这是设置内容（禁用标签）
-        </JvTabPanel>
-        <JvTabPanel value="messages">
-          这是消息内容
-        </JvTabPanel>
-      </JvTabs>
-    `,
-  }),
-}
-
-// 完全数据驱动
-export const FullyDataDriven: Story = {
-  render: () => ({
+// 带图标的标签页
+export const 带图标的标签页: Story = {
+  render: args => ({
     components: { JvTabs },
     setup() {
       const activeTab = ref('home')
@@ -252,33 +211,33 @@ export const FullyDataDriven: Story = {
         {
           value: 'home',
           label: '首页',
-          icon: '$home',
-          content: '这是首页内容，完全由数据生成',
+          icon: 'jv-icon-home',
+          content: '欢迎来到首页',
         },
         {
           value: 'profile',
           label: '个人资料',
-          icon: '$user',
-          content: '这是个人资料内容，完全由数据生成',
-        },
-        {
-          value: 'settings',
-          label: '设置',
-          icon: '$settings',
-          disabled: true,
-          content: '这是设置内容，完全由数据生成（禁用标签）',
+          icon: 'jv-icon-user',
+          content: '这里是您的个人资料信息',
         },
         {
           value: 'messages',
           label: '消息',
+          icon: 'jv-icon-message',
           badge: 5,
-          content: '这是消息内容，完全由数据生成，带有徽标',
+          content: '您有5条未读消息',
+        },
+        {
+          value: 'settings',
+          label: '设置',
+          icon: 'jv-icon-settings',
+          content: '系统设置选项',
         },
       ]
-      return { activeTab, tabItems }
+      return { args, activeTab, tabItems }
     },
     template: `
-      <JvTabs v-model="activeTab" :items="tabItems" />
+      <JvTabs v-model="activeTab" :items="tabItems" v-bind="args" />
     `,
   }),
 }

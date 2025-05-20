@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { InternalIconName, JvIconProps } from './types'
+import { computed, shallowRef, useCssVars } from 'vue'
 import { _internalIcons } from '@/components/internal-icon'
 import { useSize } from '@/hooks/useSize'
-import { computed, shallowRef, useCssVars } from 'vue'
 import JvIconify from './JvIconify.vue'
 import { bem as _bem, JVICON_NAME } from './types'
 
@@ -41,6 +41,7 @@ const internalIconVnode = computed(() => {
 useCssVars(() => {
   return {
     'jv-icon-size': sizeWithUnit.value,
+    'jv-icon-rotate': `${rotate}deg`,
   }
 })
 </script>
@@ -52,13 +53,10 @@ useCssVars(() => {
       isInnerSize && _bem.m(`size-${size}`),
       flip && _bem.m('flip'),
       spin && _bem.m('spin'),
+      rotate && !spin && _bem.m(`rotate`),
       disabled && _bem.m('disabled'),
       color && !color.startsWith('#') && _bem.m(`color-${color}`),
-    ]"
-    tabindex="0"
-    :aria-disabled="disabled"
-    :style="color.startsWith('#') ? { color } : undefined"
-    role="img"
+    ]" tabindex="0" :aria-disabled="disabled" :style="color.startsWith('#') ? { color } : undefined" role="img"
     :aria-hidden="false"
   >
     <slot v-if="$slots.default" />
@@ -85,6 +83,7 @@ $icon-color-map: ('primary', 'secondary', 'success', 'warning', 'error', 'info')
 .jv-icon {
   --jv-icon-size: 24px;
   --jv-icon-color: var(--jv-theme-on-surface);
+  --jv-icon-rotate: 0deg;
 
   //   ==== 通用样式 ====
   display: inline-flex;
@@ -110,6 +109,10 @@ $icon-color-map: ('primary', 'secondary', 'success', 'warning', 'error', 'info')
     &--color-#{$key} {
       --jv-icon-color: var(--jv-theme-#{$value});
     }
+  }
+
+  &--rotate {
+    transform: rotate(var(--jv-icon-rotate));
   }
 
   &--spin {

@@ -33,7 +33,7 @@ const contentClasses = computed(() => {
 
 .jv-card__content {
   box-sizing: border-box;
-  width: 100%;
+  width: fit-content;
   height: fit-content;
   padding: 16px;
   padding-top: 0;

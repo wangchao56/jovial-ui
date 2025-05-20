@@ -43,24 +43,14 @@ export interface JvTagProps {
    * 变体
    */
   variant?: 'filled' | 'outlined' | 'tonal'
-  /**
-   * 可选择
-   */
-  selectable?: boolean
-  /**
-   * 已选择
-   */
-  selected?: boolean
 }
 
 export interface JvTagEmits {
   (e: 'click', event: MouseEvent): void
   (e: 'clickClose', event: MouseEvent): void
-  (e: 'select', selected: boolean): void
 }
 
 export interface JvTagSlots {
-  default: Slot
   prepend: Slot
 }
 

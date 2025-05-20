@@ -1,15 +1,15 @@
 <script setup lang="ts">
+import type { JvAvatarEmits, JvAvatarProps, JvAvatarSlots } from './types'
 import type { JvBadgeProps } from '@/components/jv-badge'
 import type { JvIconProps } from '@/components/jv-icon/src/types'
-import type { JvAvatarEmits, JvAvatarProps, JvAvatarSlots } from './types'
-import { useComponentId } from '@/hooks/useComponentId'
-import { useSize } from '@/hooks/useSize'
-import { useStringOrObjectProps } from '@/hooks/useStringOrObjectProps'
-import { convertToUnit } from '@/utils'
 import JvBadge from '@components/jv-badge/src/JvBadge.vue'
 import JvIcon from '@components/jv-icon/src/JvIcon.vue'
 import JvImage from '@components/jv-image/src/JvImage.vue'
 import { computed, ref, shallowRef, useCssVars } from 'vue'
+import { useComponentId } from '@/hooks/useComponentId'
+import { useSize } from '@/hooks/useSize'
+import { useStringOrObjectProps } from '@/hooks/useStringOrObjectProps'
+import { convertToUnit } from '@/utils'
 import { bem, JVAVATAR_NAME } from './types'
 
 defineOptions({ name: JVAVATAR_NAME, inheritAttrs: false })
@@ -151,7 +151,7 @@ const avatarClasses = computed(() => [
   isInnerSize.value && bem.m(`size-${size}`),
   bem.m(`shape-${shape}`),
   bem.m(`variant-${variant}`),
-  elevated && bem.is('elevated', true),
+  bem.is('elevated', elevated),
   disabled && bem.m('disabled'),
   className,
 ])
@@ -272,7 +272,6 @@ $avatar-sizes: (
   --jv-avatar-border-width: 1px;
   --jv-avatar-bg-color: var(--jv-theme-surface);
   --jv-avatar-text-color: var(--jv-theme-on-surface);
-  --jv-avatar-box-shadow: var(--jv-elevation-2);
 
   // 布局
   position: relative;
@@ -293,7 +292,7 @@ $avatar-sizes: (
   }
 
   @include when(elevated) {
-    box-shadow: var(--jv-avatar-box-shadow);
+    box-shadow: var(--jv-elevation-2);
   }
 
   @include e(wrapper) {

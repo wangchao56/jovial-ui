@@ -31,6 +31,46 @@
   <JvButton color="success">成功按钮</JvButton>
   <JvButton color="warning">警告按钮</JvButton>
 </template>
+<button>
+  <!-- 涟漪效果层/遮罩层 -->
+  <span class="jv-button__overlay"></span>
+  <!-- 图标按钮模式 -->
+  <span v-if="isIconOnly" :class="bem.e('content')">
+    <slot name="icon">
+      <JvIcon v-bind="iconProps" :class="bem.e('icon')"></JvIcon>
+    </slot>
+  </span>
+
+  <!-- 普通按钮模式 -->
+  <template v-else>
+    <!-- 前置图标 -->
+    <span v-if="showPrepend" :class="bem.e('prepend')">
+      <slot name="prepend">
+        <JvIcon v-bind="prependIconProps" :class="bem.e('icon')"></JvIcon>
+      </slot>
+    </span>
+
+    <!-- 加载指示器 -->
+    <span v-if="loading" :class="bem.e('loading')">
+      <slot name="loader">
+        <JvLoader/>
+      </slot>
+    </span>
+
+    <!-- 按钮内容 -->
+    <span :class="bem.e('content')">
+      <slot>{{ content }}</slot>
+    </span>
+
+    <!-- 后置图标 -->
+    <span v-if="showAppend" :class="bem.e('append')">
+      <slot name="append">
+        <JvIcon v-bind="appendIconProps" :class="bem.e('icon')"></JvIcon>
+      </slot>
+    </span>
+  </template>
+</button>
+
 ```
 
 ## 交互设计

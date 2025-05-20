@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { JvSwitchEmits, JvSwitchProps } from './types'
+import { computed } from 'vue'
 import JvIcon from '@/components/jv-icon/src/JvIcon.vue'
 import { vRipple } from '@/directives'
-import { computed } from 'vue'
 import { bem, JVSWITCH_NAME } from './types'
 
 defineOptions({ name: JVSWITCH_NAME, inheritAttrs: false })

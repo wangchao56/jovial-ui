@@ -4,7 +4,7 @@
 
 ## 特性
 
-- 🧩 **60+ 组件** - 包含丰富的UI组件，覆盖各种常见场景
+- 🧩 **20+ 组件** - 包含丰富的UI组件，覆盖各种常见场景
 - 🎨 **主题定制** - 支持亮色/暗色主题和自定义主题
 - 🚀 **按需加载** - 支持完整引入和按需引入，优化应用体积
 - 💪 **TypeScript** - 使用TypeScript开发，提供完整类型支持
@@ -72,6 +72,27 @@ import 'jovial-ui/theme/styles/css/light-hc.css'
 import 'jovial-ui/theme/styles/css/dark-hc.css'
 ```
 
+
+```
+
+import type { App } from 'vue'
+import * as components from '@/components/components'
+import { createJovialUI } from '@/core/framework'
+
+// 测试
+const jovial = createJovialUI({
+  components,
+  locale: {
+    locale: 'zh-Hans',
+  },
+})
+
+
+// 添加全局组件库
+app.use(Jovial)
+
+
+```
 ## 组件列表
 
 Jovial UI提供了丰富的组件，包括但不限于：

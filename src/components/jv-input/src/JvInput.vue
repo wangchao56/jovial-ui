@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import type { JvTextfieldEmits, JvTextfieldProps } from './types'
+import type { JvInputEmits, JvInputProps } from './types'
+import { computed, onMounted, ref } from 'vue'
 import JvButton from '@/components/jv-button/src/JvButton.vue'
 import JvIcon from '@/components/jv-icon/src/JvIcon.vue'
-import { computed, ref } from 'vue'
+import { useTheme } from '@/theme/config'
 import { bem, JVINPUT_NAME } from './types'
 
 defineOptions({ name: JVINPUT_NAME, inheritAttrs: false })
@@ -21,13 +22,17 @@ const {
   suffixIcon = '',
   maxLength = undefined,
   showCount = false,
-} = defineProps<JvTextfieldProps>()
+  autofocus = false,
+} = defineProps<JvInputProps>()
 
-const emit = defineEmits<JvTextfieldEmits>()
+const emit = defineEmits<JvInputEmits>()
 
+// 状态
 const focused = ref(false)
 const passwordVisible = ref(false)
 const inputRef = ref<HTMLInputElement | null>(null)
+const theme = useTheme()
+const inputValue = defineModel<string>('modelValue', { required: true })
 
 // 计算实际输入类型
 const inputType = computed(() => {
@@ -44,12 +49,6 @@ const countText = computed(() => {
   return maxLength ? `${length}/${maxLength}` : String(length)
 })
 
-// 处理输入事件
-function handleInput(event: Event) {
-  const input = event.target as HTMLInputElement
-  emit('update:modelValue', input.value)
-}
-
 // 处理聚焦事件
 function handleFocus(event: FocusEvent) {
   focused.value = true
@@ -64,7 +63,7 @@ function handleBlur(event: FocusEvent) {
 
 // 清除输入值
 function handleClear() {
-  emit('update:modelValue', '')
+  inputValue.value = ''
   emit('clear')
   // 清除后自动聚焦
   inputRef.value?.focus()
@@ -77,6 +76,13 @@ function togglePasswordVisibility() {
 const passwordIcon = computed(() => {
   return passwordVisible.value ? '$eye' : '$eyeOff'
 })
+
+// 自动聚焦
+onMounted(() => {
+  if (autofocus)
+    inputRef.value?.focus()
+})
+
 // 暴露方法
 defineExpose({
   focus: () => inputRef.value?.focus(),
@@ -96,6 +102,7 @@ defineExpose({
       bem.is('readonly', readonly),
       bem.is('clearable', clearable),
       bem.is('show-password', showPassword),
+      theme.themeClasses,
     ]"
   >
     <!-- 前置插槽 -->
@@ -112,15 +119,15 @@ defineExpose({
       <!-- 输入框 -->
       <input
         ref="inputRef"
+        v-model="inputValue"
         :class="bem.e('inner')"
-        :value="modelValue"
         :type="inputType"
         :placeholder="placeholder"
         :disabled="disabled"
         :readonly="readonly"
         :maxlength="maxLength"
         v-bind="$attrs"
-        @input="handleInput"
+        :autofocus="autofocus"
         @focus="handleFocus"
         @blur="handleBlur"
       >
@@ -134,7 +141,7 @@ defineExpose({
       >
         <!-- 清除按钮 -->
         <JvButton
-          v-if="clearable"
+          v-if="clearable && inputValue"
           icon="$close"
           :class="bem.e('clear-icon')"
           size="small"
@@ -171,6 +178,11 @@ defineExpose({
 @use 'sass:map';
 
 $jv-input-size-options: (
+  tiny: (
+    height: 20px,
+    font-size: 12px,
+    padding-x: 4px,
+  ),
   small: (
     height: 28px,
     font-size: 12px,
@@ -199,13 +211,15 @@ $jv-input-size-options: (
   width: 100%;
 
   --jv-input-border-radius: 4px;
-  --jv-input-border-color: #dcdfe6;
-  --jv-input-bg: #fff;
-  --jv-input-text-color: #303133;
-  --jv-input-placeholder-color: #c0c4cc;
-  --jv-input-icon-color: #c0c4cc;
-  --jv-input-icon-hover-color: #409eff;
-  --jv-input-count-color: #909399;
+  --jv-input-border-color: var(--jv-theme-neutral, #d4d4d4);
+  --jv-input-bg: var(--jv-theme-surface, #fff);
+  --jv-input-text-color: var(--jv-theme-on-surface, #303133);
+  --jv-input-placeholder-color: var(--jv-theme-on-surface, #c0c4cc);
+  --jv-input-icon-color: var(--jv-theme-on-surface, #c0c4cc);
+  --jv-input-icon-hover-color: var(--jv-theme-primary, #409eff);
+  --jv-input-count-color: var(--jv-theme-on-surface, #909399);
+  --jv-input-disabled-bg: var(--jv-theme-neutral, #f5f7fa);
+  --jv-input-disabled-text: var(--jv-theme-on-surface, #c0c4cc);
 
   border-radius: var(--jv-input-border-radius);
 
@@ -219,10 +233,10 @@ $jv-input-size-options: (
         font-size: map.get($size-options, 'font-size');
       }
 
-      .jv-input__inner {
-        padding-right: map.get($size-options, 'padding-x');
-        padding-left: map.get($size-options, 'padding-x');
-      }
+      //   .jv-input__inner {
+      //     padding-right: map.get($size-options, 'padding-x');
+      //     padding-left: map.get($size-options, 'padding-x');
+      //   }
     }
   }
 
@@ -232,13 +246,13 @@ $jv-input-size-options: (
   }
 
   &.is-disabled .jv-input__wrapper {
-    background-color: #f5f7fa;
-    color: #c0c4cc;
+    background-color: var(--jv-input-disabled-bg);
+    color: var(--jv-input-disabled-text);
     cursor: not-allowed;
   }
 
   &.is-readonly .jv-input__wrapper {
-    background-color: #f5f7fa;
+    background-color: var(--jv-input-disabled-bg);
   }
 
   &__wrapper {
@@ -246,7 +260,7 @@ $jv-input-size-options: (
     display: flex;
     align-items: center;
     width: 100%;
-    border: 1px solid var(--jv-input-border-color);
+    border: 2px solid var(--jv-input-border-color);
     border-radius: var(--jv-input-border-radius);
     background-color: var(--jv-input-bg);
     transition: all 0.3s;
@@ -289,14 +303,22 @@ $jv-input-size-options: (
 
     &::placeholder {
       color: var(--jv-input-placeholder-color);
-      opacity: 1;
+      opacity: 0.7;
     }
 
     &:disabled,
     &[readonly] {
       background: transparent;
-      color: #c0c4cc;
+      color: var(--jv-input-disabled-text);
+    }
+
+    &:disabled {
       cursor: not-allowed;
+    }
+
+    &[readonly] {
+      cursor: default;
+      pointer-events: none;
     }
   }
 
@@ -304,6 +326,7 @@ $jv-input-size-options: (
     margin-left: 4px;
     color: var(--jv-input-count-color);
     font-size: 12px;
+    opacity: 0.8;
   }
 
   &__clear-icon,
@@ -311,10 +334,12 @@ $jv-input-size-options: (
     color: var(--jv-input-icon-color);
     font-size: 16px;
     cursor: pointer;
+    opacity: 0.8;
     transition: color 0.2s;
 
     &:hover {
       color: var(--jv-input-icon-hover-color);
+      opacity: 1;
     }
   }
 }

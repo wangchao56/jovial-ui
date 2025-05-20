@@ -1,24 +1,21 @@
 <script setup lang="ts">
-import { provideTheme, useTheme } from '@/theme/config/index'
-import { unref } from 'vue'
+import type { ThemeOptions } from '@/theme/config/types'
+import { provide, unref } from 'vue'
+import { createTheme, ThemeSymbol } from '@/theme/config/index'
 
 defineOptions({
   name: 'JvThemeProvider',
 })
 
 const props = defineProps<{
-  theme?: string
+  themes?: ThemeOptions
 }>()
-
-const theme = useTheme()
-provideTheme({ theme: props.theme })
+const themeInstance = createTheme(props.themes)
+provide(ThemeSymbol, themeInstance)
 </script>
 
 <template>
-  <div
-    class="jv-theme-provider"
-    :class="[unref(theme.themeClasses)]"
-  >
+  <div class="jv-theme-provider" :class="[unref(themeInstance.themeClasses)]">
     <slot />
   </div>
 </template>

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { Placement, Instance as PopperInstance, Options as PopperOptions } from '@popperjs/core'
 import type { CSSProperties } from 'vue'
 import type {
   JvDropdownEmits,
@@ -7,20 +6,20 @@ import type {
   JvDropdownProps,
   JvDropdownSlots,
 } from './types'
-import { useZindex } from '@/hooks'
-import { createPopper } from '@popperjs/core'
 import {
   computed,
   nextTick,
   normalizeClass,
   onMounted,
   onUnmounted,
+  provide,
   ref,
-  shallowRef,
   useAttrs,
   useId,
   watch,
 } from 'vue'
+import { useZindex } from '@/hooks'
+import { usePositioning } from '@/hooks/usePositioning'
 import { bem, JVDROPDOWN_NAME } from './types'
 
 defineOptions({ name: JVDROPDOWN_NAME, inheritAttrs: false })
@@ -46,9 +45,6 @@ defineSlots<JvDropdownSlots>()
 // 使用Vue的defineModel语法
 const visible = defineModel<boolean>('show', { default: false })
 
-// 计算实际放置位置
-const actualPlacement = ref<string>(props.placement)
-
 // 获取z-index
 const { currentZIndex } = useZindex()
 
@@ -56,8 +52,13 @@ const { currentZIndex } = useZindex()
 const dropdownRef = ref<HTMLElement | null>(null)
 const triggerRef = ref<HTMLElement | null>(null)
 const arrowRef = ref<HTMLElement | null>(null)
-// popper实例
-const popperInstance = shallowRef<PopperInstance | null>(null)
+
+// 使用定位Hook
+const {
+  actualPlacement,
+  updateElementPosition,
+  useEventListeners,
+} = usePositioning()
 
 // 计算最终偏移量
 const finalOffset = computed(() => {
@@ -71,95 +72,79 @@ const finalOffset = computed(() => {
 const dropdownStyle = computed<CSSProperties>(() => {
   const style: CSSProperties = {
     zIndex: currentZIndex.value,
+    position: 'absolute',
   }
 
   if (props.width === 'trigger' && triggerRef.value) {
-    style.width = `${triggerRef.value.offsetWidth}px`
+    style.minWidth = `${triggerRef.value.offsetWidth}px`
   }
   else if (typeof props.width === 'number') {
-    style.width = `${props.width}px`
+    style.minWidth = `${props.width}px`
   }
 
   return style
 })
 
-// 创建Popper实例
-function createPopperInstance() {
-  if (!dropdownRef.value || !triggerRef.value || props.disabled)
+// 根据放置位置计算箭头样式
+const arrowStyle = computed<CSSProperties>(() => {
+  const style: CSSProperties = {}
+  if (!props.arrow)
+    return style
+
+  const placement = actualPlacement.value || props.placement
+  const arrowSize = props.arrowSize / 2
+
+  if (placement.startsWith('top')) {
+    style.bottom = `-${arrowSize}px`
+    style.boxShadow = '2px 2px 5px rgb(0 0 0 / 0.06)'
+  }
+  else if (placement.startsWith('bottom')) {
+    style.top = `-${arrowSize}px`
+    style.boxShadow = '-2px -2px 5px rgb(0 0 0 / 0.06)'
+  }
+  else if (placement.startsWith('left')) {
+    style.right = `-${arrowSize}px`
+    style.boxShadow = '2px -2px 5px rgb(0 0 0 / 0.06)'
+  }
+  else if (placement.startsWith('right')) {
+    style.left = `-${arrowSize}px`
+    style.boxShadow = '-2px 2px 5px rgb(0 0 0 / 0.06)'
+  }
+
+  if (placement.endsWith('start')) {
+    style.left = '16px'
+  }
+  else if (placement.endsWith('end')) {
+    style.right = '16px'
+  }
+  else {
+    if (placement.startsWith('top') || placement.startsWith('bottom')) {
+      style.left = '50%'
+      style.transform = 'translateX(-50%) rotate(45deg)'
+    }
+    else {
+      style.top = '50%'
+      style.transform = 'translateY(-50%) rotate(45deg)'
+    }
+  }
+
+  return style
+})
+
+// 更新下拉菜单位置
+function updatePosition() {
+  if (!dropdownRef.value || !triggerRef.value)
     return
 
-  // 如果已存在实例，先销毁
-  if (popperInstance.value) {
-    popperInstance.value.destroy()
-    popperInstance.value = null
-  }
-
-  // 创建Popper配置
-  const options: Partial<PopperOptions> = {
-    placement: props.placement as Placement,
-    strategy: 'absolute',
-    modifiers: [
-      {
-        name: 'offset',
-        options: {
-          offset: finalOffset.value,
-        },
-      },
-      {
-        name: 'preventOverflow',
-        enabled: props.placementStrategy === 'prevent-overflow' || props.placementStrategy === 'auto',
-        options: {
-          boundary: 'viewport',
-          padding: 8,
-        },
-      },
-      {
-        name: 'flip',
-        enabled: props.placementStrategy === 'flip' || props.placementStrategy === 'auto',
-        options: {
-          fallbackPlacements: ['top-start', 'top', 'top-end', 'right-start', 'right', 'right-end', 'bottom-start', 'bottom', 'bottom-end', 'left-start', 'left', 'left-end'],
-        },
-      },
-      {
-        name: 'arrow',
-        enabled: props.arrow,
-        options: {
-          element: arrowRef.value,
-          padding: 5,
-        },
-      },
-      {
-        name: 'computeStyles',
-        options: {
-          gpuAcceleration: true,
-          adaptive: true,
-        },
-      },
-      {
-        name: 'updateState',
-        enabled: true,
-        phase: 'write',
-        fn: ({ state }) => {
-          // 更新实际放置位置
-          const newPlacement = state.placement
-          if (actualPlacement.value !== newPlacement) {
-            actualPlacement.value = newPlacement
-          }
-        },
-        requires: ['computeStyles'],
-      },
-    ],
-  }
-
-  // 创建popper实例
-  popperInstance.value = createPopper(triggerRef.value, dropdownRef.value, options)
-}
-
-// 页面尺寸变化时更新位置
-function updatePosition() {
-  if (popperInstance.value) {
-    popperInstance.value.update()
-  }
+  updateElementPosition(
+    dropdownRef.value,
+    triggerRef.value,
+    {
+      placement: props.placement,
+      offset: finalOffset.value,
+      placementStrategy: props.placementStrategy,
+    },
+  )
 }
 
 // 延迟隐藏计时器
@@ -204,6 +189,12 @@ function toggle(force?: boolean) {
   else {
     visible.value ? hide() : show()
   }
+}
+
+// 处理选择事件
+function onItemClick(value: any) {
+  emits('select', value)
+  hide()
 }
 
 // 处理点击外部事件
@@ -255,22 +246,11 @@ function handleDropdownMouseLeave() {
   }
 }
 
-// 组件挂载时初始化
-onMounted(() => {
-  // 确保DOM已渲染后创建popper
-  nextTick(() => {
-    if (triggerRef.value && dropdownRef.value) {
-      createPopperInstance()
-      // 初次创建后立即更新位置
-      if (visible.value) {
-        updatePosition()
-      }
-    }
-  })
+// 设置事件监听
+useEventListeners(updatePosition)
 
-  // 监听窗口大小变化
-  window.addEventListener('resize', updatePosition)
-  // 监听点击外部事件
+// 额外添加点击外部事件监听
+onMounted(() => {
   document.addEventListener('click', handleOutsideClick)
 })
 
@@ -278,13 +258,7 @@ onMounted(() => {
 watch(visible, (newVal) => {
   if (newVal) {
     // 确保DOM已更新
-    nextTick(() => {
-      // 更新或创建popper实例
-      if (!popperInstance.value) {
-        createPopperInstance()
-      }
-      updatePosition()
-    })
+    nextTick(updatePosition)
   }
 })
 
@@ -297,14 +271,7 @@ watch(() => props.disabled, (newVal) => {
 
 // 组件卸载时清理资源
 onUnmounted(() => {
-  // 销毁popper实例
-  if (popperInstance.value) {
-    popperInstance.value.destroy()
-    popperInstance.value = null
-  }
-
-  // 移除事件监听
-  window.removeEventListener('resize', updatePosition)
+  // 移除点击外部事件监听
   document.removeEventListener('click', handleOutsideClick)
 
   // 清除计时器
@@ -335,6 +302,11 @@ function onEnter() {
   nextTick(updatePosition)
 }
 
+// 提供关闭方法给子组件
+provide('jv-dropdown-close', hide)
+// 提供选项点击方法给子组件
+provide('jv-dropdown-select', onItemClick)
+
 defineExpose<JvDropdownExpose>({
   show,
   hide,
@@ -364,7 +336,7 @@ defineExpose<JvDropdownExpose>({
           ref="dropdownRef"
           :class="[dropdownClass, wrapperClass]"
           :data-placement="actualPlacement"
-          :style="[dropdownStyle, dropdownCssVars]"
+          :style="dropdownStyle"
           @mouseenter="handleDropdownMouseEnter"
           @mouseleave="handleDropdownMouseLeave"
         >
@@ -382,6 +354,7 @@ defineExpose<JvDropdownExpose>({
             ref="arrowRef"
             :class="bem.e('arrow')"
             :data-placement="actualPlacement"
+            :style="arrowStyle"
           />
         </div>
       </Transition>
@@ -392,17 +365,18 @@ defineExpose<JvDropdownExpose>({
 <style lang="scss">
 @use 'sass:map';
 
+// 过渡动画
 .jv-dropdown-fade-enter-active,
 .jv-dropdown-fade-leave-active {
   transition:
-    opacity 0.2s ease,
-    transform 0.2s ease;
+    opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .jv-dropdown-fade-enter-from,
 .jv-dropdown-fade-leave-to {
   opacity: 0;
-  transform: translateY(-10px);
+  transform: translateY(-8px) scale(0.96);
 }
 
 @include b(dropdown) {
@@ -413,75 +387,136 @@ defineExpose<JvDropdownExpose>({
     display: inline-flex;
     align-items: center;
     cursor: pointer;
+
+    &:focus {
+      outline: none;
+    }
   }
 
   @include e(content) {
-    position: absolute; // popper.js会处理定位
+    position: absolute;
     z-index: var(--jv-dropdown-z-index);
-    width: var(--jv-dropdown-width);
-    min-width: 100px;
+    overflow: hidden;
+    box-sizing: border-box;
+    width: var(--jv-dropdown-width, auto);
+    min-width: var(--jv-dropdown-min-width, 120px);
     margin: 0;
-    padding: 8px 0;
+    padding: 6px 0;
     border-width: 0;
-    border-radius: var(--jv-dropdown-border-radius);
-    box-shadow: var(--jv-dropdown-box-shadow);
-    background: var(--jv-dropdown-bg);
+    border-radius: var(--jv-dropdown-border-radius, 6px);
+    box-shadow: var(--jv-dropdown-box-shadow, 0 2px 12px 0 rgb(0 0 0 / 0.12));
+    background: var(--jv-dropdown-bg, var(--jv-color-bg-popup, #fff));
+    color: var(--jv-dropdown-text-color, var(--jv-color-text-primary, #333));
     outline: none;
 
     @include when(disabled) {
       opacity: 0.6;
       pointer-events: none;
     }
+
+    // 优化基于放置位置的样式
+    &[data-placement^='top'] {
+      transform-origin: bottom center;
+    }
+
+    &[data-placement^='bottom'] {
+      transform-origin: top center;
+    }
+
+    &[data-placement^='left'] {
+      transform-origin: right center;
+    }
+
+    &[data-placement^='right'] {
+      transform-origin: left center;
+    }
   }
 
   @include e(menu) {
-    max-height: 300px;
+    max-height: var(--jv-dropdown-max-height, 300px);
     overflow-y: auto;
     scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch; // 改善iOS滚动体验
 
     &::-webkit-scrollbar {
       width: 4px;
+      height: 4px;
     }
 
     &::-webkit-scrollbar-thumb {
       border-radius: 4px;
-      background-color: rgb(0 0 0 / 0.2);
+      background-color: var(--jv-scrollbar-color, rgb(0 0 0 / 0.2));
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
     }
   }
 
   @include e(empty) {
-    padding: 8px 16px;
-    color: var(--jv-color-text-secondary);
+    padding: 10px 16px;
+    color: var(--jv-color-text-secondary, #909399);
     font-size: 14px;
     text-align: center;
   }
 
   @include e(arrow) {
-    --jv-dropdown-arrow-ratio: var(--jv-dropdown-arrow-size, 8px);
     position: absolute;
     z-index: 1; // 确保箭头位于内容上层
-    width: var(--jv-dropdown-arrow-ratio);
-    height: var(--jv-dropdown-arrow-ratio);
+    width: var(--jv-dropdown-arrow-size, 8px);
+    height: var(--jv-dropdown-arrow-size, 8px);
     border: none;
-    background-color: var(--jv-dropdown-bg); // 使用与dropdown相同的背景色
+    background-color: var(--jv-dropdown-bg, var(--jv-color-bg-popup, #fff));
     transform: rotate(45deg);
     pointer-events: none; // 确保箭头不阻止鼠标事件
   }
 
-  &[data-popper-placement^='top'] .jv-dropdown__arrow {
-    bottom: calc(var(--jv-dropdown-arrow-size) / -2);
+  // 添加下拉项的默认样式
+  .jv-dropdown-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    color: var(--jv-dropdown-item-color, var(--jv-color-text-primary, #333));
+    font-size: 14px;
+    line-height: 1.5;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+      background-color 0.2s,
+      color 0.2s;
+
+    &:hover {
+      background-color: var(--jv-dropdown-item-hover-bg, var(--jv-color-primary-light-9, #f2f8fe));
+      color: var(--jv-dropdown-item-hover-color, var(--jv-color-primary, #409eff));
+    }
+
+    &.is-disabled {
+      color: var(--jv-color-text-disabled, #c0c4cc);
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    &.is-active {
+      background-color: var(--jv-dropdown-item-active-bg, var(--jv-color-primary-light-9, #f2f8fe));
+      color: var(--jv-color-primary, #409eff);
+      font-weight: 500;
+    }
   }
 
-  &[data-popper-placement^='bottom'] .jv-dropdown__arrow {
-    top: calc(var(--jv-dropdown-arrow-size) / -2);
-  }
+  // 添加下拉菜单分组样式
+  .jv-dropdown-group {
+    &__title {
+      padding: 6px 16px;
+      color: var(--jv-color-text-secondary, #909399);
+      font-size: 12px;
+      font-weight: 500;
+    }
 
-  &[data-popper-placement^='left'] .jv-dropdown__arrow {
-    right: calc(var(--jv-dropdown-arrow-size) / -2);
-  }
-
-  &[data-popper-placement^='right'] .jv-dropdown__arrow {
-    left: calc(var(--jv-dropdown-arrow-size) / -2);
+    &__divider {
+      height: 1px;
+      margin: 4px 0;
+      background-color: var(--jv-color-border, #e4e7ed);
+    }
   }
 }
 </style>

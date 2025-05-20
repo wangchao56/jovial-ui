@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { JvSpaceProps } from './types'
-import { convertToUnit } from '@/utils'
 import { computed, useCssVars } from 'vue'
+import { convertToUnit } from '@/utils'
 import { bem, JVSPACE_NAME } from './types'
 
 defineOptions({ name: JVSPACE_NAME, inheritAttrs: false })

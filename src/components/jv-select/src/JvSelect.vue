@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import type { JvSelectEmits, JvSelectOption, JvSelectProps } from './types'
-import JvIcon from '@/components/jv-icon/src/JvIcon.vue'
-import JvInput from '@/components/jv-input/src/JvInput.vue'
 import { computed, ref, watchEffect } from 'vue'
+import JvIcon from '@/components/jv-icon/src/JvIcon.vue'
 import { bem, JVSELECT_NAME } from './types'
 
 defineOptions({ name: JVSELECT_NAME, inheritAttrs: false })
@@ -16,12 +15,12 @@ const {
   multiple = false,
   placeholder = '请选择',
   size = 'medium',
-  clearable = true,
+  clearable = false,
 } = defineProps<JvSelectProps>()
 const emit = defineEmits<JvSelectEmits>()
 
 const showDropdown = ref(false)
-const inputRef = ref()
+const selectRef = ref()
 const dropdownRef = ref<HTMLElement | null>(null)
 
 const selectedLabel = computed(() => {
@@ -31,10 +30,17 @@ const selectedLabel = computed(() => {
         (modelValue as (string | number)[]).includes(opt.value),
       )
       .map(opt => opt.label)
-      .join(',')
+      .join(', ')
   }
   const found = options.find(opt => opt.value === modelValue)
   return found ? found.label : ''
+})
+
+const hasValue = computed(() => {
+  if (multiple && Array.isArray(modelValue)) {
+    return (modelValue as (string | number)[]).length > 0
+  }
+  return modelValue !== ''
 })
 
 function handleSelect(option: JvSelectOption) {
@@ -56,32 +62,22 @@ function handleSelect(option: JvSelectOption) {
   }
 }
 
-function handleClear() {
-  emit(
-    'update:modelValue',
-    (multiple ? [] : '') as typeof modelValue,
-  )
+function handleClear(e: Event) {
+  e.stopPropagation()
+  emit('update:modelValue', (multiple ? [] : '') as typeof modelValue)
   emit('clear')
-}
-
-function handleFocus(e: FocusEvent) {
-  emit('focus', e)
-  if (!disabled && !readonly) {
-    showDropdown.value = true
-  }
-}
-
-function handleBlur(e: FocusEvent) {
-  emit('blur', e)
-  setTimeout(() => {
-    showDropdown.value = false
-  }, 150)
 }
 
 function toggleDropdown() {
   if (disabled || readonly)
     return
   showDropdown.value = !showDropdown.value
+  if (showDropdown.value) {
+    emit('focus', new FocusEvent('focus'))
+  }
+  else {
+    emit('blur', new FocusEvent('blur'))
+  }
 }
 
 function isSelected(option: JvSelectOption) {
@@ -93,7 +89,7 @@ function isSelected(option: JvSelectOption) {
 
 function handleClickOutside(e: MouseEvent) {
   const target = e.target as HTMLElement
-  const selectEl = inputRef.value?.$el
+  const selectEl = selectRef.value?.$el || selectRef.value
   const dropdownEl = dropdownRef.value
 
   if (
@@ -122,67 +118,37 @@ watchEffect(() => {
 
 <template>
   <div
-    :class="[bem.b(), { 'is-disabled': disabled }]"
+    ref="selectRef"
+    :class="[bem.b(), { 'is-disabled': disabled }, bem.m(`size-${size}`), bem.is('inline', inline)]"
     style="position: relative"
   >
-    <JvInput
-      ref="inputRef"
-      :inline="inline"
-      :model-value="selectedLabel || ''"
-      :placeholder="placeholder || '请选择'"
-      :disabled="disabled"
-      :readonly="true"
-      :clearable="clearable"
-      :size="size || 'medium'"
-      type="text"
-      variant="outlined"
-      :prefix-icon="$slots.prefix ? '' : ''"
-      :suffix-icon="$slots.suffix ? '' : ''"
-      v-bind="$attrs"
-      @focus="handleFocus"
-      @blur="handleBlur"
-      @clear="handleClear"
-      @click="toggleDropdown"
-    >
-      <template v-if="$slots.prefix" #prefix>
-        <slot name="prefix" />
-      </template>
+    <div class="jv-select__wrapper" @click="toggleDropdown">
+      <div class="jv-select__label">
+        <span v-if="selectedLabel">{{ selectedLabel }}</span>
+        <span v-else class="jv-select__placeholder">{{ placeholder }}</span>
+      </div>
 
-      <template #suffix>
-        <slot name="suffix">
-          <JvIcon
-            :class="bem.e('arrow')"
-            :rotate="showDropdown ? 180 : 0"
-            name="$menuDown"
-          />
-        </slot>
-      </template>
-    </JvInput>
+      <div class="jv-select__suffix">
+        <JvIcon
+          v-if="clearable && hasValue && !disabled" class="jv-select__clear" name="$close-circle"
+          @click="handleClear"
+        />
+        <JvIcon class="jv-select__arrow" :class="{ 'is-reverse': showDropdown }" name="$chevron-down" />
+      </div>
+    </div>
 
-    <div
-      v-if="showDropdown"
-      ref="dropdownRef"
-      :class="bem.e('dropdown')"
-      :style="{ zIndex: 1000 }"
-    >
+    <div v-if="showDropdown" ref="dropdownRef" :class="bem.e('dropdown')" :style="{ zIndex: 1000 }">
       <div
-        v-for="option in options"
-        :key="option.value"
-        :class="[
+        v-for="option in options" :key="option.value" :class="[
           bem.e('option'),
           {
             'is-selected': isSelected(option),
             'is-disabled': option.disabled,
           },
-        ]"
-        @mousedown.prevent="!option.disabled && handleSelect(option)"
+        ]" @mousedown.prevent="!option.disabled && handleSelect(option)"
       >
         <span>{{ option.label }}</span>
-        <JvIcon
-          v-if="isSelected(option)"
-          :class="bem.e('check')"
-          name="$check"
-        />
+        <JvIcon v-if="isSelected(option)" :class="bem.e('check')" name="$check" />
       </div>
 
       <div v-if="!options.length" :class="bem.e('empty')">
@@ -194,12 +160,64 @@ watchEffect(() => {
 
 <style lang="scss" scoped>
 .jv-select {
+  --jv-select-height: 36px;
   position: relative;
   width: 100%;
 
   &.is-disabled {
     pointer-events: none;
     opacity: 0.6;
+  }
+
+  &.is-inline {
+    display: inline-block;
+    width: fit-content;
+  }
+
+  .jv-select__wrapper {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: var(--jv-select-height);
+    padding: 0 12px;
+    border: 1px solid var(--jv-input-border-color, #dcdfe6);
+    border-radius: var(--jv-input-border-radius, 4px);
+    background-color: #fff;
+    cursor: pointer;
+    transition: border-color 0.2s;
+
+    &:hover {
+      border-color: #c0c4cc;
+    }
+  }
+
+  .jv-select__label {
+    overflow: hidden;
+    flex: 1;
+    font-size: 14px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .jv-select__placeholder {
+    color: #999;
+  }
+
+  .jv-select__suffix {
+    display: flex;
+    align-items: center;
+  }
+
+  .jv-select__clear {
+    margin-right: 6px;
+    color: #c0c4cc;
+    font-size: 16px;
+
+    &:hover {
+      color: #909399;
+    }
   }
 
   .jv-select__dropdown {
@@ -253,9 +271,13 @@ watchEffect(() => {
 
   .jv-select__arrow {
     display: inline-block;
-    margin-left: 4px;
     color: var(--jv-input-icon-color, #c0c4cc);
+    font-size: 16px;
     transition: transform 0.2s;
+
+    &.is-reverse {
+      transform: rotate(180deg);
+    }
   }
 
   .jv-select__empty {

@@ -1,6 +1,7 @@
+import type { Slot } from 'vue'
+import type { JvButtonProps } from '@/components/jv-button/src/types'
 import type { JvCardHeaderProps } from '@/components/jv-card'
 import type { JvIconProps } from '@/components/jv-icon/src/types'
-import type { Slot } from 'vue'
 import { createNamespace } from '@/utils'
 
 export const JVMODAL_NAME = 'JvModal'
@@ -50,6 +51,9 @@ export interface JvModalProps {
    * 确认按钮文本
    */
   confirmText?: string
+
+  confirmButtonProps?: JvButtonProps
+  cancelButtonProps?: JvButtonProps
 }
 /**
  * 弹窗组件事件

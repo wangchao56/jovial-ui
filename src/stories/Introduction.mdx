@@ -1,0 +1,213 @@
+# Jovial UI 组件库
+
+## 1. 项目简介
+
+Jovial UI 是一个现代且灵活的 Vue 3 组件库，专为构建优雅且易用的用户界面而设计。我们的组件库提供了丰富的界面元素，支持主题定制，并遵循最佳的可访问性实践。
+
+### 特点
+
+- **优雅美观**：遵循现代设计趋势，提供精致且美观的视觉体验
+- **高度可定制**：支持主题化，允许您根据品牌需求进行样式调整
+- **响应式设计**：组件自适应不同屏幕尺寸，提供一致的体验
+- **可访问性支持**：符合 WCAG 标准，确保所有用户都能使用您的应用
+- **TypeScript 支持**：完整的类型定义，提供更好的开发体验
+- **轻量级**：精心优化的代码体积，提高加载速度
+
+## 2. 设计原则
+
+我们的设计原则指导着 Jovial UI 的每一个决策和实现：
+
+### 一致性
+保持视觉和交互的一致性，减少用户的认知负担。
+
+### 可复用性
+组件应该易于复用，以适应不同的需求。
+
+### 可扩展性
+组件应该易于扩展和修改，以适应不同的需求。
+
+## 3. 快速开始
+
+### 安装
+
+```bash
+npm install jovial-ui
+# 或
+yarn add jovial-ui
+```
+
+### 引入组件库
+
+```javascript
+// main.js
+import { createApp } from 'vue'
+import { createJovialUI,components } from 'jovial-ui'
+import 'jovial-ui/dist/styles.css'
+import App from './App.vue'
+
+const Jovial = createJovialUI({
+  components,
+  locale: {
+    locale: 'zh-Hans',
+  },
+})
+const app = createApp(App)
+app.use(Jovial)
+app.mount('#app')
+```
+
+### 按需引入
+
+```javascript
+// main.js
+import { createApp } from 'vue'
+import { JvButton, JvIcon } from 'jovial-ui'
+import 'jovial-ui/dist/styles.css'
+import App from './App.vue'
+
+const app = createApp(App)
+app.component('JvButton', JvButton)
+app.component('JvIcon', JvIcon)
+app.mount('#app')
+```
+
+## 4. 组件一览
+
+Jovial UI 提供了丰富的组件，满足各种界面需求：
+
+### 基础组件
+- JvButton - 按钮组件
+- JvIcon - 图标组件
+- JvLink - 链接组件
+- JvDivider - 分割线组件
+
+### 表单组件
+- JvInput - 输入框组件
+- JvSelect - 选择器组件
+- JvCheckbox - 复选框组件
+- JvRadio - 单选框组件
+- JvSwitch - 开关组件
+- JvSlider - 滑块组件
+
+### 布局组件
+- JvGrid - 栅格布局组件
+- JvSpace - 间距组件
+- JvDivider - 分割线组件
+- JvAffix - 固钉组件
+
+### 反馈组件
+- JvAlert - 提示组件
+- JvMessage - 消息组件
+- JvLoading - 加载组件
+- JvProgress - 进度条组件
+
+### 数据展示组件
+- JvTable - 表格组件
+- JvTag - 标签组件
+- JvBadge - 徽章组件
+- JvAvatar - 头像组件
+- JvCard - 卡片组件
+
+### 导航组件
+- JvMenu - 菜单组件
+- JvPagination - 分页组件
+- JvBreadcrumb - 面包屑组件
+- JvTabs - 标签页组件
+- JvDropdown - 下拉菜单组件
+
+## 5. 使用示例
+
+使用 Jovial UI 构建界面非常简单：
+
+```vue
+<template>
+  <div class="demo-container">
+    <JvButton color="primary" @click="showMessage">点击我</JvButton>
+    
+    <JvSpace vertical size="large">
+      <JvInput v-model="username" placeholder="请输入用户名" />
+      <JvSelect v-model="selected" :options="options" />
+      
+      <JvCard>
+        <template #title>
+          <div class="card-title">
+            <JvIcon name="mdi:star" color="warning" />
+            <span>卡片标题</span>
+          </div>
+        </template>
+        <div class="card-content">
+          这是一个卡片内容示例
+        </div>
+        <template #footer>
+          <JvButton size="small">详情</JvButton>
+        </template>
+      </JvCard>
+    </JvSpace>
+  </div>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+import { useMessage } from 'jovial-ui'
+
+const username = ref('')
+const selected = ref('')
+const options = [
+  { label: '选项1', value: '1' },
+  { label: '选项2', value: '2' },
+  { label: '选项3', value: '3' }
+]
+
+const message = useMessage()
+const showMessage = () => {
+  message.success('操作成功！')
+}
+</script>
+```
+
+## 6. 贡献指南
+
+我们非常欢迎社区贡献，无论是功能改进、bug修复还是文档完善。
+
+### 开发环境设置
+
+```bash
+# 克隆仓库
+git clone https://github.com/your-org/jovial-ui.git
+
+# 安装依赖
+cd jovial-ui
+npm install
+
+# 启动开发服务器
+npm run dev
+```
+
+### 开发规范
+
+- 遵循项目的代码风格和命名约定
+- 所有组件必须编写测试用例
+- 新功能必须提供文档
+- 提交前请确保代码通过所有测试
+
+### 提交PR
+
+1. Fork 仓库并创建您的分支
+2. 添加或修改代码
+3. 确保测试通过
+4. 提交PR并描述您的更改
+
+## 7. 版本计划
+
+Jovial UI 遵循语义化版本控制，我们的版本计划如下：
+
+- **当前稳定版**: v1.0.0
+- **下一个版本**: v1.1.0 (计划增加更多动画效果和新组件)
+- **未来规划**: 
+  - 增强主题系统
+  - 提供更多预设模板
+  - 优化移动设备体验
+
+---
+
+感谢您选择 Jovial UI，我们期待看到您用它构建的精彩作品！ 

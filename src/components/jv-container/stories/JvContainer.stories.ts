@@ -47,15 +47,37 @@ type Story = StoryObj<typeof meta>
 // 基础用法
 export const Basic: Story = {
   render: args => ({
-    components: { JvContainer },
+    components: { JvContainer, JvHeader, JvAside, JvMain, JvFooter },
     setup() {
       return { args }
     },
     template: `
       <jv-container v-bind="args">
-        <div style="background-color: var(--jv-theme-surface); padding: 20px; text-align: center;">
-          基础容器
-        </div>
+        <jv-header>
+          <div style="width: 100%; background-color: var(--jv-theme-success); padding: 20px; text-align: center;">
+            Header
+          </div>
+        </jv-header>
+        <jv-aside position="left">
+          <div style="background-color: var(--jv-theme-surface); padding: 20px; text-align: center;">
+            Aside
+          </div>
+        </jv-aside>
+        <jv-main>
+          <div style="background-color: var(--jv-theme-surface); padding: 20px; text-align: center;">
+            Main
+          </div>
+        </jv-main>
+        <jv-aside position="right">
+          <div style="background-color: var(--jv-theme-surface); padding: 20px; text-align: center;">
+            Aside
+          </div>
+        </jv-aside>
+        <jv-footer fixed>
+          <div style="width: 100%; background-color: var(--jv-theme-warning); padding: 20px; text-align: center;">
+            Footer
+          </div>
+        </jv-footer>
       </jv-container>
     `,
   }),

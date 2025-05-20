@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { JvTableContext, TableColumn } from './types'
+import { inject } from 'vue'
 import JvIcon from '@/components/jv-icon/src/JvIcon.vue'
 import { convertToUnit } from '@/utils'
-import { inject } from 'vue'
 import { bem, JvTableContextKey } from './types'
 
 defineOptions({
@@ -150,6 +150,8 @@ function handleSortClick(column: TableColumn) {
 <style lang="scss">
 .jv-table__header {
   position: relative;
+
+  position: absolute;
   top: 0;
   left: 0;
   z-index: 10;

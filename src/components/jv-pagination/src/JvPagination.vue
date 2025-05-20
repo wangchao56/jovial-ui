@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import type { JvSelectOption } from '@components/jv-select/src/types'
 import type { JvPaginationEmits, JvPaginationProps } from './types'
-import { useLocale } from '@/locale'
+import JvButton from '@components/jv-button/src/JvButton.vue'
+import JvInputNumber from '@components/jv-input-number/src/JvInputNumber.vue'
 import JvSelect from '@components/jv-select/src/JvSelect.vue'
+import JvText from '@components/jv-typography/src/JvText.vue'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { bem } from './types'
 
@@ -20,12 +22,10 @@ const currentPage = ref(modelValue)
 const pageSize = ref(pageSizeProp)
 const totalPages = computed(() => Math.ceil(total / pageSize.value))
 
-const { current, t } = useLocale()
-
 // 转换pageSizes为JvSelect需要的选项格式
 const pageSizeOptions = computed<JvSelectOption[]>(() => {
   return pageSizes.map(size => ({
-    label: `${size}${t('pagination.itemsPerPage')}`,
+    label: `${size} 条/页`,
     value: size,
   }))
 })
@@ -42,7 +42,6 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('directionchange', updateRtl)
 })
-watch(() => current.value, updateRtl)
 
 watch(
   () => modelValue,
@@ -108,146 +107,114 @@ const pageList = computed(() => {
   }
   return isRtl.value ? pages.reverse() : pages
 })
+
+const pagebtnVariant = computed(() => {
+  return (p: string | number) => p === '...' ? 'text' : 'flat'
+})
+
+const pagebtnColor = computed(() => {
+  return (p: string | number) => p === currentPage.value ? 'primary' : 'default'
+})
 </script>
 
 <template>
   <nav :class="[bem.b(), simple && 'is-simple', isRtl && 'is-rtl']">
-    <template v-if="isRtl">
-      <button
-        :class="bem.e('btn')"
-        :disabled="currentPage === totalPages"
-        @click="changePage(currentPage + 1)"
-      >
-        <span style="display: inline-block; transform: scaleX(-1)">←</span>
-        {{ t('pagination.next') }}
-      </button>
-      <template v-if="!simple">
-        <button
-          v-for="p in pageList"
-          :key="p"
-          :class="[
-            bem.e('btn'),
+    <!-- 导航控制区 -->
+    <div :class="bem.e('nav')">
+      <!-- 前一页按钮 -->
+      <JvButton
+        :class="bem.e('nav-btn')" :disabled="currentPage === 1" size="small" variant="flat"
+        :prepend-icon="isRtl ? '$chevronRight' : '$chevronLeft'" @click="changePage(currentPage - 1)"
+      />
+
+      <!-- 页码区域 -->
+      <TransitionGroup v-if="!simple" name="jv-pagination-fade" tag="div" :class="bem.e('pages')">
+        <JvButton
+          v-for="p in pageList" :key="p" :class="[
+            bem.e('page-btn'),
             bem.is('active', p === currentPage),
             bem.is('ellipsis', p === '...'),
-          ]"
-          :disabled="p === '...'"
+          ]" :disabled="p === '...'" size="small" :variant="pagebtnVariant(p)" :color="pagebtnColor(p)"
           @click="typeof p === 'number' && changePage(p)"
         >
-          {{ p === '...' ? '...' : t('pagination.page', p) }}
-        </button>
-      </template>
-      <button
-        :class="bem.e('btn')"
-        :disabled="currentPage === 1"
-        @click="changePage(currentPage - 1)"
+          {{ p }}
+        </JvButton>
+      </TransitionGroup>
+      <!-- 后一页按钮 -->
+      <JvButton
+        :class="bem.e('nav-btn')" :disabled="currentPage === totalPages" size="small" variant="flat"
+        :append-icon="isRtl ? '$chevronLeft' : '$chevronRight'" @click="changePage(currentPage + 1)"
+      />
+    </div>
+
+    <!-- 信息和控制区 -->
+    <div :class="bem.e('controls')">
+      <!-- 总条数信息 -->
+      <JvFlex :gap="8" align="center">
+        <JvText :class="bem.e('total')" secondary>
+          {{ total }}
+        </JvText>
+        <JvSelect
+          v-model="pageSize" inline size="small" :class="bem.e('select')" :options="pageSizeOptions"
+          @change="changePageSize"
+        />
+      </JvFlex>
+      <!-- 每页条数选择器 -->
+
+      <!-- 跳转到特定页面 -->
+      <JvInputNumber
+        v-model="currentPage" :min="1" :max="totalPages" size="small" inline
+        :class="bem.e('jump-input')" @change="changePage"
       >
-        <span style="display: inline-block; transform: scaleX(-1)">→</span>
-        {{ t('pagination.prev') }}
-      </button>
-    </template>
-    <template v-else>
-      <button
-        :class="bem.e('btn')"
-        :disabled="currentPage === 1"
-        @click="changePage(currentPage - 1)"
-      >
-        {{ t('pagination.prev') }}
-        <span style="display: inline-block">←</span>
-      </button>
-      <template v-if="!simple">
-        <button
-          v-for="p in pageList"
-          :key="p"
-          :class="[
-            bem.e('btn'),
-            bem.is('active', p === currentPage),
-            bem.is('ellipsis', p === '...'),
-          ]"
-          :disabled="p === '...'"
-          @click="typeof p === 'number' && changePage(p)"
-        >
-          {{ p === '...' ? '...' : t('pagination.page', p) }}
-        </button>
-      </template>
-      <button
-        :class="bem.e('btn')"
-        :disabled="currentPage === totalPages"
-        @click="changePage(currentPage + 1)"
-      >
-        {{ t('pagination.next') }}
-        <span style="display: inline-block">→</span>
-      </button>
-    </template>
-    <span :class="bem.e('total')">{{ t('pagination.total', total) }}</span>
-    <!-- 使用JvSelect替换原生select -->
-    <JvSelect
-      v-model="pageSize"
-      inline
-      :class="bem.e('select')"
-      :options="pageSizeOptions"
-      size="small"
-      @change="changePageSize"
-    />
-    <span v-if="!simple" :class="bem.e('jump')">
-      {{ t('pagination.jumpTo') }}
-      <input
-        v-model.number="currentPage"
-        type="number"
-        min="1"
-        :max="totalPages"
-        style="width: 40px"
-        @change="changePage(currentPage)"
-      >
-      {{ t('pagination.page') }}
-    </span>
+        <template #prepend>
+          <JvText secondary>
+            跳转
+          </JvText>
+        </template>
+        <template #append>
+          <JvText secondary>
+            页
+          </JvText>
+        </template>
+      </JvInputNumber>
+    </div>
   </nav>
 </template>
 
 <style scoped lang="scss">
 .jv-pagination {
-  --jv-pagination-gap: 8px;
+  --jv-pagination-gap: 16px;
   --jv-pagination-padding: 8px 0;
-  --jv-pagination-font-size: 15px;
+  --jv-pagination-font-size: 14px;
   --jv-pagination-font-size-mobile: 13px;
   --jv-pagination-btn-min-width: 32px;
   --jv-pagination-btn-min-width-mobile: 28px;
   --jv-pagination-btn-height: 32px;
   --jv-pagination-btn-height-mobile: 28px;
-  --jv-pagination-btn-bg: #f5f5f7;
-  --jv-pagination-btn-color: #333;
-  --jv-pagination-btn-radius: 6px;
-  --jv-pagination-btn-margin-x: 2px;
-  --jv-pagination-btn-active-bg: #409eff;
-  --jv-pagination-btn-active-color: #fff;
-  --jv-pagination-btn-disabled-opacity: 0.5;
   --jv-pagination-total-margin-x: 8px;
-  --jv-pagination-total-color: #888;
+  --jv-pagination-total-color: var(--jv-theme-on-background, #282828);
   --jv-pagination-total-font-size: 14px;
   --jv-pagination-select-width: 100px;
   --jv-pagination-select-width-mobile: 80px;
-  --jv-pagination-select-radius: 4px;
-  --jv-pagination-select-border: #ddd;
-  --jv-pagination-select-padding: 2px 8px;
-  --jv-pagination-select-font-size: 14px;
   --jv-pagination-jump-margin-left: 8px;
-  --jv-pagination-input-border: #ddd;
-  --jv-pagination-input-radius: 4px;
-  --jv-pagination-input-padding: 2px 4px;
-  --jv-pagination-input-font-size: 14px;
-  --jv-pagination-input-font-size-mobile: 13px;
-  --jv-pagination-input-width: 40px;
+  --jv-pagination-input-width: 60px;
   --jv-pagination-input-width-mobile: 32px;
-  --jv-pagination-input-height-mobile: 24px;
+  --jv-pagination-animation-duration: 0.3s;
+
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
-  gap: var(--jv-pagination-gap, 8px);
-  padding: var(--jv-pagination-padding, 8px 0);
+  flex-wrap: nowrap;
+  gap: var(--jv-pagination-gap);
+  padding: var(--jv-pagination-padding);
+  font-size: var(--jv-pagination-font-size);
   user-select: none;
-  font-size: var(--jv-pagination-font-size, 15px);
 
   &.is-simple {
-    .jv-pagination__btn:not(:first-child):not(:last-child),
+    .jv-pagination__pages {
+      display: none;
+    }
+
     .jv-pagination__jump {
       display: none;
     }
@@ -256,109 +223,143 @@ const pageList = computed(() => {
   &.is-rtl {
     flex-direction: row-reverse;
 
-    .jv-pagination__jump {
-      margin-right: var(--jv-pagination-jump-margin-left, 8px);
-      margin-left: 0;
+    .jv-pagination__nav {
+      flex-direction: row-reverse;
     }
 
-    .jv-pagination__total {
-      margin: 0 var(--jv-pagination-total-margin-x, 8px);
+    .jv-pagination__controls {
+      flex-direction: row-reverse;
     }
   }
 
-  .jv-pagination__btn {
-    display: inline-flex;
-    justify-content: center;
+  // 导航区域样式
+  .jv-pagination__nav {
+    display: flex;
     align-items: center;
-    min-width: var(--jv-pagination-btn-min-width, 32px);
-    height: var(--jv-pagination-btn-height, 32px);
-    margin: 0 var(--jv-pagination-btn-margin-x, 2px);
-    padding: 0 8px;
-    border: none;
-    border-radius: var(--jv-pagination-btn-radius, 6px);
-    background: var(--jv-pagination-btn-bg, #f5f5f7);
-    color: var(--jv-pagination-btn-color, #333);
-    cursor: pointer;
-    transition:
-      background 0.2s,
-      color 0.2s,
-      box-shadow 0.2s;
-
-    &.is-active {
-      background: var(--jv-pagination-btn-active-bg, #409eff);
-      color: var(--jv-pagination-btn-active-color, #fff);
-      font-weight: bold;
-    }
-
-    &.is-ellipsis {
-      background: transparent;
-      cursor: default;
-    }
-
-    &:disabled {
-      cursor: not-allowed;
-      opacity: var(--jv-pagination-btn-disabled-opacity, 0.5);
-    }
+    gap: 4px;
   }
 
+  // 页码区域样式
+  .jv-pagination__pages {
+    position: relative;
+    display: flex;
+    overflow: hidden;
+    flex: 1;
+    align-items: center;
+    gap: 4px;
+  }
+
+  // 页码按钮样式
+  .jv-pagination__page-btn {
+    min-width: var(--jv-pagination-btn-min-width);
+  }
+
+  // 导航按钮样式
+  .jv-pagination__nav-btn {
+    min-width: fit-content;
+  }
+
+  // 控制区域样式
+  .jv-pagination__controls {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 16px;
+  }
+
+  // 总数显示样式
   .jv-pagination__total {
-    margin: 0 var(--jv-pagination-total-margin-x, 8px);
-    color: var(--jv-pagination-total-color, #888);
-    font-size: var(--jv-pagination-total-font-size, 14px);
+    margin: 0;
+    white-space: nowrap;
   }
 
+  // 选择器样式
   .jv-pagination__select {
-    width: var(--jv-pagination-select-width, 100px);
+    width: var(--jv-pagination-select-width);
   }
 
+  // 跳转区域样式
   .jv-pagination__jump {
     display: flex;
     align-items: center;
-    margin-left: var(--jv-pagination-jump-margin-left, 8px);
+    gap: 8px;
 
-    input {
-      box-sizing: border-box;
-      width: var(--jv-pagination-input-width, 40px);
-      height: var(--jv-pagination-btn-height, 32px);
-      margin: 0 4px;
-      padding: var(--jv-pagination-input-padding, 2px 4px);
-      border: 1px solid var(--jv-pagination-input-border, #ddd);
-      border-radius: var(--jv-pagination-input-radius, 4px);
-      font-size: var(--jv-pagination-input-font-size, 14px);
-      text-align: center;
+    .jv-pagination__jump-input {
+      width: var(--jv-pagination-input-width);
     }
+  }
+
+  // 页码动画效果
+  .jv-pagination-fade-move,
+  .jv-pagination-fade-enter-active,
+  .jv-pagination-fade-leave-active {
+    transition: all var(--jv-pagination-animation-duration) cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .jv-pagination-fade-enter-from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+
+  .jv-pagination-fade-leave-to {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+
+  .jv-pagination-fade-leave-active {
+    position: absolute;
   }
 }
 
-@media (width <= 600px) {
-  .jv-pagination {
-    gap: 4px;
-    font-size: var(--jv-pagination-font-size-mobile, 13px);
+// 暗色主题下的特殊调整
+.jv-theme-dark .jv-pagination {
+  --jv-pagination-btn-hover-bg: rgb(255 255 255 / 0.1);
+}
 
-    .jv-pagination__btn,
-    .jv-pagination__total {
-      min-width: var(--jv-pagination-btn-min-width-mobile, 28px);
-      height: var(--jv-pagination-btn-height-mobile, 28px);
+// 响应式样式
+@media (width <=600px) {
+  .jv-pagination {
+    // 在移动设备上更改布局方向
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: var(--jv-pagination-font-size-mobile);
+
+    .jv-pagination__nav {
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .jv-pagination__controls {
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .jv-pagination__page-btn,
+    .jv-pagination__nav-btn {
+      min-width: var(--jv-pagination-btn-min-width-mobile);
+      height: var(--jv-pagination-btn-height-mobile);
       padding: 0 4px;
-      font-size: var(--jv-pagination-font-size-mobile, 13px);
+      font-size: var(--jv-pagination-font-size-mobile);
+    }
+
+    .jv-pagination__pages {
+      gap: 2px;
     }
 
     .jv-pagination__select {
-      width: var(--jv-pagination-select-width-mobile, 80px);
+      width: var(--jv-pagination-select-width-mobile);
     }
 
     .jv-pagination__jump {
-      margin-left: 4px;
-      font-size: var(--jv-pagination-font-size-mobile, 13px);
+      gap: 4px;
 
-      input {
-        width: var(--jv-pagination-input-width-mobile, 32px);
-        height: var(--jv-pagination-input-height-mobile, 24px);
-        margin: 0 2px;
-        padding: 0 2px;
-        font-size: var(--jv-pagination-input-font-size-mobile, 13px);
+      .jv-pagination__jump-input {
+        width: var(--jv-pagination-input-width-mobile);
       }
     }
+
+    // 移动端动画更快
+    --jv-pagination-animation-duration: 0.2s;
   }
 }
 </style>

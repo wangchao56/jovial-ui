@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { JvGridItemPosition } from './types'
-import { useStyle } from '@/hooks'
 import { computed } from 'vue'
+import { useStyle } from '@/hooks'
 import { bem, JVGRID_NAME } from './types'
 
 defineOptions({ name: `${JVGRID_NAME}Item`, inheritAttrs: false })

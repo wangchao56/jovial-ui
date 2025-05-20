@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { LocaleInstance } from '@/locale'
 import type { JvModalEmits, JvModalExpose, JvModalProps } from './types'
+import type { LocaleInstance } from '@/locale'
+import { computed, normalizeStyle, ref, useId, watch } from 'vue'
 import JvButton from '@/components/jv-button/src/JvButton.vue'
 import JvCardHeader from '@/components/jv-card/src/JvCardHeader.vue'
 import JvOverlay from '@/components/jv-overlay/src/JvOverlay.vue'
 import { useZindex } from '@/hooks'
 import { useLocale } from '@/locale'
-import { computed, normalizeStyle, ref, useId, watch } from 'vue'
 import { bem, JVMODAL_NAME } from './types'
 
 defineOptions({ name: JVMODAL_NAME, inheritAttrs: false })
@@ -77,13 +77,11 @@ function handleConfirm() {
 }
 const modalId = `jv-modal-${useId()}`
 
-const triggerProps = computed(() => {
-  return {
-    'onClick': toggleModal,
-    'class': 'jv-modal__trigger',
-    'data-bindmodal-id': modalId,
-  }
-})
+const triggerProps = {
+  'onClick': toggleModal,
+  'class': 'jv-modal__trigger',
+  'data-bindmodal-id': modalId,
+}
 const maskZIndex = computed(() => {
   return currentZIndex.value - 1
 })
@@ -105,7 +103,9 @@ defineExpose<JvModalExpose>({
 </script>
 
 <template>
-  <slot name="trigger" :props="triggerProps" />
+  <div :class="[bem.e('trigger')]" v-bind="triggerProps">
+    <slot name="trigger" />
+  </div>
   <JvOverlay
     target="viewport" :model-value="overlayVisible" :mask-z-index="maskZIndex" class="jv-modal"
     @open-after="overlayOpenAfter" @close-after="overlayCloseAfter" @click-overlay="handleClickOverlay"
@@ -115,8 +115,17 @@ defineExpose<JvModalExpose>({
         <div
           v-if="modalVisible" :id="modalId" :class="[bem.e('wrapper'), bem.is('open', visible)]"
           :style="normalizeStyle(contentStyle)"
+          role="dialog"
+          :aria-modal="visible"
+          :aria-labelledby="modalId"
+          :aria-describedby="modalId"
         >
           <JvCardHeader variant="flat" v-bind="cradHeaderProps">
+            <template #title>
+              <slot name="title">
+                {{ title }}
+              </slot>
+            </template>
             <template #append>
               <JvButton
                 v-if="closeable" size="medium" variant="text" :icon="closeIcon"
@@ -129,10 +138,10 @@ defineExpose<JvModalExpose>({
           </div>
           <div :class="[bem.e('footer')]">
             <slot name="footer">
-              <JvButton size="medium" variant="outlined" color-type="warning" @click="handleCancel">
+              <JvButton v-bind="cancelButtonProps" size="medium" variant="outlined" color="warning" @click="handleCancel">
                 {{ cancelText || local.t('modal.cancel') }}
               </JvButton>
-              <JvButton size="medium" variant="text" color-type="primary" @click="handleConfirm">
+              <JvButton v-bind="confirmButtonProps" size="medium" variant="text" color="primary" @click="handleConfirm">
                 {{ confirmText || local.t('modal.confirm') }}
               </JvButton>
             </slot>
@@ -165,6 +174,11 @@ defineExpose<JvModalExpose>({
     border-radius: var(--jv-rounded-md);
     box-shadow: var(--jv-elevation-4);
     background-color: #fff;
+  }
+
+  &__trigger {
+    display: inline-block;
+    cursor: pointer;
   }
 
   &__header {

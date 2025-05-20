@@ -1,15 +1,15 @@
 # JvContainer 布局容器组件
 
 ## 组件介绍
-`JvContainer` 是一个灵活的布局容器组件系统，用于创建响应式的页面布局结构。它由一系列相互配合的组件组成：
+`JvContainer` 是一个灵活的布局容器组件系统，使用CSS Grid布局实现响应式页面结构。它由一系列相互配合的组件组成：
 
-- **JvContainer**: 基础容器，提供内容最大宽度限制和响应式边距
-- **JvHeader**: 页面顶部区域，可固定在视口顶部
-- **JvAside**: 侧边栏区域，可作为导航菜单容器
-- **JvMain**: 主内容区域，占据剩余空间
-- **JvFooter**: 页面底部区域，可固定在视口底部
+- **JvContainer**: 基础容器，提供内容最大宽度限制和响应式边距，使用Grid布局管理子组件
+- **JvHeader**: 页面顶部区域，可固定在视口顶部，对应gridArea: 'header'
+- **JvAside**: 侧边栏区域，可作为导航菜单容器，可设置左侧栏(gridArea: 'left-aside')或右侧栏(gridArea: 'right-aside')
+- **JvMain**: 主内容区域，对应gridArea: 'main'
+- **JvFooter**: 页面底部区域，可固定在视口底部，对应gridArea: 'footer'
 
-这些组件遵循现代布局最佳实践，使用 Flexbox 构建，支持多种布局组合方式，适用于各种复杂的页面结构需求。
+这些组件遵循现代布局最佳实践，使用CSS Grid构建，支持多种布局组合方式，适用于各种复杂的页面结构需求。
 
 ## 布局结构使用方式
 布局容器组件支持多种灵活的组合方式：
@@ -17,7 +17,7 @@
 ### 基本容器
 ```vue
 <template>
-  <JvContainer :max-width="lg">
+  <JvContainer :max-width="lg" spacing="md">
     <div>容器内容</div>
   </JvContainer>
 </template>
@@ -26,7 +26,7 @@
 ### 经典布局 (上中下结构)
 ```vue
 <template>
-  <div style="height: 100vh; display: flex; flex-direction: column;">
+  <JvContainer gridTemplate='"header" auto "main" 1fr "footer" auto / 1fr' spacing="md">
     <JvHeader height="60">
       页面头部
     </JvHeader>
@@ -38,97 +38,90 @@
     <JvFooter height="40">
       页面底部
     </JvFooter>
-  </div>
+  </JvContainer>
 </template>
 ```
 
-### 侧边栏布局
+### 带左侧边栏的布局
 ```vue
 <template>
-  <div style="height: 100vh; display: flex;">
-    <JvAside width="200">
-      侧边导航
-    </JvAside>
-    
-    <div style="flex: 1; display: flex; flex-direction: column;">
-      <JvHeader>
-        页面头部
-      </JvHeader>
-      
-      <JvMain>
-        主内容区域
-      </JvMain>
-      
-      <JvFooter>
-        页面底部
-      </JvFooter>
-    </div>
-  </div>
-</template>
-```
-
-### 复杂布局 (含侧边栏的上中下结构)
-```vue
-<template>
-  <div style="height: 100vh; display: flex; flex-direction: column;">
+  <JvContainer gridTemplate='"header header" auto "left-aside main" 1fr "footer footer" auto / 200px 1fr' spacing="md">
     <JvHeader>
       页面头部
     </JvHeader>
     
-    <div style="flex: 1; display: flex;">
-      <JvAside>
-        侧边导航
-      </JvAside>
-      
-      <JvMain>
-        <JvContainer>
-          主内容区域
-        </JvContainer>
-      </JvMain>
-    </div>
+    <JvAside position="left">
+      侧边导航
+    </JvAside>
+    
+    <JvMain>
+      主内容区域
+    </JvMain>
     
     <JvFooter>
       页面底部
     </JvFooter>
-  </div>
+  </JvContainer>
+</template>
+```
+
+### 双侧边栏布局
+```vue
+<template>
+  <JvContainer gridTemplate='"header header header" auto "left-aside main right-aside" 1fr "footer footer footer" auto / 200px 1fr 200px' spacing="md">
+    <JvHeader>页面头部</JvHeader>
+    
+    <JvAside position="left">左侧导航</JvAside>
+    <JvMain>主内容区域</JvMain>
+    <JvAside position="right">右侧信息栏</JvAside>
+    
+    <JvFooter>页面底部</JvFooter>
+  </JvContainer>
+</template>
+```
+
+### 自定义区域布局
+```vue
+<template>
+  <JvContainer gridTemplate='"header header header" 60px "left-aside main right-aside" 1fr "left-aside footer footer" auto / 220px 1fr 180px' spacing="sm">
+    <JvHeader>
+      <div>页面头部</div>
+    </JvHeader>
+    
+    <JvAside position="left">
+      <div>左侧栏</div>
+    </JvAside>
+    
+    <JvAside position="right">
+      <div>右侧栏</div>
+    </JvAside>
+    
+    <JvMain>
+      <JvContainer gridTemplate='"section1 section2" 1fr "section3 section3" auto / 1fr 1fr' spacing="xs">
+        <div style="grid-area: section1">区块1</div>
+        <div style="grid-area: section2">区块2</div>
+        <div style="grid-area: section3">区块3</div>
+      </JvContainer>
+    </JvMain>
+    
+    <JvFooter>
+      <div>页面底部</div>
+    </JvFooter>
+  </JvContainer>
 </template>
 ```
 
 ## 交互设计
-布局组件系统提供以下交互特性：
-
-### JvContainer
-- **响应式行为**：根据不同屏幕尺寸自动调整内边距
-- **最大宽度限制**：提供多个断点的最大宽度选项（xs, sm, md, lg, xl, 2xl）
-- **流体模式**：可设置为流体容器（100%宽度）
-
-### JvHeader
-- **固定定位**：可固定在视口顶部，页面滚动时保持可见
-- **高度自定义**：支持自定义高度
-- **z-index控制**：固定时具有适当的层级，保证在其他内容之上
-
-### JvAside
-- **响应式行为**：支持在不同断点隐藏/显示
-- **固定定位**：可固定在视口左侧
-- **宽度自定义**：支持自定义宽度
-
-### JvMain
-- **自动填充**：自动占据剩余空间
-- **内边距控制**：可选择是否应用内边距
-- **溢出处理**：自动处理内容溢出，提供滚动功能
-
-### JvFooter
-- **固定定位**：可固定在视口底部
-- **高度自定义**：支持自定义高度
+- 容器组件支持响应式布局，根据屏幕尺寸自动调整间距
+- 固定布局（fixed）使头部和底部保持在视口中
+- 默认布局通过grid布局提供了一种直观的页面区域组织方式
+- 双侧边栏布局支持左右侧边栏，更灵活地展示内容
+- 使用内边距（padding）而非间隔（gap）控制组件间距，可设置不同大小的间距
 
 ## 可访问性
-布局容器组件系统遵循以下可访问性原则：
-
-- **语义化标签**：默认使用语义化HTML标签（header, aside, main, footer），也支持自定义标签
-- **结构清晰**：提供清晰的页面结构，便于屏幕阅读器理解内容组织
-- **键盘导航**：固定布局元素不会影响键盘导航和焦点管理
-- **可自定义颜色**：支持通过CSS变量自定义颜色，可实现高对比度样式
-- **响应式设计**：适应不同屏幕尺寸，提供良好的移动设备体验
+- 使用语义化HTML标签，如`<header>`, `<main>`, `<footer>`, `<aside>`等
+- 可以通过tag属性自定义标签类型
+- 良好的键盘导航支持
 
 ## Vue 组件 API
 
@@ -140,6 +133,8 @@
 | fluid | boolean | false | 是否使用流体容器（100%宽度） |
 | maxWidth | 'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl' \| false | 'lg' | 容器的最大宽度，对应的像素值：xs(444px)、sm(600px)、md(900px)、lg(1200px)、xl(1536px)、2xl(1920px) |
 | tag | string | 'div' | 容器的HTML标签 |
+| gridTemplate | string | '"header header header" auto "left-aside main right-aside" 1fr "left-aside footer footer" auto / auto 1fr auto' | CSS Grid布局模板，定义布局结构 |
+| spacing | 'xs' \| 'sm' \| 'md' \| 'lg' | 'md' | 设置容器子元素的内边距大小 |
 
 #### Slots
 | 插槽名 | 说明 |
@@ -151,7 +146,7 @@
 #### Props
 | 属性名 | 类型 | 默认值 | 说明 |
 |--------|------|--------|------|
-| height | number \| string | 60 | 头部高度，单位为像素 |
+| height | number \| string | '60px' | 头部高度 |
 | fixed | boolean | false | 是否固定在视口顶部 |
 | tag | string | 'header' | 头部的HTML标签 |
 
@@ -165,8 +160,9 @@
 #### Props
 | 属性名 | 类型 | 默认值 | 说明 |
 |--------|------|--------|------|
-| width | number \| string | 200 | 侧边栏宽度，单位为像素 |
-| fixed | boolean | false | 是否固定在视口左侧 |
+| width | number \| string | 200 | 侧边栏宽度 |
+| fixed | boolean | false | 是否固定在视口侧边 |
+| position | 'left' \| 'right' | 'left' | 侧边栏位置，左侧或右侧 |
 | breakpoint | 'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl' | 'md' | 响应式断点，低于该断点时可隐藏 |
 | tag | string | 'aside' | 侧边栏的HTML标签 |
 
@@ -193,7 +189,7 @@
 #### Props
 | 属性名 | 类型 | 默认值 | 说明 |
 |--------|------|--------|------|
-| height | number \| string | 60 | 底部高度，单位为像素 |
+| height | number \| string | 60 | 底部高度 |
 | fixed | boolean | false | 是否固定在视口底部 |
 | tag | string | 'footer' | 底部的HTML标签 |
 
@@ -204,371 +200,185 @@
 
 ## 测试用例
 
-### JvContainer 测试
+### 基础功能测试
+- 测试组件实例渲染
+- 测试默认插槽内容
 
-#### 基础功能测试
-| 测试ID | 测试场景 | 测试描述 | 测试步骤 | 预期结果 | 测试状态 |
-|--------|----------|----------|----------|----------|----------|
-| CT-001 | 基础渲染 | 验证容器基本渲染 | 1. 挂载JvContainer<br>2. 检查DOM结构 | 1. 组件应正确渲染<br>2. 应具有正确的class | ✅ |
-| CT-002 | 内容渲染 | 验证容器内容渲染 | 1. 挂载JvContainer并设置内容<br>2. 检查内容渲染 | 内容应正确显示 | ✅ |
+### Props 功能测试
+- 测试 gridTemplate 属性应用
+- 测试 maxWidth 属性是否正确应用
+- 测试 fixed 属性是否正确生效
+- 测试 height/width 属性是否按预期设置
+- 测试 position 属性是否正确控制侧边栏位置
+- 测试 spacing 属性是否正确控制内边距
 
-#### Props 功能测试
-| 测试ID | 测试场景 | 测试描述 | 测试步骤 | 预期结果 | 测试状态 |
-|--------|----------|----------|----------|----------|----------|
-| CT-101 | fluid属性 | 验证fluid模式 | 1. 设置fluid=true<br>2. 检查样式 | 容器宽度应为100% | ✅ |
-| CT-102 | maxWidth属性 | 验证不同maxWidth值 | 1. 设置不同的maxWidth值<br>2. 检查最大宽度 | 最大宽度应符合设置 | ✅ |
-| CT-103 | tag属性 | 验证自定义标签 | 1. 设置tag='section'<br>2. 检查渲染的HTML标签 | 应渲染为section标签 | ✅ |
+### 布局组合测试
+- 测试基本的上中下布局
+- 测试带侧边栏的布局
+- 测试双侧边栏布局
+- 测试多区域自定义布局
 
-### JvHeader 测试
+### 样式测试
+- 测试基本样式应用
+- 测试响应式布局效果
 
-#### 基础功能测试
-| 测试ID | 测试场景 | 测试描述 | 测试步骤 | 预期结果 | 测试状态 |
-|--------|----------|----------|----------|----------|----------|
-| HD-001 | 基础渲染 | 验证头部基本渲染 | 1. 挂载JvHeader<br>2. 检查DOM结构 | 1. 组件应正确渲染<br>2. 应渲染为header标签 | ✅ |
-
-#### Props 功能测试
-| 测试ID | 测试场景 | 测试描述 | 测试步骤 | 预期结果 | 测试状态 |
-|--------|----------|----------|----------|----------|----------|
-| HD-101 | height属性 | 验证高度设置 | 1. 设置height=80<br>2. 检查高度样式 | 高度应为80px | ✅ |
-| HD-102 | fixed属性 | 验证固定定位 | 1. 设置fixed=true<br>2. 检查position样式 | 定位应为fixed | ✅ |
-
-### JvAside 测试
-
-#### 基础功能测试
-| 测试ID | 测试场景 | 测试描述 | 测试步骤 | 预期结果 | 测试状态 |
-|--------|----------|----------|----------|----------|----------|
-| AS-001 | 基础渲染 | 验证侧边栏基本渲染 | 1. 挂载JvAside<br>2. 检查DOM结构 | 1. 组件应正确渲染<br>2. 应渲染为aside标签 | ✅ |
-
-#### Props 功能测试
-| 测试ID | 测试场景 | 测试描述 | 测试步骤 | 预期结果 | 测试状态 |
-|--------|----------|----------|----------|----------|----------|
-| AS-101 | width属性 | 验证宽度设置 | 1. 设置width=250<br>2. 检查宽度样式 | 宽度应为250px | ✅ |
-| AS-102 | fixed属性 | 验证固定定位 | 1. 设置fixed=true<br>2. 检查position样式 | 定位应为fixed | ✅ |
-
-### JvMain 测试
-
-#### 基础功能测试
-| 测试ID | 测试场景 | 测试描述 | 测试步骤 | 预期结果 | 测试状态 |
-|--------|----------|----------|----------|----------|----------|
-| MN-001 | 基础渲染 | 验证主内容区基本渲染 | 1. 挂载JvMain<br>2. 检查DOM结构 | 1. 组件应正确渲染<br>2. 应渲染为main标签 | ✅ |
-
-#### Props 功能测试
-| 测试ID | 测试场景 | 测试描述 | 测试步骤 | 预期结果 | 测试状态 |
-|--------|----------|----------|----------|----------|----------|
-| MN-101 | padding属性 | 验证内边距设置 | 1. 设置padding=false<br>2. 检查padding样式 | 不应应用内边距 | ✅ |
-
-### JvFooter 测试
-
-#### 基础功能测试
-| 测试ID | 测试场景 | 测试描述 | 测试步骤 | 预期结果 | 测试状态 |
-|--------|----------|----------|----------|----------|----------|
-| FT-001 | 基础渲染 | 验证底部基本渲染 | 1. 挂载JvFooter<br>2. 检查DOM结构 | 1. 组件应正确渲染<br>2. 应渲染为footer标签 | ✅ |
-
-#### Props 功能测试
-| 测试ID | 测试场景 | 测试描述 | 测试步骤 | 预期结果 | 测试状态 |
-|--------|----------|----------|----------|----------|----------|
-| FT-101 | height属性 | 验证高度设置 | 1. 设置height=50<br>2. 检查高度样式 | 高度应为50px | ✅ |
-| FT-102 | fixed属性 | 验证固定定位 | 1. 设置fixed=true<br>2. 检查position样式 | 定位应为fixed | ✅ |
+### 可访问性测试
+- 测试语义化HTML结构
 
 ## 使用示例
 
-### 基础容器
+### 标准布局
 ```vue
 <template>
-  <JvContainer :max-width="md">
-    <div class="content-box">
-      <h2>基础容器</h2>
-      <p>这是一个最大宽度为900px的容器</p>
-    </div>
-  </JvContainer>
-</template>
-
-<style scoped>
-.content-box {
-  padding: 20px;
-  background-color: var(--jv-theme-surface);
-  border-radius: 4px;
-}
-</style>
-```
-
-### 流体容器
-```vue
-<template>
-  <JvContainer fluid>
-    <div class="content-box">
-      <h2>流体容器</h2>
-      <p>这个容器会占据100%的宽度</p>
-    </div>
-  </JvContainer>
-</template>
-
-<style scoped>
-.content-box {
-  padding: 20px;
-  background-color: var(--jv-theme-surface);
-  border-radius: 4px;
-}
-</style>
-```
-
-### 经典上中下布局
-```vue
-<template>
-  <div class="layout-container">
-    <JvHeader height="60" class="demo-header">
-      <h2>页面头部</h2>
+  <JvContainer spacing="md">
+    <JvHeader>
+      <h1>页面标题</h1>
+      <nav>
+        <a href="/">首页</a>
+        <a href="/about">关于</a>
+        <a href="/contact">联系我们</a>
+      </nav>
     </JvHeader>
     
-    <JvMain class="demo-main">
-      <JvContainer>
-        <h3>主内容区域</h3>
-        <p>这里是页面的主要内容</p>
+    <JvAside position="left">
+      <nav>
+        <ul>
+          <li><a href="/dashboard">仪表盘</a></li>
+          <li><a href="/profile">个人资料</a></li>
+          <li><a href="/settings">设置</a></li>
+        </ul>
+      </nav>
+    </JvAside>
+    
+    <JvMain>
+      <h2>主内容区域</h2>
+      <p>这里是页面的主要内容...</p>
+    </JvMain>
+    
+    <JvFooter>
+      <p>© 2023 JovalUI. 保留所有权利。</p>
+    </JvFooter>
+  </JvContainer>
+</template>
+```
+
+### 双侧边栏布局
+```vue
+<template>
+  <JvContainer gridTemplate='"header header header" auto "left-aside main right-aside" 1fr "footer footer footer" auto / 200px 1fr 180px' spacing="sm">
+    <JvHeader>
+      <div class="logo">管理中心</div>
+      <div class="user-menu">用户菜单</div>
+    </JvHeader>
+    
+    <JvAside position="left">
+      <div class="nav-menu">
+        <div class="nav-item">控制台</div>
+        <div class="nav-item">用户管理</div>
+        <div class="nav-item">内容管理</div>
+      </div>
+    </JvAside>
+    
+    <JvMain>
+      <div class="content-panel">
+        <h1>控制台</h1>
+        <p>主要内容区域，显示核心数据和操作界面</p>
+      </div>
+    </JvMain>
+    
+    <JvAside position="right">
+      <div class="info-panel">
+        <div class="info-item">系统公告</div>
+        <div class="info-item">待办事项</div>
+        <div class="info-item">快捷操作</div>
+      </div>
+    </JvAside>
+    
+    <JvFooter>
+      <p>© 2023 管理系统. 版权所有</p>
+    </JvFooter>
+  </JvContainer>
+</template>
+```
+
+### 自定义网格布局
+```vue
+<template>
+  <JvContainer gridTemplate='"header header header" auto "nav content sidebar" 1fr "footer footer footer" auto / 200px 1fr 200px' spacing="md">
+    <header style="grid-area: header">页面头部</header>
+    <nav style="grid-area: nav">导航菜单</nav>
+    <main style="grid-area: content">主内容</main>
+    <aside style="grid-area: sidebar">侧边栏</aside>
+    <footer style="grid-area: footer">页面底部</footer>
+  </JvContainer>
+</template>
+```
+
+### 响应式管理面板布局
+```vue
+<template>
+  <JvContainer gridTemplate='"header header header" auto "left-aside main right-aside" 1fr / 240px 1fr 180px' spacing="lg">
+    <JvHeader>
+      <div class="logo">管理面板</div>
+      <div class="user-info">管理员</div>
+    </JvHeader>
+    
+    <JvAside position="left" width="240">
+      <div class="sidebar-menu">
+        <div class="menu-item">仪表盘</div>
+        <div class="menu-item">用户管理</div>
+        <div class="menu-item">内容管理</div>
+        <div class="menu-item">系统设置</div>
+      </div>
+    </JvAside>
+    
+    <JvMain>
+      <JvContainer spacing="md">
+        <div class="content-card">
+          <h2>欢迎使用管理面板</h2>
+          <p>这是基于Grid布局的响应式管理界面</p>
+        </div>
+        
+        <div class="dashboard-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+          <div class="stat-card">访问统计</div>
+          <div class="stat-card">用户统计</div>
+          <div class="stat-card">收入统计</div>
+          <div class="stat-card">活动统计</div>
+        </div>
       </JvContainer>
     </JvMain>
     
-    <JvFooter height="50" class="demo-footer">
-      <p>页面底部 © 2023</p>
-    </JvFooter>
-  </div>
-</template>
-
-<script setup>
-// 组件引入
-</script>
-
-<style scoped>
-.layout-container {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-.demo-header {
-  padding: 0 20px;
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid #eee;
-}
-
-.demo-main {
-  flex: 1;
-}
-
-.demo-footer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-top: 1px solid #eee;
-}
-</style>
-```
-
-### 带侧边栏的布局
-```vue
-<template>
-  <div class="layout-container">
-    <JvHeader height="60" class="demo-header">
-      <h2>页面头部</h2>
-    </JvHeader>
-    
-    <div class="layout-content">
-      <JvAside width="220" class="demo-aside">
-        <h3>侧边栏</h3>
-        <div class="nav-item">首页</div>
-        <div class="nav-item">列表页</div>
-        <div class="nav-item">详情页</div>
-        <div class="nav-item">设置</div>
-      </JvAside>
-      
-      <JvMain class="demo-main">
-        <JvContainer>
-          <h3>主内容区域</h3>
-          <p>这里是页面的主要内容</p>
-        </JvContainer>
-      </JvMain>
-    </div>
-    
-    <JvFooter height="50" class="demo-footer">
-      <p>页面底部 © 2023</p>
-    </JvFooter>
-  </div>
-</template>
-
-<script setup>
-// 组件引入
-</script>
-
-<style scoped>
-.layout-container {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-.layout-content {
-  flex: 1;
-  display: flex;
-  overflow: hidden;
-}
-
-.demo-header {
-  padding: 0 20px;
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid #eee;
-}
-
-.demo-aside {
-  padding: 20px;
-  background-color: var(--jv-theme-surface-variant);
-  border-right: 1px solid #eee;
-}
-
-.nav-item {
-  padding: 10px;
-  margin: 5px 0;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.nav-item:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-}
-
-.demo-main {
-  flex: 1;
-  overflow: auto;
-}
-
-.demo-footer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-top: 1px solid #eee;
-}
-</style>
-```
-
-### 具有固定头部和侧边栏的布局
-```vue
-<template>
-  <div class="layout-container">
-    <JvHeader height="60" fixed class="demo-header">
-      <div class="header-content">
-        <h2>固定头部</h2>
-        <div class="actions">
-          <button>登录</button>
-          <button>注册</button>
-        </div>
+    <JvAside position="right" width="180">
+      <div class="info-panel">
+        <h3>通知中心</h3>
+        <div class="notice-item">系统更新</div>
+        <div class="notice-item">新消息(3)</div>
+        <div class="notice-item">待办事项</div>
       </div>
-    </JvHeader>
-    
-    <div class="layout-body">
-      <JvAside width="220" fixed class="demo-aside">
-        <div class="aside-content">
-          <h3>固定侧边栏</h3>
-          <div class="nav-item">首页</div>
-          <div class="nav-item active">控制台</div>
-          <div class="nav-item">用户管理</div>
-          <div class="nav-item">系统设置</div>
-        </div>
-      </JvAside>
-      
-      <JvMain class="demo-main" style="margin-left: 220px; margin-top: 60px;">
-        <JvContainer>
-          <div class="content-card">
-            <h3>内容区域</h3>
-            <p>这里是主要内容，有固定头部和侧边栏。滚动时，头部和侧边栏位置保持不变。</p>
-            
-            <!-- 添加额外内容使其可滚动 -->
-            <div v-for="i in 20" :key="i" class="demo-card">
-              演示卡片 {{ i }}
-            </div>
-          </div>
-        </JvContainer>
-      </JvMain>
-    </div>
-  </div>
+    </JvAside>
+  </JvContainer>
 </template>
+```
 
-<style scoped>
-.layout-container {
-  min-height: 100vh;
-}
+## 测试技术说明
 
-.layout-body {
-  display: flex;
-}
+在测试中，我们使用了以下技术和方法：
 
-.demo-header {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  z-index: 100;
-}
+- 使用 `mount` 函数创建组件实例
+- 使用 `find` 方法查找DOM元素
+- 使用 `classes`、`attributes` 和 `text` 方法检查元素属性
+- 使用 `props` 方法检查组件属性
+- 使用 `emitted` 方法检查事件触发情况
+- 使用 `vi.fn()` 模拟DOM方法和事件监听器
+- 使用 `Object.defineProperty` 模拟浏览器环境属性
 
-.header-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 100%;
-}
+## 测试覆盖范围
 
-.actions {
-  display: flex;
-  gap: 10px;
-}
+这些测试全面覆盖了JvContainer及其子组件的功能，确保组件在各种配置下都能正确渲染和工作。测试用例设计合理，每个测试都专注于一个特定的功能点，使测试结果清晰明确。测试覆盖了以下方面：
 
-.actions button {
-  padding: 6px 12px;
-  border-radius: 4px;
-  background: transparent;
-  border: 1px solid #ddd;
-  cursor: pointer;
-}
-
-.demo-aside {
-  padding-top: 60px;
-  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
-}
-
-.aside-content {
-  padding: 20px;
-}
-
-.nav-item {
-  padding: 10px 15px;
-  margin: 8px 0;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.nav-item:hover, .nav-item.active {
-  background-color: rgba(0, 0, 0, 0.08);
-}
-
-.nav-item.active {
-  font-weight: bold;
-}
-
-.demo-main {
-  flex: 1;
-  padding: 20px;
-}
-
-.content-card {
-  background-color: var(--jv-theme-surface);
-  border-radius: 8px;
-  padding: 20px;
-}
-
-.demo-card {
-  margin: 20px 0;
-  padding: 15px;
-  background-color: #f5f5f5;
-  border-radius: 4px;
-}
-</style> 
+1. 基本渲染和插槽
+2. 属性设置和默认值
+3. 格网布局结构
+4. 样式应用
+5. 生命周期钩子
+6. 组件嵌套使用场景 

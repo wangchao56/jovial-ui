@@ -1,7 +1,7 @@
 import type { App, InjectionKey } from 'vue'
-import type { InternalThemeDefinition, ThemeInstance, ThemeOptions } from './types'
-import { getCurrentInstance } from '@/utils'
+import type { Colors, InternalThemeDefinition, ThemeInstance, ThemeOptions } from './types'
 import { computed, inject, provide, ref } from 'vue'
+import { getCurrentInstance } from '@/utils'
 import { getForeground, THEME_CLASS } from '../helpers'
 import { convertColorsToCssRules, insertCssRulesToHead } from './types'
 
@@ -13,6 +13,7 @@ function genThemeOptions() {
     defaultTheme: 'light',
     themes: {
       light: {
+        darkMode: false,
         colors: {
           'primary': '#067d75',
           'secondary': '#015751',
@@ -36,6 +37,7 @@ function genThemeOptions() {
         },
       },
       dark: {
+        darkMode: true,
         colors: {
           'primary': '#4cada4',
           'secondary': '#00b2a6',
@@ -61,36 +63,56 @@ function genThemeOptions() {
     },
   }
 }
-
 export function createTheme(themeOptions?: ThemeOptions): ThemeInstance {
   const initThemeOptions = themeOptions || genThemeOptions() as ThemeOptions
-
   const name = ref(initThemeOptions.defaultTheme || 'light')
+
+  // 计算当前主题
   const current = computed(() => initThemeOptions.themes[name.value] as InternalThemeDefinition || {
     darkMode: false,
     colors: {},
     variables: {},
   })
-  const themMode = computed(() => {
-    return current.value.darkMode ? 'dark' : 'light'
-  })
-  const themeClass = computed(() => {
-    return `jv-theme-${themMode.value}`
-  })
-  const themes = ref(initThemeOptions.themes)
-  //   const themeColors = new Set<string>(
-  //     Object.values(themes.value).flatMap(theme => Object.keys(theme.colors)),
-  //   )
 
-  const colors = computed(() => {
-    // 获取前景色
+  // 计算主题模式
+  //   const themMode = computed(() => current.value.darkMode ? 'dark' : 'light')
+
+  // 计算主题类名
+  const themeClass = computed(() => `jv-theme-${name.value}`)
+
+  // 所有主题配置
+  const themes = computed(() => initThemeOptions.themes)
+
+  // 计算所有主题的颜色
+  const colors = computed<Record<string, Colors>>(() => {
+    const _colors: Record<string, Colors> = {}
+    Object.entries(themes.value).forEach(([key, value]) => {
+      _colors[key] = parseThemesColors(value)
+    })
+    return _colors
+  })
+
+  /**
+   * 解析主题颜色
+   * @param theme 主题定义
+   * @returns 处理后的颜色对象
+   */
+  function parseThemesColors(theme: DeepPartial<InternalThemeDefinition>): Colors {
+    if (!theme.colors)
+      return { ...current.value.colors }
+
     const fglines: Record<string, string> = {}
     const bglines: Record<string, string> = {}
-    Object.entries(current.value.colors).forEach(([key, value]) => {
-      if (!key.startsWith('on-')) {
-        fglines[`on-${key}`] = getForeground(value)
+
+    Object.entries(theme.colors).forEach(([key, value]) => {
+      // 为背景色自动生成前景色
+      if (!key.startsWith('on-') && value) {
+        fglines[`on-${key}`] = getForeground(value as string)
       }
-      bglines[key] = value
+
+      if (value) {
+        bglines[key] = value
+      }
     })
 
     return {
@@ -98,11 +120,28 @@ export function createTheme(themeOptions?: ThemeOptions): ThemeInstance {
       ...bglines,
       ...fglines,
     }
-  })
+  }
 
+  /**
+   * 更新样式
+   */
   function updateStyles() {
-    const cssRules = convertColorsToCssRules(colors.value, themeClass.value)
-    insertCssRulesToHead(cssRules, themeClass.value)
+    let cssRules = ''
+
+    // 生成每个主题的CSS规则
+    Object.entries(colors.value).forEach(([key, value]) => {
+      cssRules += convertColorsToCssRules(
+        value,
+        `.jv-theme-${key}`,
+        key === 'dark' || (themes.value[key] as InternalThemeDefinition)?.darkMode === true,
+      )
+    })
+
+    // 添加根元素的默认主题
+    cssRules += convertColorsToCssRules(current.value.colors, ':root', false)
+
+    // 插入到文档中
+    insertCssRulesToHead(cssRules, 'jv-theme-styles')
   }
 
   return {

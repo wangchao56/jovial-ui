@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { JvSubMenuProps } from './types'
+import { ref } from 'vue'
 import JvCollapse from '@/components/jv-collapse/src/JvCollapse.vue'
 import { createNamespace } from '@/utils'
-import { ref } from 'vue'
 
 defineOptions({
   name: 'JvSubMenu',

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
-import JvIcon from '@/components/jv-icon'
 import JvButton from '@components/jv-button'
 import { JvCardContent } from '@components/jv-card'
+import JvIcon from '@/components/jv-icon'
 
 const meta: Meta<typeof JvCardContent> = {
   title: '数据展示组件/Card 卡片/JvCardContent',

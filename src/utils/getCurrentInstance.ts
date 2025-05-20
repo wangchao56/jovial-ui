@@ -19,7 +19,7 @@ export function getCurrentInstance(name: string, message?: string) {
   // 如果当前组件实例不存在，则抛出错误
   if (!vm) {
     throw new Error(
-      `[Vuetify] ${name} ${message || 'must be called from inside a setup function'}`,
+      `[jovial-ui] ${name} ${message || 'must be called from inside a setup function'}`,
     )
   }
 

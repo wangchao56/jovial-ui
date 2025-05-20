@@ -65,7 +65,7 @@ describe('jvTextfield', () => {
     const input = wrapper.find('input')
     await input.setValue('new value')
     expect(wrapper.emitted('update:modelValue')).toBeTruthy()
-    expect(wrapper.emitted('update:modelValue')[0]).toEqual(['new value'])
+    expect(wrapper.emitted('update:modelValue')![0]).toEqual(['new value'])
   })
 
   it('emits focus event when input is focused', async () => {
@@ -99,7 +99,7 @@ describe('jvTextfield', () => {
     })
     await wrapper.find('.jv-textfield__clear-icon').trigger('click')
     expect(wrapper.emitted('clear')).toBeTruthy()
-    expect(wrapper.emitted('update:modelValue')[0]).toEqual([''])
+    expect(wrapper.emitted('update:modelValue')![0]).toEqual([''])
   })
 
   it('toggles password visibility when showPassword is true', async () => {
@@ -116,7 +116,7 @@ describe('jvTextfield', () => {
   })
 
   it('renders with different sizes', () => {
-    const sizes = ['small', 'medium', 'large', 'xlarge']
+    const sizes = ['small', 'medium', 'large', 'xlarge'] as const
     sizes.forEach((size) => {
       const wrapper = mount(JvTextfield, {
         props: {
@@ -129,7 +129,7 @@ describe('jvTextfield', () => {
   })
 
   it('renders with different variants', () => {
-    const variants = ['outlined', 'default']
+    const variants = ['outlined', 'default'] as const
     variants.forEach((variant) => {
       const wrapper = mount(JvTextfield, {
         props: {
@@ -194,7 +194,7 @@ describe('jvTextfield', () => {
     expect(blurSpy).toHaveBeenCalled()
 
     wrapper.vm.clear()
-    expect(wrapper.emitted('update:modelValue')[0]).toEqual([''])
+    expect(wrapper.emitted('update:modelValue')![0]).toEqual([''])
     expect(wrapper.emitted('clear')).toBeTruthy()
   })
 })

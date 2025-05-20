@@ -1,3 +1,4 @@
+import type { CSSProperties, InjectionKey, Ref } from 'vue'
 import { createNamespace } from '@/utils'
 
 export const JVCONTAINER_NAME = 'JvContainer'
@@ -11,22 +12,33 @@ export const c_header_bem = createNamespace(JVHEADER_NAME)
 export const c_main_bem = createNamespace(JVMAN_NAME)
 export const c_footer_bem = createNamespace(JVFOOTER_NAME)
 
+export type ContainerStateKey = 'asideWidth' | 'headerHeight' | 'footerHeight' | 'leftAsideWidth' | 'rightAsideWidth'
+
 export interface JvContainerProps {
   fluid?: boolean
   maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | false
   tag?: string
+  gridTemplate?: string
+  spacing?: 'xs' | 'sm' | 'md' | 'lg'
+  asideWidth?: number
+  headerHeight?: number
+  footerHeight?: number
 }
 
 export interface JvAsideProps {
   tag?: string
-  width?: number
+  width?: number | string
   fixed?: boolean
   breakpoint?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'
+  position?: 'left' | 'right'
+  class?: string
+  style?: CSSProperties
 }
 
 export interface JvHeaderProps {
   tag?: string
-  height?: number
+  height?: number | string
+  fixed?: boolean
 }
 
 export interface JvMainProps {
@@ -36,6 +48,17 @@ export interface JvMainProps {
 
 export interface JvFooterProps {
   tag?: string
-  height?: number
+  height?: number | string
   fixed?: boolean
 }
+
+// 与子组件共享的类型
+export interface JvContainercontext {
+  leftAsideWidth: Ref<number>
+  rightAsideWidth: Ref<number>
+  headerHeight: Ref<number>
+  footerHeight: Ref<number>
+  updateState: (key: ContainerStateKey, value: number) => void
+}
+
+export const JvContainerContextKey: InjectionKey<JvContainercontext> = Symbol('JvContainerContext')

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { JvTabNavProps, TabNavItem } from './types'
+import type { JvTabNavProps, JvTabsContext, TabNavItem } from './types'
 import { computed, inject, onMounted, onUpdated, ref, watch } from 'vue'
-import JvTab from './JvTab.vue'
-import { bem } from './types'
+import JvTabNavItem from './JvTabNavItem.vue'
+import { bem, JvTabsContextKey } from './types'
 
 defineOptions({ name: 'JvTabNav', inheritAttrs: false })
 
@@ -24,13 +24,7 @@ interface JvTabNavPropsWithItems extends JvTabNavProps {
 }
 
 // 获取父组件提供的上下文
-const tabs = inject('tabs', {
-  activeTab: ref(''),
-  updateActiveTab: () => {},
-  variant: computed(() => 'default'),
-  color: computed(() => 'primary'),
-  vertical: computed(() => false),
-})
+const tabs = inject(JvTabsContextKey, null) as JvTabsContext
 
 // 滑块样式
 const sliderStyle = ref({})
@@ -43,7 +37,7 @@ function updateSlider() {
     return
 
   const activeItem = navItems.value.find((item) => {
-    return item.getAttribute('data-value') === tabs.activeTab.value
+    return item.getAttribute('data-value') === String(tabs.activeTab.value)
   })
 
   if (!activeItem)
@@ -76,12 +70,12 @@ watch(() => props.items, updateSlider, { deep: true })
 
 // 在组件挂载和更新后更新滑块位置
 onMounted(() => {
-  navItems.value = Array.from(navRef.value?.querySelectorAll('.jv-tab-nav__item') || [])
+  navItems.value = Array.from(navRef.value?.querySelectorAll('.jv-tabs-nav__item') || [])
   updateSlider()
 })
 
 onUpdated(() => {
-  navItems.value = Array.from(navRef.value?.querySelectorAll('.jv-tab-nav__item') || [])
+  navItems.value = Array.from(navRef.value?.querySelectorAll('.jv-tabs-nav__item') || [])
   updateSlider()
 })
 
@@ -102,37 +96,32 @@ const sliderClass = computed(() => [
   `${bem.b()}-nav__slider--${props.sliderPosition}`,
 ])
 
-// 判断是否有数据项或插槽内容
-const hasItems = computed(() => props.items && props.items.length > 0)
+// // 点击标签处理函数
+// function handleClick(params: {
+//   offsetLeft: number
+//   offsetTop: number
+//   offsetWidth: number
+//   offsetHeight: number
+// }) {
+//   console.log(params)
+// }
 </script>
 
 <template>
   <div ref="navRef" :class="navClass">
-    <div class="jv-tab-nav__list">
-      <!-- 自动生成的标签 -->
-      <template v-if="hasItems">
-        <JvTab
-          v-for="item in items"
-          :key="item.value"
-          :value="item.value"
-          :disabled="item.disabled"
-          :icon="item.icon"
-        >
-          {{ item.label }}
-        </JvTab>
-      </template>
-      <!-- 插槽内容 -->
-      <slot v-else />
+    <div class="jv-tabs-nav__list">
+      <JvTabNavItem
+        v-for="item in items" :key="item.value" :value="item.value" :disabled="item.disabled"
+        :icon="item.icon" :badge="item.badge"
+      >
+        {{ item.label }}
+      </JvTabNavItem>
+      <div v-if="sliderVisible" :class="sliderClass" :style="sliderStyle" />
     </div>
-    <div
-      v-if="sliderVisible"
-      :class="sliderClass"
-      :style="sliderStyle"
-    />
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @include b(tabs) {
   &-nav {
     position: relative;
@@ -144,12 +133,13 @@ const hasItems = computed(() => props.items && props.items.length > 0)
       z-index: 1;
       display: flex;
       flex-wrap: nowrap;
+      width: 100%;
     }
 
     &__slider {
       position: absolute;
       z-index: 0;
-      background-color: var(--jv-theme-primary);
+      background-color: var(--jv-primary);
       transition: all 0.3s ease;
 
       &--top {
@@ -180,7 +170,7 @@ const hasItems = computed(() => props.items && props.items.length > 0)
     &--vertical {
       flex-direction: column;
 
-      .jv-tab-nav__list {
+      .jv-tabs-nav__list {
         flex-direction: column;
       }
     }

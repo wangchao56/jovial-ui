@@ -1,4 +1,3 @@
-// Types
 import type {
   ComponentInternalInstance,
   ComponentPublicInstance,
@@ -124,7 +123,7 @@ export function getPropertyFromItem(
 }
 
 export function createRange(length: number, start = 0): number[] {
-  return Array.from({ length }, (v, k) => start + k)
+  return Array.from({ length }, (_v, k) => start + k)
 }
 
 export function getZIndex(el?: Element | null): number {
@@ -540,7 +539,7 @@ export function chunk(str: string, size = 1) {
 }
 
 export function chunkArray(array: any[], size = 1) {
-  return Array.from({ length: Math.ceil(array.length / size) }, (v, i) =>
+  return Array.from({ length: Math.ceil(array.length / size) }, (_v, i) =>
     array.slice(i * size, i * size + size)
   )
 }

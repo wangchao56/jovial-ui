@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { JvDividerProps } from './types'
-import { createNamespace } from '@/utils'
 import { computed, useCssVars } from 'vue'
+import { createNamespace } from '@/utils'
 import { JVDIVIDER_NAME } from './types'
 
 defineOptions({ name: JVDIVIDER_NAME, inheritAttrs: false })

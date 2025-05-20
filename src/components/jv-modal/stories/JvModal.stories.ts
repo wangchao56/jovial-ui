@@ -30,6 +30,14 @@ export default {
       control: 'text',
       description: '确认按钮文本',
     },
+    confirmButtonProps: {
+      control: 'object',
+      description: '确认按钮属性',
+    },
+    cancelButtonProps: {
+      control: 'object',
+      description: '取消按钮属性',
+    },
   },
 } as Meta
 
@@ -148,18 +156,33 @@ export const 确认对话框: StoryObj = {
         visible.value = false
       }
 
-      return { visible, showModal, handleConfirm, handleCancel }
+      const confirmButtonProps = {
+        size: 'medium',
+        variant: 'text',
+        color: 'primary',
+      }
+      const cancelButtonProps = {
+        size: 'medium',
+        variant: 'outlined',
+        color: 'warning',
+      }
+
+      return { visible, showModal, handleConfirm, handleCancel, confirmButtonProps, cancelButtonProps }
     },
     template: `
       <div>
-        <JvButton @click="showModal">打开确认对话框</JvButton>
         <JvModal 
-          v-model="visible" 
           @confirm="handleConfirm"
           @cancel="handleCancel"
           confirmText="确认删除"
           cancelText="我再想想"
+          title="删除确认"
+          :confirmButtonProps="confirmButtonProps"
+          :cancelButtonProps="cancelButtonProps"
         >
+          <template #trigger>
+             <JvButton>打开确认对话框</JvButton>
+          </template>
           <template #title>
             <span style="color: #ff5252;">删除确认</span>
           </template>

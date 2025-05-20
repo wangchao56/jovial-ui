@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import { provide, watch } from 'vue'
 import { createLocale, LocaleSymbol } from '@/locale'
 import { isRTLLanguage } from '@/locale/helpers'
-import { provide, watch } from 'vue'
 
 defineOptions({
   name: 'JvLocaleProvider',

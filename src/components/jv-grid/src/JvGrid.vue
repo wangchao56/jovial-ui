@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { JvGridProps, JvGridSlots } from './types'
+import { computed } from 'vue'
 import { useBreakpoints, useStyle } from '@/hooks'
 import { convertToUnit } from '@/utils'
-import { computed } from 'vue'
 import { bem, JVGRID_NAME } from './types'
 
 defineOptions({ name: JVGRID_NAME, inheritAttrs: false })

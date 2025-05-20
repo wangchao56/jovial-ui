@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { JvTextareaEmits, JvTextareaProps } from './types'
-import JvButton from '@/components/jv-button/src/JvButton.vue'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import JvButton from '@/components/jv-button/src/JvButton.vue'
 import { bem, JVTEXTAREA_NAME } from './types'
 
 defineOptions({ name: JVTEXTAREA_NAME, inheritAttrs: false })

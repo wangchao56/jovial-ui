@@ -145,7 +145,7 @@ export interface JvMenuSlots {
   /**
    * 默认插槽，用于菜单触发元素
    */
-  default: Slot
+  header: Slot
   /**
    * 菜单内容插槽
    */

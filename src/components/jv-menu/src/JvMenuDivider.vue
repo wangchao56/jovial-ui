@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import { defineOptions } from 'vue'
 import JvDivider from '@/components/jv-divider/src/JvDivider.vue'
 import { createNamespace } from '@/utils'
-import { defineOptions } from 'vue'
 
 defineOptions({
   name: 'JvMenuDivider',

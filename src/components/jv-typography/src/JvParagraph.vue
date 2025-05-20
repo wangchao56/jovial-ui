@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { JvParagraphProps } from './types'
-import { createNamespace } from '@/utils'
 import { computed } from 'vue'
+import { createNamespace } from '@/utils'
 
 defineOptions({
   name: 'JvParagraph',

@@ -1,6 +1,6 @@
 import type { FormItemValue, FormValidateRule } from './types'
-import { isArray } from '@/utils'
 import Schema from 'async-validator'
+import { isArray } from '@/utils'
 
 /**
  * 获取嵌套属性值

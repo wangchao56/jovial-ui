@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'vue'
-import { createNamespace } from '@/utils'
 import { computed } from 'vue'
+import { createNamespace } from '@/utils'
 
 interface ColorTypeVars {
   background: string

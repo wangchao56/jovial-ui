@@ -1,0 +1,3 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`jvTypography > renders correctly with default props 1`] = `"<article class="jv-typography"></article>"`;

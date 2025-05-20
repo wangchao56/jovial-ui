@@ -27,7 +27,7 @@ describe('jvMessage', () => {
   })
 
   it('renders with different types', () => {
-    const types: MessageType[] = ['info', 'success', 'warning', 'danger']
+    const types: MessageType[] = ['info', 'success', 'warning', 'error']
 
     types.forEach((type) => {
       const wrapper = mount(JvMessage, {

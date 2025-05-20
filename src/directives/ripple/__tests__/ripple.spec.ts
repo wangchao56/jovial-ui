@@ -1,9 +1,9 @@
-import { keyCodes } from '@/utils'
-
 // Utilities
 import { mount } from '@vue/test-utils'
+
 import { describe, expect, it, vi } from 'vitest'
 import { defineComponent } from 'vue'
+import { keyCodes } from '@/utils'
 // Directives
 import Ripple from '../'
 

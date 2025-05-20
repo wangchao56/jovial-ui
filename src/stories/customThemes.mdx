@@ -1,0 +1,92 @@
+## 定制与主题
+
+Jovial UI 提供灵活的样式定制方案，满足不同品牌风格需求。
+
+### 主题变量
+组件使用 CSS 变量进行样式控制，支持动态主题切换：
+```css
+/* 全局主题变量 */
+:root {
+  --jv-theme-primary: #409eff;
+}
+```
+
+
+2. 运行时动态切换：
+```javascript
+// 在 Vue 组件中
+import { useTheme } from 'jovial-ui'
+
+const theme = useTheme()
+theme.setTheme({
+  primaryColor: '#f56c6c',
+  borderRadius: '8px'
+})
+```
+
+### 组件级样式覆盖
+使用深度选择器自定义单个组件样式：
+```css
+/* 覆盖按钮样式 */
+.jv-button {
+  &::v-deep(.jv-button__content) {
+    font-weight: 600;
+  }
+}
+```
+
+## 7. 国际化与本地化
+
+组件库内置多语言支持，目前包含中文和英文两种语言包。
+
+### 基础配置
+```javascript
+createJovialUI({
+  locale: {
+    locale: 'zh-CN', // 默认语言
+    fallbackLocale: 'en' // 备用语言
+  }
+})
+```
+
+### 切换语言
+```vue
+<template>
+  <jv-locale-provider :locale="currentLocale">
+    <!-- 应用内容 -->
+  </jv-locale-provider>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+import { zhCN, enUS } from 'jovial-ui'
+
+const currentLocale = ref(zhCN)
+</script>
+```
+
+### 自定义语言包
+```javascript
+const customLocale = {
+  button: {
+    loading: '加载中...'
+  },
+  // ... 其他组件翻译
+}
+
+createJovialUI({
+  locale: {
+    locale: customLocale
+  }
+})
+```
+
+### 日期与货币格式
+组件库使用 Day.js 处理日期国际化：
+```javascript
+import 'dayjs/locale/zh-cn'
+import updateLocale from 'dayjs/plugin/updateLocale'
+
+dayjs.extend(updateLocale)
+dayjs.locale('zh-cn')
+```

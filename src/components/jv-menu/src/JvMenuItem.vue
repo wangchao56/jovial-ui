@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { JvMenuItemEmits, JvMenuItemProps } from './types'
+import { computed } from 'vue'
 import JvIcon from '@/components/jv-icon/src/JvIcon.vue'
 import { createNamespace } from '@/utils'
-import { computed } from 'vue'
 
 defineOptions({
   name: 'JvMenuItem',

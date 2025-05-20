@@ -1,5 +1,5 @@
-import type { Color } from '@/utils/color/colorUtils'
 import type { InternalThemeDefinition } from './config/types'
+import type { Color } from '@/utils/color/colorUtils'
 import { APCAcontrast } from '@/utils/color/APCA'
 import { getLuma, parseColor } from '@/utils/color/colorUtils'
 
@@ -101,7 +101,7 @@ export function getForeground(color: Color) {
  * @param styleSheetId 样式表ID
  * @returns 样式表
  */
-export function createThemeStylesheet(lines: string[], styleSheetId: string = `${THEME_CLASS}-${themeClasses}`) {
+export function createThemeStylesheet(lines: string[], styleSheetId: string = `${THEME_CLASS}-style`) {
   const style = document.createElement('style')
   style.id = styleSheetId
   // 值转化为rgb的数值 使用时使用rgb(var(--jv-theme-primary)) / rgba(var(--jv-theme-primary),0.5)

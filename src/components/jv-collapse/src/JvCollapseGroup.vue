@@ -1,153 +1,139 @@
 <script setup lang="ts">
-import type { JvCollapseGroupEmits, JvCollapseGroupProps } from './types'
-import { computed, provide, useCssVars, watch } from 'vue'
+import type { CollapseGroupContext, JvCollapseGroupProps } from './types'
+import { provide, ref, watch } from 'vue'
 import { bemGroup, collapseGroupInjectionKey, JVCOLLAPSEGROUP_NAME } from './types'
 
 defineOptions({ name: JVCOLLAPSEGROUP_NAME, inheritAttrs: false })
 
-const {
-  accordion = false,
-  variant = 'default',
-  divider = true,
-  rounded = false,
-  elevated = false,
-} = defineProps<JvCollapseGroupProps>()
+const props = withDefaults(defineProps<JvCollapseGroupProps>(), {
+  accordion: false,
+  modelValue: () => [],
+  variant: 'elevated',
+  divider: false,
+  rounded: false,
+  elevated: true,
+  size: 'medium',
+})
 
-const emit = defineEmits<JvCollapseGroupEmits>()
+// 使用emit来抛出事件
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: string[]): void
+  (e: 'change', value: string[]): void
+}>()
 
-// 使用shallowRef优化性能
-const expandedItems = defineModel<Set<string>>('modelValue', { required: false, default: () => new Set() })
+// 当前展开的折叠面板的name列表
+const internalExpandedItems = ref<string[]>(props.modelValue || [])
 
-// 监听内部状态变化，更新 modelValue - 使用Array.from缓存优化
-watch(expandedItems, (newVal) => {
-  const values = Array.from(newVal)
-  emit('update:modelValue', values)
-  emit('change', values)
-}, { deep: true })
-
-// 优化处理逻辑
-function handleItemToggle(name: string, expanded: boolean) {
-  // 创建新的Set以触发响应式更新
-  const newItems = new Set(expandedItems.value)
-
-  if (expanded) {
-    // 手风琴模式：只允许一个面板展开
-    if (accordion) {
-      expandedItems.value = new Set([name])
-      return
+// 当modelValue变化时，更新内部状态
+watch(
+  () => props.modelValue,
+  (newVal) => {
+    if (newVal !== internalExpandedItems.value) {
+      internalExpandedItems.value = newVal
     }
+  },
+)
 
-    // 普通模式：添加到展开列表
-    newItems.add(name)
+// 处理折叠面板的切换
+function handleItemToggle(name: string, expanded: boolean) {
+  const index = internalExpandedItems.value.indexOf(name)
+  // 如果是手风琴模式，切换时要关闭其他已展开的面板
+  if (props.accordion && expanded) {
+    internalExpandedItems.value = [name]
   }
   else {
-    // 从展开列表中移除
-    newItems.delete(name)
+    // 非手风琴模式下，只切换当前面板的状态
+    if (expanded && index === -1) {
+      internalExpandedItems.value.push(name)
+    }
+    else if (!expanded && index !== -1) {
+      internalExpandedItems.value.splice(index, 1)
+    }
   }
 
-  expandedItems.value = newItems
+  // 抛出事件通知父组件
+  emit('update:modelValue', internalExpandedItems.value)
+  emit('change', internalExpandedItems.value)
 }
 
-// 提供给子组件的上下文
-provide(collapseGroupInjectionKey, {
-  accordion,
-  expandedItems: computed(() => Array.from(expandedItems.value)),
+// 提供上下文给子组件
+provide<CollapseGroupContext>(collapseGroupInjectionKey, {
+  accordion: props.accordion,
+  expandedItems: internalExpandedItems,
   handleItemToggle,
+  size: props.size,
+  variant: props.variant,
 })
-// 计算组件类名
-const groupClasses = computed(() => [
+
+// 计算容器类名
+const containerClasses = [
   bemGroup.b(),
-  bemGroup.m(`variant-${variant}`),
-  elevated && bemGroup.m('elevated'),
-  rounded && bemGroup.m('rounded'),
-])
-// 使用CSS变量控制主题
-useCssVars(() => ({
-  'jv-collapse-group-border-color': divider ? 'var(--jv-theme-outline, #e0e0e0)' : 'transparent',
-  'jv-collapse-group-border-radius': rounded ? 'var(--jv-rounded, 4px)' : '0',
-  'jv-collapse-group-box-shadow': elevated ? 'var(--jv-elevation-2)' : 'none',
-}))
+  bemGroup.m(`variant-${props.variant}`),
+  props.divider && bemGroup.m('with-divider'),
+  props.rounded && bemGroup.m('rounded'),
+  props.elevated && bemGroup.m('elevated'),
+  bemGroup.m(`size-${props.size}`),
+]
 </script>
 
 <template>
-  <div :class="groupClasses">
+  <div :class="containerClasses">
     <slot />
   </div>
 </template>
 
 <style lang="scss" scoped>
 @include b(collapse-group) {
-  --jv-collapse-group-border-color: var(--jv-theme-outline, #e0e0e0);
-  --jv-collapse-group-border-radius: 0;
-  --jv-collapse-group-box-shadow: none;
-
-  position: relative;
   display: flex;
-  overflow: hidden;
   flex-direction: column;
-  width: 100%;
-  border: 1px solid var(--jv-collapse-group-border-color);
-  border-radius: var(--jv-collapse-group-border-radius);
-  box-shadow: var(--jv-collapse-group-box-shadow);
-  justify-items: flex-start;
+  box-sizing: border-box;
+  width: max-content;
 
-  // 重置内部 Collapse 组件的样式
-  :deep(.jv-collapse) {
-    min-width: unset;
-    margin-bottom: 0;
-    border-radius: 0;
-    box-shadow: none;
-
-    // 移除最后一个Collapse的边框
-    &:last-child {
-      border-bottom: none;
-    }
-  }
-
-  // 内部header样式调整
-  :deep(.jv-collapse__header) {
-    margin: 0;
-    border-radius: 0;
-    border-bottom: 1px solid var(--jv-collapse-group-border-color);
-  }
-
-  // 最后一个未展开的折叠面板不显示header底部边框
-  :deep(.jv-collapse:last-child:not(.jv-collapse--state-expanded) .jv-collapse__header) {
-    border-bottom: none;
-  }
-
-  // 内容区域样式重置
-  :deep(.jv-collapse__content) {
-    border-top: none;
-  }
-
-  // 变体样式
+  // 组件变体
   @include m(variant-default) {
-    --jv-collapse-group-bg: var(--jv-theme-surface);
-    background-color: var(--jv-collapse-group-bg);
+    // 默认样式
   }
 
   @include m(variant-outlined) {
-    border: 1px solid var(--jv-collapse-group-border-color);
-    box-shadow: none;
+    border: 1px solid var(--jv-theme-border, rgb(0 0 0 / 0.12));
   }
 
-  @include m(elevated) {
-    box-shadow: var(--jv-collapse-group-box-shadow);
+  // 特性修饰符
+  @include m(with-divider) {
+    .jv-collapse:not(:last-child) {
+      border-bottom: 1px solid var(--jv-theme-border, rgb(0 0 0 / 0.12));
+    }
   }
 
   @include m(rounded) {
-    border-radius: var(--jv-collapse-group-border-radius);
+    overflow: hidden;
+    border-radius: var(--jv-rounded, 4px);
+  }
 
-    // 第一个和最后一个子元素圆角处理
-    :deep(.jv-collapse:first-child .jv-collapse__header) {
-      border-top-left-radius: calc(var(--jv-collapse-group-border-radius) - 1px);
-      border-top-right-radius: calc(var(--jv-collapse-group-border-radius) - 1px);
+  @include m(elevated) {
+    box-shadow: var(--jv-elevation-2);
+  }
+
+  // 移除冲突样式
+  :deep(.jv-collapse) {
+    width: 100%;
+    min-width: unset; // 覆盖子组件的最小宽度
+    margin: 0; // 确保没有外边距
+    border-radius: 0; // 移除子组件的圆角
+    border-bottom: 1px solid var(--jv-theme-border, rgb(0 0 0 / 0.12));
+    box-shadow: none; // 移除子组件的阴影
+  }
+
+  // 让第一个和最后一个子元素拥有合适的圆角
+  @include m(rounded) {
+    :deep(.jv-collapse:first-child) {
+      border-top-left-radius: var(--jv-rounded, 4px);
+      border-top-right-radius: var(--jv-rounded, 4px);
     }
 
-    :deep(.jv-collapse:last-child .jv-collapse__content) {
-      border-bottom-left-radius: calc(var(--jv-collapse-group-border-radius) - 1px);
-      border-bottom-right-radius: calc(var(--jv-collapse-group-border-radius) - 1px);
+    :deep(.jv-collapse:last-child) {
+      border-bottom-left-radius: var(--jv-rounded, 4px);
+      border-bottom-right-radius: var(--jv-rounded, 4px);
     }
   }
 }

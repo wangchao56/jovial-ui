@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { JvTextfieldEmits, JvTextfieldProps } from './types'
+import { computed, ref } from 'vue'
 import JvButton from '@/components/jv-button/src/JvButton.vue'
 import JvIcon from '@/components/jv-icon/src/JvIcon.vue'
-import { computed, ref } from 'vue'
 import { bem, JVINPUT_NAME } from './types'
 
 defineOptions({ name: JVINPUT_NAME, inheritAttrs: false })

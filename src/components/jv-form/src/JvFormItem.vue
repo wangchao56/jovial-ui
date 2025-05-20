@@ -7,8 +7,8 @@ import type {
   FormValidateStatus,
   JvFormContext,
 } from './types'
-import { useComponentId } from '@/hooks/useComponentId'
 import { computed, inject, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { useComponentId } from '@/hooks/useComponentId'
 import {
   computeLabelWidthStyle,
   filterRulesByTrigger,

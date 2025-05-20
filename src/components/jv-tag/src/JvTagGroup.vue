@@ -70,7 +70,7 @@ const remainingCount = computed(() => {
   return filteredTags.value.length - maxCollapse
 })
 
-function handleClose(event: MouseEvent, tag: JvTagItemProps, index: number) {
+function handleClose(_event: MouseEvent, tag: JvTagItemProps, index: number) {
   emit('close', tag, index)
   const newTags = [...localTags.value]
   // 找到原始数组中的实际索引

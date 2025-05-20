@@ -1,5 +1,5 @@
 // Types
-import type { RGB, XYZ } from '../colorUtils'
+import type { RGB, XYZ } from './colorUtils'
 
 // Utilities
 import { clamp } from '../helpers'

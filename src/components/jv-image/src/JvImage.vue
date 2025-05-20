@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { JvImageEmits, JvImageProps, JvImageSlots } from './types'
+import { computed, onMounted, ref, useCssVars } from 'vue'
 import JvLoader from '@/components/jv-loader/src/JvLoader.vue'
 import JvOverlay from '@/components/jv-overlay/src/JvOverlay.vue'
 import { useCssVariables } from '@/hooks/useStyle/useCssVariables'
 import { useRoundedClass } from '@/hooks/useStyle/useRoundedClass'
 import { convertToUnit } from '@/utils'
-import { computed, onMounted, ref, useCssVars } from 'vue'
 import { bem, JVIMAGE_NAME } from './types'
 
 defineOptions({ name: JVIMAGE_NAME, inheritAttrs: false })

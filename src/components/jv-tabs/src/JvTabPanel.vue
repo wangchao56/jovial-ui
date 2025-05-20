@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { computed, inject, ref } from 'vue'
-import { bem } from './types'
+import type { JvTabPanelProps, JvTabsContext } from './types'
+import { computed, inject, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { bem, JvTabsContextKey } from './types'
 
 defineOptions({ name: 'JvTabPanel', inheritAttrs: false })
 
@@ -11,40 +12,21 @@ const props = withDefaults(
   },
 )
 
-interface JvTabPanelProps {
-  /**
-   * 面板的唯一值，与对应标签的value匹配
-   */
-  value?: string | number
-  /**
-   * 是否启用延迟加载，仅在激活时加载内容
-   */
-  lazy?: boolean
-}
-
 // 获取父组件提供的上下文
-const tabs = inject('tabs', {
-  activeTab: ref(''),
-  updateActiveTab: () => {},
-  variant: computed(() => 'default'),
-  color: computed(() => 'primary'),
-  vertical: computed(() => false),
-})
+const tabs = inject(JvTabsContextKey, null) as JvTabsContext
 
 // 计算面板是否激活
-const isActive = computed(() => tabs.activeTab.value === props.value)
+const isActive = computed(() => tabs && tabs.activeTab.value === props.value)
 
 // 记录面板是否曾经被激活过
 const hasBeenActive = ref(isActive.value)
 
 // 监听激活状态变化
-if (props.lazy) {
-  // 如果是懒加载模式，记录面板是否曾经被激活过
-  // 这样即使面板不再激活，也不会卸载已加载的内容
-  if (isActive.value) {
+watch(isActive, (val) => {
+  if (props.lazy && val) {
     hasBeenActive.value = true
   }
-}
+})
 
 // 计算面板样式类
 const panelClass = computed(() => [
@@ -53,15 +35,20 @@ const panelClass = computed(() => [
     [`${bem.b()}-panel--active`]: isActive.value,
   },
 ])
+
+// 在组件挂载时注册到父组件
+onMounted(() => {
+  tabs.addTabPanel(props)
+})
+
+// 在组件卸载前从父组件注销
+onBeforeUnmount(() => {
+  tabs.removeTabPanel(props)
+})
 </script>
 
 <template>
-  <div
-    v-show="isActive"
-    :class="panelClass"
-    role="tabpanel"
-    :aria-hidden="!isActive"
-  >
+  <div v-show="isActive" :class="panelClass" role="tabpanel" :aria-hidden="!isActive">
     <slot v-if="!lazy || hasBeenActive" />
   </div>
 </template>

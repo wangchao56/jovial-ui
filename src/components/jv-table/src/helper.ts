@@ -1,7 +1,7 @@
 import type { MaybeRef } from 'vue'
 import type { JvTableProps, TableColumn, TableRowData } from './types'
-import { convertToUnit } from '@/utils'
 import { unref } from 'vue'
+import { convertToUnit } from '@/utils'
 import { bem } from './types'
 /**
  * 样式处理相关的函数提供hook

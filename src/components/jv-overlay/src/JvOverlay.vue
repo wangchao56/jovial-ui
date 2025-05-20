@@ -6,9 +6,9 @@ import type {
   JvOverlayProps,
   JvOverlaySolts,
 } from './types'
-import { useZindex } from '@/hooks'
 import { useParentElement } from '@vueuse/core'
 import { computed, onMounted, unref } from 'vue'
+import { useZindex } from '@/hooks'
 import { bem, JVOVERLAY_NAME } from './types'
 
 defineOptions({ name: JVOVERLAY_NAME, inheritAttrs: true })
@@ -102,6 +102,7 @@ function handleClickOverlay() {
   }
 
   @include m(mask-show) {
+    width: 100%;
     height: 100vh;
   }
 

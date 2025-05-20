@@ -25,9 +25,6 @@ export interface JvIconProps {
   /** 是否禁用 */
   disabled?: boolean
 }
-export interface JvIconEmits {
-  (e: 'click', event: MouseEvent): void
-}
 
 export interface JvIconSlots {
   default: Slot

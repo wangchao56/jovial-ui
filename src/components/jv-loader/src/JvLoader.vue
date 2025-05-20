@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { JvLoaderProps } from './types'
-import { createNamespace } from '@/utils'
 import JvOverlay from '@components/jv-overlay/src/JvOverlay.vue'
 import { computed, onMounted, ref, useSlots } from 'vue'
+import { createNamespace } from '@/utils'
 import JvCircleLoader from './JvCircleLoader.vue'
 import JvLineLoader from './JvLineLoader.vue'
 import { JVLOADER_NAME } from './types'

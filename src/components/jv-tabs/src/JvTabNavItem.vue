@@ -1,53 +1,66 @@
 <script setup lang="ts">
-import { computed, inject, ref } from 'vue'
-import { bem } from './types'
+import type { JvTabsContext } from './types'
+import { computed, inject, onMounted, ref } from 'vue'
+import { bem, JvTabsContextKey } from './types'
 
-defineOptions({ name: 'JvTab', inheritAttrs: false })
+defineOptions({ name: 'JvTabNavItem', inheritAttrs: false })
 
 const props = withDefaults(
-  defineProps<JvTabProps>(),
+  defineProps<{
+    /**
+     * 标签的唯一值，用于标识和切换
+     */
+    value: string | number
+    /**
+     * 标签显示的文本
+     */
+    label?: string
+    /**
+     * 是否禁用该标签
+     */
+    disabled?: boolean
+    /**
+     * 标签图标
+     */
+    icon?: string
+    /**
+     * 标签徽标内容
+     */
+    badge?: number | string | boolean
+  }>(),
   {
     disabled: false,
   },
 )
 
-interface JvTabProps {
-  /**
-   * 标签的唯一值，用于标识和切换
-   */
-  value?: string | number
-  /**
-   * 是否禁用该标签
-   */
-  disabled?: boolean
-  /**
-   * 标签图标
-   */
-  icon?: string
-  /**
-   * 标签徽标内容
-   */
-  badge?: number | string | boolean
-}
+const emit = defineEmits<{
+  (e: 'click', params: {
+    offsetLeft: number
+    offsetTop: number
+    offsetWidth: number
+    offsetHeight: number
+  }): void
+}>()
 
 // 获取父组件提供的上下文
-const tabs = inject('tabs', {
-  activeTab: ref(''),
-  updateActiveTab: () => {},
-  variant: computed(() => 'default'),
-  color: computed(() => 'primary'),
-  vertical: computed(() => false),
-})
+const tabs = inject(JvTabsContextKey, null) as JvTabsContext
 
+const tabNavItemRef = ref<HTMLButtonElement>()
 // 计算标签是否激活
 const isActive = computed(() => tabs.activeTab.value === props.value)
 
 // 点击标签处理函数
 function handleClick() {
-  if (props.disabled)
+  if (props.disabled || !tabNavItemRef.value || !tabs)
     return
-  if (props.value !== undefined) {
-    tabs.updateActiveTab(props.value)
+  tabs.updateActiveTab(props.value)
+  if (tabNavItemRef.value) {
+    emit('click', {
+      offsetLeft: tabNavItemRef.value?.offsetLeft,
+      offsetTop: tabNavItemRef.value?.offsetTop,
+      offsetWidth: tabNavItemRef.value?.offsetWidth,
+      offsetHeight: tabNavItemRef.value?.offsetHeight,
+    })
   }
 }
 
@@ -59,28 +72,32 @@ const tabClass = computed(() => [
     [`${bem.b()}-nav__item--disabled`]: props.disabled,
   },
 ])
+onMounted(() => {
+  if (tabNavItemRef.value) {
+    tabs.updateNavItemOffset({
+      offsetLeft: tabNavItemRef.value?.offsetLeft,
+      offsetTop: tabNavItemRef.value?.offsetTop,
+      offsetWidth: tabNavItemRef.value?.offsetWidth,
+      offsetHeight: tabNavItemRef.value?.offsetHeight,
+    })
+  }
+})
 </script>
 
 <template>
   <button
-    :class="tabClass"
-    :disabled="disabled"
-    :data-value="value"
-    role="tab"
-    :aria-selected="isActive"
-    :tabindex="isActive ? 0 : -1"
-    :aria-disabled="disabled"
-    @click="handleClick"
+    ref="tabNavItemRef" :class="tabClass" :disabled="disabled" :data-value="value" role="tab"
+    :aria-selected="isActive" :tabindex="isActive ? 0 : -1" :aria-disabled="disabled" @click="handleClick"
   >
-    <span v-if="icon" class="jv-tab-nav__item-icon">
+    <span v-if="icon" class="jv-tabs-nav__item-icon">
       <slot name="icon">
         <i :class="icon" />
       </slot>
     </span>
-    <span class="jv-tab-nav__item-content">
-      <slot />
+    <span class="jv-tabs-nav__item-content">
+      <slot>{{ label }}</slot>
     </span>
-    <span v-if="badge" class="jv-tab-nav__item-badge">
+    <span v-if="badge" class="jv-tabs-nav__item-badge">
       {{ badge }}
     </span>
   </button>

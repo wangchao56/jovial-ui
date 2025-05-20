@@ -5,10 +5,10 @@ import type {
   JvMessageProps,
   MessageType,
 } from './types'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import JvButton from '@/components/jv-button/src/JvButton.vue'
 import JvIcon from '@/components/jv-icon/src/JvIcon.vue'
 import { useZindex } from '@/hooks'
-import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { bem, JVMESSAGE_NAME } from './types'
 
 defineOptions({ name: JVMESSAGE_NAME, inheritAttrs: false })

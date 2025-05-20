@@ -1,7 +1,7 @@
+import type { Slot } from 'vue'
 import type { JvBadgeProps } from '@/components/jv-badge'
 import type { JvIconProps } from '@/components/jv-icon/src/types'
 import type { JvImageProps, JvImageSlots } from '@/components/jv-image'
-import type { Slot } from 'vue'
 import { createNamespace } from '@/utils'
 
 export const JVAVATAR_NAME = 'JvAvatar'
@@ -81,15 +81,15 @@ export interface JvAvatarSlots extends JvImageSlots {
   /**
    * 文本类型的内容插槽
    */
-  text: Slot
+  text?: Slot
   /**
    * 图标类型的内容插槽
    */
-  icon: Slot
+  icon?: Slot
   /**
    * 默认占位符插槽
    */
-  placeholder: Slot
+  placeholder?: Slot
 }
 
 export interface JvAvatarEmits {

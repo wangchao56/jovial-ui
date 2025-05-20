@@ -1,4 +1,4 @@
-import type { InjectionKey, Ref, Slot } from 'vue'
+import type { CSSProperties, InjectionKey, Ref, Slot } from 'vue'
 import { createNamespace } from '@/utils'
 
 export const JVCOLLAPSE_NAME = 'JvCollapse'
@@ -25,11 +25,19 @@ export interface JvCollapseProps {
   /**
    * 样式变体
    */
-  variant?: 'default' | 'outlined'
+  variant?: 'elevated' | 'flat' | 'outlined'
   /**
    * 是否显示箭头
    */
   showArrow?: boolean
+  /**
+   * 折叠的图标
+   */
+  collapseIcon?: string
+  /**
+   * 展开的图标
+   */
+  expandIcon?: string
   /**
    * 动画持续时间，单位毫秒
    */
@@ -43,9 +51,25 @@ export interface JvCollapseProps {
    */
   class?: string
   /**
+   * 自定义样式
+   */
+  style?: CSSProperties
+  /**
+   * 宽度
+   */
+  width?: string
+  /**
+   * 最大宽度
+   */
+  maxWidth?: string
+  /**
    * 是否禁用
    */
   disabled?: boolean
+  /**
+   * 组件尺寸
+   */
+  size?: 'small' | 'medium' | 'large'
 }
 
 export interface JvCollapseEmits {
@@ -106,7 +130,7 @@ export interface JvCollapseGroupProps {
   /**
    * 样式变体
    */
-  variant?: 'default' | 'outlined'
+  variant?: 'outlined' | 'elevated' | 'flat'
   /**
    * 是否显示分割线
    */
@@ -119,6 +143,10 @@ export interface JvCollapseGroupProps {
    * 是否使用阴影
    */
   elevated?: boolean
+  /**
+   * 组件尺寸
+   */
+  size?: 'small' | 'medium' | 'large'
 }
 
 export interface JvCollapseGroupEmits {
@@ -136,5 +164,7 @@ export interface CollapseGroupContext {
   accordion: boolean
   expandedItems: Ref<string[]>
   handleItemToggle: (name: string, expanded: boolean) => void
+  size?: 'small' | 'medium' | 'large'
+  variant?: 'default' | 'elevated' | 'flat' | 'outlined'
 }
 export const collapseGroupInjectionKey: InjectionKey<CollapseGroupContext> = Symbol('collapseGroup')

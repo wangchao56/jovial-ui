@@ -11,10 +11,10 @@ export type InputType =
   | 'search'
   | 'textarea'
 
-export const JVINPUT_NAME = 'JvTextfield'
+export const JVINPUT_NAME = 'JvInput'
 export const bem = createNamespace(JVINPUT_NAME)
 
-export interface JvTextfieldProps {
+export interface JvInputProps {
   /** 绑定值 */
   modelValue: string
   /** 占位符 */
@@ -32,7 +32,7 @@ export interface JvTextfieldProps {
   /** 变体 */
   variant?: 'outlined' | 'default'
   /** 尺寸 */
-  size?: 'small' | 'medium' | 'large' | 'xlarge'
+  size?: 'tiny' | 'small' | 'medium' | 'large' | 'xlarge'
   /** 前缀图标 */
   prefixIcon?: string
   /** 后缀图标 */
@@ -41,9 +41,11 @@ export interface JvTextfieldProps {
   maxLength?: number
   /** 显示计数 */
   showCount?: boolean
+  /** 自动聚焦 */
+  autofocus?: boolean
 }
 
-export interface JvTextfieldEmits {
+export interface JvInputEmits {
   /** 更新绑定值 */
   (e: 'update:modelValue', value: string): void
   /** 清除 */
@@ -54,7 +56,7 @@ export interface JvTextfieldEmits {
   (e: 'blur', event: FocusEvent): void
 }
 
-export interface JvTextfieldSlots {
+export interface JvInputSlots {
   /** 前置插槽 */
   prepared: Slot
   /** 后置插槽 */
@@ -65,11 +67,13 @@ export interface JvTextfieldSlots {
   suffix: Slot
 }
 
-export interface JvTextfieldExpose {
+export interface JvInputExpose {
   /** 聚焦 */
   focus: () => void
   /** 失焦 */
   blur: () => void
   /** 清除 */
   clear: () => void
+  /** 提示 */
+  hint: (message: string) => void
 }

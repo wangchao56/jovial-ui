@@ -67,15 +67,12 @@
 | title | string | undefined | 卡片标题 |
 | subtitle | string | undefined | 卡片副标题 |
 | content | string | undefined | 卡片内容 |
+| imgSrc | string | undefined | 卡片图片 |
 | maxWidth | string \| number | undefined | 卡片最大宽度 |
-| colorType | 'default' \| 'primary' \| 'secondary' \| 'success' \| 'warning' \| 'error' \| 'info' | 'default' | 卡片颜色类型 |
 | variant | 'elevated' \| 'outlined' \| 'tonal' | 'elevated' | 卡片变体 |
 | rounded | 'rounded' \| 'rounded-sm' \| 'rounded-lg' \| 'rounded-xl' \| 'rounded-full' \| 'rounded-none' | 'rounded' | 卡片圆角样式 |
-| bordered | boolean | false | 是否显示边框 |
-| clickable | boolean | false | 是否可点击 |
-| disabled | boolean | false | 是否禁用 |
-| padding | 'none' \| 'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl' | 'md' | 卡片内边距大小 |
 | actionsAlign | 'start' \| 'end' \| 'center' | 'end' | 操作按钮对齐方式 |
+| clickable | boolean | false| 卡片是否可点击| 
 
 ### Emits
 | 事件名 | 参数 | 说明 |
@@ -146,7 +143,7 @@
 | CD-304 | 媒体插槽 | 验证media插槽内容渲染 | 1. 在media插槽中放置内容<br>2. 检查渲染结果 | 应正确显示媒体插槽内容 | ✅ |
 | CD-305 | 内容插槽 | 验证content插槽内容渲染 | 1. 在content插槽中放置内容<br>2. 检查渲染结果 | 应正确显示内容插槽内容 | ✅ |
 | CD-306 | 操作插槽 | 验证actions插槽内容渲染 | 1. 在actions插槽中放置内容<br>2. 检查渲染结果 | 应正确显示操作插槽内容 | ✅ |
-| CD-307 | 底部插槽 | 验证footer插槽内容渲染 | 1. 在footer插槽中放置内容<br>2. 检查渲染结果 | 应正确显示底部插槽内容 | ✅ |
+
 
 ### 子组件测试
 | 测试ID | 测试场景 | 测试描述 | 测试步骤 | 预期结果 | 测试状态 |

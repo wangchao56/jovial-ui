@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { MenuItem } from './types'
-import { createNamespace } from '@/utils'
 import { h, onMounted } from 'vue'
+import { createNamespace } from '@/utils'
 import { useMenuFlatten } from './hooks/useMenuFlatten'
 import JvMenuDivider from './JvMenuDivider.vue'
 import JvMenuGroup from './JvMenuGroup.vue'

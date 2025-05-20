@@ -1,4 +1,5 @@
 import type { Slot } from 'vue'
+import type { JvInputSlots } from '@/components/jv-input'
 import { createNamespace } from '@/utils'
 
 export const COMPONENT_NAME = 'JvSelect'
@@ -25,7 +26,7 @@ export interface JvSelectProps {
   /** 是否可清除 */
   clearable?: boolean
   /** 尺寸 */
-  size?: 'small' | 'medium' | 'large'
+  size?: 'tiny' | 'small' | 'medium' | 'large' | 'xlarge'
   /** 是否多选 */
   multiple?: boolean
   /** 是否内联 */
@@ -40,8 +41,6 @@ export interface JvSelectEmits {
   (e: 'blur', event: FocusEvent): void
 }
 
-export interface JvSelectSlots {
+export interface JvSelectSlots extends JvInputSlots {
   default: Slot
-  prefix: Slot
-  suffix: Slot
 }

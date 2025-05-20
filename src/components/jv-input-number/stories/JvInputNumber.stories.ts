@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3'
 import JvInputNumber from '@components/jv-input-number/src/JvInputNumber.vue'
 
 const meta: Meta<typeof JvInputNumber> = {
-  title: '数据输入组件/JvInputNumber 数字输入框',
+  title: '数据输入组件/InputNumber 数字输入框',
   tags: ['autodocs'],
   component: JvInputNumber,
   argTypes: {

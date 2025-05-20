@@ -1,6 +1,6 @@
 import type { DirectiveBinding, ObjectDirective } from 'vue'
-import JvBadge from '@/components/jv-badge'
 import { createVNode, render } from 'vue'
+import JvBadge from '@/components/jv-badge'
 import './style.scss'
 
 export interface BadgeOptions {

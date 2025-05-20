@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { CircleSvgProps } from './types'
-import { useComponentId } from '@/hooks/useComponentId'
 import { computed, ref, useCssVars, watch } from 'vue'
+import { useComponentId } from '@/hooks/useComponentId'
 import { bemCircle, JVCIRCLESVG_NAME } from './types'
 
 defineOptions({

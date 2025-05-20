@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { LineSvgProps } from './types'
+import { computed, ref, useCssVars, watch } from 'vue'
 import { getOptions } from '@/constants'
 import { useComponentId } from '@/hooks/useComponentId'
 import { createNamespace } from '@/utils'
-import { computed, ref, useCssVars, watch } from 'vue'
 import { JVLINESVG_NAME } from './types'
 
 defineOptions({

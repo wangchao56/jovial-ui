@@ -1,17 +1,17 @@
 <script setup lang="ts">
+import type { JvCardHeaderProps, JvCardHeaderSlots } from './types'
 import type { JvAvatarProps } from '@/components/jv-avatar/src/types'
 import type { JvIconProps } from '@/components/jv-icon/src/types'
 import type { JvParagraphProps, JvTextProps, JvTitleProps } from '@/components/jv-typography/src/types'
-import type { JvCardHeaderProps, JvCardHeaderSlots } from './types'
+import JvParagraph from '@components/jv-typography/src/JvParagraph.vue'
+import JvText from '@components/jv-typography/src/JvText.vue'
+import JvTitle from '@components/jv-typography/src/JvTitle.vue'
+import { computed } from 'vue'
 import JvAvatar from '@/components/jv-avatar/src/JvAvatar.vue'
 import JvIcon from '@/components/jv-icon/src/JvIcon.vue'
 import JvImage from '@/components/jv-image/src/JvImage.vue'
 import { useStringOrObjectProps } from '@/hooks/useStringOrObjectProps'
 import { isString } from '@/utils'
-import JvParagraph from '@components/jv-typography/src/JvParagraph.vue'
-import JvText from '@components/jv-typography/src/JvText.vue'
-import JvTitle from '@components/jv-typography/src/JvTitle.vue'
-import { computed } from 'vue'
 import { bem, JVCARDHEADER_NAME } from './types'
 
 defineOptions({ name: JVCARDHEADER_NAME, inheritAttrs: false })

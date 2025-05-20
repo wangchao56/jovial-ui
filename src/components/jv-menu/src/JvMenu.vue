@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { Rect } from '@/components/jv-popper/src/types'
 import type { JvMenuEmits, JvMenuProps, MenuItem } from './types'
-import JvPopper from '@/components/jv-popper/src/JvPopper.vue'
+import type { Rect } from '@/components/jv-popper/src/types'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import JvPopper from '@/components/jv-popper/src/JvPopper.vue'
 import OptimizedMenuRenderer from './OptimizedMenuRenderer.vue'
 import { bem, JVMENU_NAME } from './types'
 

@@ -1,7 +1,7 @@
 import type { JvBadgeProps } from '@/components/jv-badge'
-import JvImage from '@/components/jv-image/src/JvImage.vue'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
+import JvImage from '@/components/jv-image/src/JvImage.vue'
 import JvAvatar from '../src/JvAvatar.vue'
 
 describe('jvAvatar', () => {

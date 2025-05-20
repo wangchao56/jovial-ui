@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { JvInputNumberEmits, JvInputNumberProps } from './types'
+import { computed, ref, useCssVars, watch } from 'vue'
 import JvButton from '@/components/jv-button/src/JvButton.vue'
-import { computed, ref, watch } from 'vue'
+import { useSize } from '@/hooks/useSize'
 import { bem, JVINPUTNUMBER_NAME } from './types'
 
 // 组件名
@@ -24,6 +25,14 @@ const focused = ref(false)
 const inputRef = ref<HTMLInputElement | null>(null)
 const innerValue = ref<number | ''>(modelValue ?? '')
 
+const sizeMap = {
+  tiny: 20,
+  small: 28,
+  medium: 36,
+  large: 44,
+  xlarge: 52,
+}
+const { sizeWithUnit } = useSize(size, sizeMap)
 // 是否显示清除按钮
 const showClearIcon = computed(() => {
   return clearable && !disabled && !readonly && innerValue.value !== ''
@@ -123,6 +132,10 @@ function clearInputValue() {
   handleClear()
 }
 defineExpose({ getInputValue, setInputValue, clearInputValue })
+
+useCssVars(() => ({
+  'jv-input-number-size': sizeWithUnit.value,
+}))
 </script>
 
 <template>
@@ -133,6 +146,7 @@ defineExpose({ getInputValue, setInputValue, clearInputValue })
       bem.is('disabled', disabled),
       bem.is('readonly', readonly),
       bem.is('focused', focused),
+      bem.is('inline', inline),
     ]"
   >
     <div :class="bem.e('prepend')">
@@ -144,40 +158,18 @@ defineExpose({ getInputValue, setInputValue, clearInputValue })
       </div>
       <!-- 输入框 -->
       <input
-        ref="inputRef"
-        :class="bem.e('inner')"
-        :value="innerValue"
-        type="number"
-        :disabled="disabled"
-        :readonly="readonly"
-        @input="handleInput"
-        @focus="handleFocus"
-        @blur="handleBlur"
+        ref="inputRef" :class="bem.e('inner')" :value="innerValue" type="number" :disabled="disabled"
+        :readonly="readonly" @input="handleInput" @focus="handleFocus" @blur="handleBlur"
       >
       <!-- 清除按钮 -->
       <JvButton
-        v-if="clearable && showClearIcon"
-        icon="$close"
-        size="small"
-        variant="tonal"
+        v-if="clearable && showClearIcon" icon="$close" size="small" variant="tonal"
         @click="handleClear"
       />
       <!-- 减按钮 -->
-      <JvButton
-        icon="$minus"
-        :size="size"
-        variant="text"
-        :disabled="disabled || readonly"
-        @click="handleSub"
-      />
+      <JvButton icon="$minus" :size="size" variant="text" :disabled="disabled || readonly" @click="handleSub" />
       <!-- 加按钮 -->
-      <JvButton
-        icon="$plus"
-        :size="size"
-        variant="text"
-        :disabled="disabled || readonly"
-        @click="handleAdd"
-      />
+      <JvButton icon="$plus" :size="size" variant="text" :disabled="disabled || readonly" @click="handleAdd" />
     </div>
     <div :class="bem.e('append')">
       <slot name="append" />
@@ -191,16 +183,24 @@ defineExpose({ getInputValue, setInputValue, clearInputValue })
 
 .jv-input-number {
   display: inline-flex;
+  box-sizing: border-box;
   width: 100%;
-  min-height: 28px;
-  padding: 4px;
+  min-height: 20px;
+  max-height: 52px;
 
+  --jv-input-height: var(--jv-input-number-size);
   --jv-input-border-radius: 4px;
   --jv-input-border-color: #dcdfe6;
   --jv-input-bg: #fff;
   --jv-input-text-color: #303133;
   --jv-input-placeholder-color: #c0c4cc;
   --jv-input-icon-color: #c0c4cc;
+  --jv-input-icon-hover-color: #909399;
+
+  &.is-inline {
+    display: inline-flex;
+    width: fit-content;
+  }
 
   &.is-focused .jv-input-number__wrapper {
     border-color: var(--jv-theme-primary, #409eff);
@@ -237,6 +237,7 @@ defineExpose({ getInputValue, setInputValue, clearInputValue })
     flex-direction: row;
     align-items: center;
     width: 100%;
+    height: var(--jv-input-height);
     padding: 4px;
     border: 1px solid var(--jv-input-border-color, #dcdfe6);
     border-radius: var(--jv-input-border-radius, 4px);
@@ -269,7 +270,6 @@ defineExpose({ getInputValue, setInputValue, clearInputValue })
     flex: 1;
     width: 100%;
     height: 100%;
-    padding: 0 8px;
     border: none;
     background: none;
     color: var(--jv-input-text-color, #303133);
@@ -307,6 +307,21 @@ defineExpose({ getInputValue, setInputValue, clearInputValue })
 
   input[type='number'] {
     appearance: textfield;
+  }
+
+  &__prepend,
+  &__append {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__append {
+    margin-left: 4px;
+  }
+
+  &__prepend {
+    margin-right: 4px;
   }
 }
 </style>

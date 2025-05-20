@@ -100,9 +100,7 @@ export const 基础使用: Story = {
     template: `
       <JvDropdown v-bind="args">
         <template #trigger>
-          <button style="padding: 8px 16px; background: #f0f0f0; border: 1px solid #ddd; border-radius: 4px;">
-            点击此处 ▼
-          </button>
+          <JvButton>基础菜单</JvButton>
         </template>
         <div style="padding: 8px 0;">
           <div style="padding: 8px 16px; cursor: pointer; hover:background-color: #f5f5f5;">选项 1</div>

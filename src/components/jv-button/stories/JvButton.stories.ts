@@ -1,13 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
-import JvFlex from '@/components/jv-flex'
-import { getOptions } from '@/constants'
 import JvButton from '@components/jv-button'
+import { action } from '@storybook/addon-actions'
 import { ref } from 'vue'
+import JvFlex from '@/components/jv-flex'
+import { JvGrid } from '@/components/jv-grid'
+import JvModal from '@/components/jv-modal'
+import { getOptions, roundedOptions } from '@/constants'
 
 const colorTypeOptions = getOptions('colorType')
 const variantOptions = ['elevated', 'flat', 'plain', 'dashed', 'tonal', 'outlined', 'text']
 const sizeOptions = getOptions('size')
-const shapeOptions = getOptions('shape')
+const shapeOptions = roundedOptions
 
 /**
  * # JvButton 按钮组件
@@ -28,7 +31,7 @@ const shapeOptions = getOptions('shape')
     - 功能触发
  */
 const meta = {
-  title: '通用组件/Button 按钮',
+  title: '通用组件/Button/Button 按钮',
   component: JvButton,
   tags: ['autodocs'],
   argTypes: {
@@ -86,16 +89,6 @@ const meta = {
         defaultValue: { summary: 'false' },
       },
     },
-    shape: {
-      control: { type: 'select' },
-      options: shapeOptions,
-      defaultValue: 'square',
-      description: '按钮形状',
-      table: {
-        type: { summary: 'string' },
-        defaultValue: { summary: 'square' },
-      },
-    },
     icon: {
       control: 'text',
       description: '按钮图标（仅图标模式）',
@@ -125,7 +118,7 @@ const meta = {
         defaultValue: { summary: 'false' },
       },
     },
-    content: {
+    label: {
       control: 'text',
       description: '按钮文本内容',
       table: {
@@ -146,7 +139,7 @@ const meta = {
   },
   args: {
     variant: 'elevated',
-    color: 'primary',
+    color: 'default',
     size: 'medium',
     disabled: false,
   },
@@ -158,14 +151,17 @@ type Story = StoryObj<typeof meta>
 export const BaseUsage: Story = {
   args: {
     variant: 'elevated',
-    content: '基础按钮',
+    label: '基础按钮',
   },
   render: args => ({
     components: { JvButton },
     setup() {
-      return { args }
+      const handleClick = () => {
+        action('click')()
+      }
+      return { args, handleClick }
     },
-    template: '<JvButton v-bind="args">{{ args.content || "按钮" }}</JvButton>',
+    template: '<JvButton  @click="handleClick"  v-bind="args">{{ args.label || "按钮" }}</JvButton>',
   }),
   parameters: {
     docs: {
@@ -176,7 +172,7 @@ export const BaseUsage: Story = {
   },
 }
 
-export const ButtonShape: Story = {
+export const ButtonRounded: Story = {
   args: {
     variant: 'elevated',
     color: 'primary',
@@ -188,7 +184,12 @@ export const ButtonShape: Story = {
     },
     template: `
       <JvFlex :gap="12">
-        <JvButton v-bind="args" v-for="shape in shapeOptions" :shape="shape" :content="shape" />
+         <template v-for="(shape,idx) in shapeOptions" :key="shape">
+            <JvFlex :gap="12"  v-if="idx%5===0"   direction="horizontal" justify="center">
+                <JvButton v-bind="args" :rounded="shape" :label="shape" />
+                <JvButton v-bind="args" :rounded="shape" :label="shape" />
+            </JvFlex>
+         </template>
       </JvFlex>
     `,
   }),
@@ -200,7 +201,9 @@ export const ButtonShape: Story = {
     },
   },
 }
-
+/**
+ * 按钮支持多种尺寸：tiny, small, medium, large, xlarge。不同尺寸的按钮会自动调整字体大小、高度和内边距。
+ */
 export const DifferentSizes: Story = {
   render: args => ({
     components: { JvButton, JvFlex },
@@ -215,13 +218,6 @@ export const DifferentSizes: Story = {
       </JvFlex>
     `,
   }),
-  parameters: {
-    docs: {
-      description: {
-        story: '按钮支持多种尺寸：tiny, small, medium, large, xlarge。不同尺寸的按钮会自动调整字体大小、高度和内边距。',
-      },
-    },
-  },
 }
 
 export const DifferentColors: Story = {
@@ -331,7 +327,7 @@ export const PrependAndAppendIcon: Story = {
   args: {
     variant: 'elevated',
     color: 'primary',
-    content: '带图标按钮',
+    label: '带图标按钮',
   },
   render: args => ({
     components: { JvButton, JvFlex },
@@ -406,7 +402,7 @@ export const StackedButton: Story = {
 export const DisabledState: Story = {
   args: {
     disabled: true,
-    content: '禁用按钮',
+    label: '禁用按钮',
   },
   parameters: {
     docs: {
@@ -420,7 +416,7 @@ export const DisabledState: Story = {
 export const LoadingState: Story = {
   args: {
     loading: true,
-    content: '加载中',
+    label: '加载中',
   },
   parameters: {
     docs: {
@@ -434,7 +430,7 @@ export const LoadingState: Story = {
 export const BlockButton: Story = {
   args: {
     block: true,
-    content: '块级按钮',
+    label: '块级按钮',
   },
   render: args => ({
     components: { JvButton, JvFlex },
@@ -563,4 +559,51 @@ export const ButtonSizeAndFont: Story = {
       },
     },
   },
+}
+
+// 所有样式展示
+export const AllStyles: Story = {
+  render: () => ({
+    components: { JvButton, JvFlex, JvGrid },
+    setup() {
+      const shaps: RoundedType[] = ['pill', 'circle', 'shaped', 'none', 'sm', 'lg', 'xl']
+      const sizeOptions = ['tiny', 'small', 'medium', 'large', 'xlarge']
+      return { variantOptions, sizeOptions, colorTypeOptions, shaps }
+    },
+    template: `
+    <div >
+      <JvFlex :gap="12" direction="vertical">
+        <template v-for="(color,idx) in colorTypeOptions" :key="color">
+        <JvFlex :gap="12" direction="horizontal" justify="center">
+          <template v-for="(variant,index) in variantOptions" :key="variant">
+              <JvButton :variant="variant" :size="sizeOptions[index]" :color="color" :rounded="shaps[index]">
+                BUTTON
+              </JvButton>
+          </template>
+        </JvFlex>
+        </template>
+      </JvFlex>
+    </div>
+    `,
+  }),
+}
+
+// 点击触发弹窗
+export const ClickToTriggerPopup: Story = {
+  render: () => ({
+    components: { JvButton, JvFlex, JvModal },
+    setup() {
+      const visible = ref(false)
+      const handleClick = () => {
+        visible.value = true
+      }
+      return { handleClick }
+    },
+    template: `
+      <JvButton @click="handleClick">点击我</JvButton>
+      <JvModal v-model="visible" title="弹窗" @close="handleClose">
+        <div>弹窗内容</div> 
+      </JvModal>
+    `,
+  }),
 }

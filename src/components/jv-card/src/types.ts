@@ -1,8 +1,8 @@
+import type { InjectionKey, Slot } from 'vue'
 import type { JvAvatarProps } from '@/components/jv-avatar/src/types'
 import type { JvIconProps } from '@/components/jv-icon/src/types'
 import type { JvImageProps } from '@/components/jv-image/src/types'
 import type { JvTextProps, JvTitleProps } from '@/components/jv-typography'
-import type { InjectionKey, Slot } from 'vue'
 import { createNamespace } from '@/utils'
 
 export const JVCARD_NAME = 'JvCard'
@@ -16,7 +16,7 @@ export type CardVariant = 'elevated' | 'outlined' | 'tonal' | 'filled' | 'flat' 
 export type CardColorType = 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'info'
 export type CardPadding = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 export type CardRounded = 'rounded' | 'roundedSm' | 'roundedLg' | 'roundedXl' | 'roundedFull' | 'none'
-export type CardActionsAlign = 'start' | 'end' | 'center' | 'space-between' | 'space-around'
+export type CardActionsAlign = 'start' | 'end' | 'center' | 'between' | 'around'
 export type CardOrientation = 'vertical' | 'horizontal'
 
 export interface JvCardProps {
@@ -50,37 +50,18 @@ export interface JvCardProps {
    * 卡片副标题
    */
   subtitle?: string
-
-  /**
-   * 卡片描述
-   * 用于在卡片头部提供详细说明文本
-   */
-  description?: string
-
   /**
    * 卡片内容
    */
   content?: string
-
   /**
    * 卡片最大宽度
    */
   maxWidth?: number
-
-  /**
-   * 卡片最小宽度
-   */
-  minWidth?: number
-
-  /**
-   * 卡片高度
-   */
-  height?: number
-
   /**
    * 卡片图片
    */
-  image?: string | JvImageProps
+  imgSrc?: string
 
   /**
    * 卡片颜色类型
@@ -97,14 +78,7 @@ export interface JvCardProps {
    * 卡片圆角
    * @default 'rounded'
    */
-  rounded?: CardRounded
-
-  /**
-   * 卡片是否有边框
-   * @default false
-   */
-  bordered?: boolean
-
+  rounded?: RoundedType
   /**
    * 卡片是否可点击
    * @default false
@@ -134,19 +108,6 @@ export interface JvCardProps {
    * @default 'vertical'
    */
   orientation?: CardOrientation
-
-  /**
-   * 卡片阴影
-   * @default true
-   */
-  elevation?: boolean | number
-
-  /**
-   * 卡片是否平面（无阴影）
-   * @default false
-   */
-  flat?: boolean
-
   /**
    * 卡片是否加载中
    * @default false
@@ -158,21 +119,6 @@ export interface JvCardProps {
    * @default 'cover'
    */
   objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down'
-
-  /**
-   * 卡片头部属性
-   */
-  headerProps?: JvCardHeaderProps
-
-  /**
-   * 卡片内容属性
-   */
-  contentProps?: JvCardContentProps
-
-  /**
-   * 卡片操作区属性
-   */
-  actionsProps?: JvCardActionsProps
 }
 
 /**
@@ -337,9 +283,9 @@ export interface JvCardSlots {
    */
   default?: Slot
   /**
-   * 内容
+   * 卡片头部
    */
-  content?: Slot
+  header?: Slot
   /**
    * 操作区
    */
@@ -352,10 +298,6 @@ export interface JvCardSlots {
    * 卡片头部副标题
    */
   subtitle?: Slot
-  /**
-   * 卡片头部描述
-   */
-  description?: Slot
   /**
    *  媒体
    */

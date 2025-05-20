@@ -1,3 +1,4 @@
+import type { InjectionKey, Ref, Slot } from 'vue'
 import { createNamespace } from '@/utils'
 
 export const JVTABS_NAME = 'JvTabs'
@@ -112,10 +113,6 @@ export interface JvTabsExpose {
 
 export interface JvTabNavProps {
   /**
-   * 当前激活的标签值
-   */
-  modelValue: string | number
-  /**
    * 滑块指示器位置
    * @default 'bottom'
    */
@@ -141,5 +138,50 @@ export interface JvTabNavSlots {
   /**
    * 默认插槽，用于放置JvTab组件
    */
-  default: () => any
+  default: Slot
 }
+
+export interface JvTabPanelProps {
+  /**
+   * 面板的唯一值，与对应标签的value匹配
+   */
+  value?: string | number
+  /**
+   * 面板的名称
+   */
+  name?: string
+  /**
+   * 是否启用延迟加载，仅在激活时加载内容
+   */
+  lazy?: boolean
+}
+
+/**
+ * tabs 上下文
+ */
+export interface JvTabsContext {
+  activeTab: Ref<string | number>
+  updateActiveTab: (value: string | number) => void
+  variant: Ref<'default' | 'segmented' | 'pills' | 'underline'>
+  color: Ref<'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'info'>
+  vertical: Ref<boolean>
+  // 布局方向
+  direction: Ref<'horizontal' | 'vertical'>
+  // 标签位置
+  labelPosition: Ref<'top' | 'bottom' | 'left' | 'right'>
+  // 更新tabs
+  updateTabs: (tabs: JvTabPanelProps[]) => void
+  // 添加tabPanel
+  addTabPanel: (tabPanel: JvTabPanelProps) => void
+  // 移除tabPanel
+  removeTabPanel: (tabPanel: JvTabPanelProps) => void
+  // 更新navItem的offset
+  updateNavItemOffset: (offset: {
+    offsetLeft: number
+    offsetTop: number
+    offsetWidth: number
+    offsetHeight: number
+  }) => void
+}
+
+export const JvTabsContextKey: InjectionKey<JvTabsContext> = Symbol('jv-tabs-context')

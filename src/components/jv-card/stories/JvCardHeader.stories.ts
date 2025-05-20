@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
-import JvAvatar from '@/components/jv-avatar'
-import JvIcon from '@/components/jv-icon'
 import JvButton from '@components/jv-button'
 import { JvCardHeader } from '@components/jv-card'
+import JvAvatar from '@/components/jv-avatar'
+import JvIcon from '@/components/jv-icon'
 
 /**
  * 卡片头部

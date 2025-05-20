@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useLocale } from '@/locale/adapters/jovial'
 import { computed } from 'vue'
+import { useLocale } from '@/locale'
 
 defineOptions({
   name: 'JvLocaleSwitcher',
@@ -19,3 +19,14 @@ const availableLocales = computed(() => Object.keys(locale.messages.value))
     </select>
   </div>
 </template>
+
+// 定义样式
+const useButtonStyles = makeStyles({
+root: { padding: '8px 16px', borderRadius: '4px', cursor: 'pointer' },
+  primary: { backgroundColor: 'blue', color: 'white' }
+})
+// 在组件中使用
+const classes = useButtonStyles()
+<button :class="classes.value.root">
+基础按钮
+</button>

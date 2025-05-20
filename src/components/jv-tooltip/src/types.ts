@@ -1,22 +1,9 @@
+import type { Slot } from 'vue'
 import type { PlacementStrategy } from '@/components/jv-popover/src/types'
 import { createNamespace } from '@/utils'
 
 export const JVTOOLTIP_NAME = 'JvTooltip'
 export const bem = createNamespace(JVTOOLTIP_NAME)
-
-export type PlacementType =
-  | 'top'
-  | 'bottom'
-  | 'left'
-  | 'right'
-  | 'top-start'
-  | 'top-end'
-  | 'bottom-start'
-  | 'bottom-end'
-  | 'left-start'
-  | 'left-end'
-  | 'right-start'
-  | 'right-end'
 
 export type TriggerMethodType =
   | 'hover'
@@ -66,4 +53,13 @@ export interface JvTooltipProps {
    * 放置策略：flip(翻转), prevent-overflow(防止溢出), auto(自动), fixed(固定)
    */
   placementStrategy?: PlacementStrategy
+}
+
+export interface JvTooltipEmits {
+  (e: 'update:show', show: boolean): void
+}
+
+export interface JvTooltipSlots {
+  default: Slot
+  content: Slot
 }

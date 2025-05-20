@@ -1,9 +1,8 @@
-import type { LocaleInstance, LocaleOptions } from '@/locale/types'
-import type { ThemeInstance, ThemeOptions } from '@/theme/config/types'
 import type { App, Component, Directive } from 'vue'
 import type { DefaultsOptions } from './default'
-import { createLocale } from '@/locale'
-import { LocaleSymbol } from '@/locale/adapters/vue-i18n'
+import type { LocaleInstance, LocaleOptions } from '@/locale/types'
+import type { ThemeInstance, ThemeOptions } from '@/theme/config/types'
+import { createLocale, LocaleSymbol } from '@/locale'
 import { createTheme, ThemeSymbol } from '@/theme/config'
 import { getUid } from '@/utils'
 import { createDefaults, DefaultsSymbol } from './default'
@@ -40,6 +39,10 @@ export function createJovialUI(jovial: JovialOptions = {}): JovialInstance {
 
   const defaults = createDefaults(options.defaults)
   const theme = createTheme(options.theme)
+  // 创建国际化实例
+  // 1. 自动检测是否安装了vue-i18n
+  // 2. 如果安装了vue-i18n，使用vue-i18n适配器
+  // 3. 否则使用内置的jovial适配器
   const locale = createLocale(localeOptions) // 创建国际化实例
 
   const install = (app: App): void => {
@@ -50,10 +53,13 @@ export function createJovialUI(jovial: JovialOptions = {}): JovialInstance {
       app.component(key, components[key] as Component) // 安装组件
     }
     theme.install(app) // 安装主题
-
+    // 安装国际化实例
+    // 1. 如果适配器有install方法，调用它（如vue-i18n适配器会调用app.use(i18n)）
+    // 2. 将国际化实例注入到应用中，使组件可以通过useLocale()访问
     app.provide(DefaultsSymbol, defaults)
     app.provide(ThemeSymbol, theme)
-    app.provide(LocaleSymbol, locale) // 提供国际化实例
+    app.provide(LocaleSymbol, locale)
+
     getUid.reset()
   }
 

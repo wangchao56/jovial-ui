@@ -19,6 +19,7 @@ type Variant =
   | 'elevated'
   | 'filled'
   | 'soft'
+// 全局
 
 //   html标签除标题和p ,code ,pre 外的字体标签
 type TextVariant = 'a' | 'strong' | 'b' | 'i' | 'em' | 'u' | 's' | 'small' | 'del' | 'ins' | 'sub' | 'sup' | 'mark' | 'code' | 'pre' | 'kbd' | 'samp' | 'var' | 'cite' | 'dfn' | 'abbr' | 'time' | 'mark' | 'ruby' | 'rt' | 'rp' | 'bdi' | 'bdo' | 'span'

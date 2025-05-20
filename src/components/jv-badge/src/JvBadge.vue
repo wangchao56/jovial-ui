@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { BadgePlacementType, JvBadgeProps } from './types'
+import { computed, ref, useCssVars } from 'vue'
 import { getOptions } from '@/constants'
 import { useSize } from '@/hooks/useSize'
-import { computed, ref, useCssVars } from 'vue'
 import { bem, JVBADGE_NAME } from './types'
 
 defineOptions({ name: JVBADGE_NAME, inheritAttrs: false })
